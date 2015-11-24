@@ -12,7 +12,7 @@ public class StartLiveCommand extends TelegramCommand {
 
     public void processCommand() {
         String[] args = getEvent().getArgs();
-        if (args.length < 3) {
+        if (args.length > 0 && args.length < 3) {
             respond(SendableTextMessage.builder().message("Starting Live Feed: " + args[0]).build());
             return;
         }

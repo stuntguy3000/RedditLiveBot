@@ -1,5 +1,6 @@
 package me.stuntguy3000.java.redditlivebot.hook;
 
+import me.stuntguy3000.java.redditlivebot.command.StartLiveCommand;
 import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.event.Listener;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
@@ -10,18 +11,19 @@ public class TelegramHook implements Listener {
 
     public TelegramHook(String authKey) {
         bot = TelegramBot.login(authKey);
-        bot.getEventsManager().register(this);
         bot.startUpdates(false);
+        bot.getEventsManager().register(this);
         System.out.println("Connected to Telegram.");
     }
 
-    public void onCommandMessageReceivedEvent(CommandMessageReceivedEvent event) {
-        String command = event.getMessage().toString();
+    @Override
+    public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
+        String command = event.getCommand();
 
         System.out.println(command);
 
-        if (command.startsWith("/startlive")) {
-            //new StartLiveCommand(event);
+        if (command.equalsIgnoreCase("startlive")) {
+            new StartLiveCommand(event);
         }
     }
 
