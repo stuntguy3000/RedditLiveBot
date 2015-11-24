@@ -8,6 +8,9 @@ import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.http.oauth.Credentials;
 import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
+import pro.zackpollard.telegrambot.api.TelegramBot;
+import pro.zackpollard.telegrambot.api.chat.Chat;
+import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 
 import java.io.IOException;
 
@@ -32,9 +35,14 @@ public class RedditLiveBot {
         connectReddit();
         connectTelegram();
 
+        Chat mazenchat = TelegramBot.getChat(-17349250);
         while (true) {
             String in = System.console().readLine();
-
+            if ("quit".equals(in)) {
+                break;
+            }
+            SendableTextMessage message = SendableTextMessage.builder().message(in).build();
+            this.telegramHook.getBot().sendMessage(mazenchat, message);
         }
     }
 

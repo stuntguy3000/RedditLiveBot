@@ -11,12 +11,12 @@ public class TelegramHook implements Listener {
     public TelegramHook(String authKey) {
         this.bot = TelegramBot.login(authKey);
         this.bot.getEventsManager().register(this);
+        this.bot.startUpdates(false);
         System.out.println("Connected to Telegram.");
     }
 
     @Override
     public void onTextMessageReceived(TextMessageReceivedEvent event) {
-        System.out.println("Message Recieved.");
         event.getChat().sendMessage("The bot is working, " + event.getMessage().getSender().getUsername() + ".", bot);
     }
 
