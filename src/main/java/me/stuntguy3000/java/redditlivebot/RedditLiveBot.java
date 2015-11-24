@@ -42,7 +42,7 @@ public class RedditLiveBot {
                 break;
             }
             SendableTextMessage message = SendableTextMessage.builder().message(in).build();
-            this.telegramHook.getBot().sendMessage(mazenchat, message);
+            TelegramHook.getBot().sendMessage(mazenchat, message);
         }
     }
 

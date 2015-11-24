@@ -1,46 +1,36 @@
 package me.stuntguy3000.java.redditlivebot.command;
 
-import pro.zackpollard.telegrambot.api.TelegramBot;
-import pro.zackpollard.telegrambot.api.event.chat.message.TextMessageReceivedEvent;
+import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
+import pro.zackpollard.telegrambot.api.chat.message.send.SendableMessage;
+import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
-public class TelegramCommand {
-    private String fullMessage;
-    private String[] args;
-    private TextMessageReceivedEvent event;
-    private TelegramBot bot;
+public abstract class TelegramCommand {
+    private final String cmd;
+    private final String description;
 
-    public TelegramCommand(String fullMessage, String[] args, TextMessageReceivedEvent event, TelegramBot bot) {
-        this.fullMessage = fullMessage;
-        this.args = args;
+    private final CommandMessageReceivedEvent event;
+
+    public TelegramCommand(String cmd, String description, CommandMessageReceivedEvent event) {
+        this.cmd = cmd;
+        this.description = description;
         this.event = event;
-        this.bot = bot;
     }
 
-    public TelegramBot getBot() {
-        return bot;
-    }
+    public abstract void processCommand();
 
-    public String getFullMessage() {
-        return fullMessage;
-    }
-
-    public void setFullMessage(String fullMessage) {
-        this.fullMessage = fullMessage;
-    }
-
-    public String[] getArgs() {
-        return args;
-    }
-
-    public void setArgs(String[] args) {
-        this.args = args;
-    }
-
-    public TextMessageReceivedEvent getEvent() {
+    public CommandMessageReceivedEvent getEvent() {
         return event;
     }
 
-    public void setEvent(TextMessageReceivedEvent event) {
-        this.event = event;
+    public String getCmd() {
+        return cmd;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void respond(SendableMessage message) {
+        event.getChat().sendMessage(message, TelegramHook.getBot());
     }
 }
