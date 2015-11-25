@@ -8,6 +8,7 @@ import pro.zackpollard.telegrambot.api.chat.message.send.SendableMessage;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
 public abstract class TelegramCommand {
+    @Getter
     private final RedditLiveBot instance;
     @Getter
     private final String name;

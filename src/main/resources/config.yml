@@ -1,0 +1,8 @@
+# Reddit Settings
+redditUsername: ''
+redditPassword: ''
+redditAppID: ''
+redditAppSecret: ''
+# Telegram Settings
+telegramKey: ''
+telegramAdmin: '0'

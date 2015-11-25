@@ -6,8 +6,7 @@ package me.stuntguy3000.java.redditlivebot.util;
 public class LogHandler {
 
     public static void log(String s, Object... format) {
-        String msg = String.format(s, format);
-        System.out.println(msg);
+        System.out.println(String.format(s, format));
     }
 
     public static void logn(String s, Object... format) {

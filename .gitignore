@@ -57,3 +57,4 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 config.yml
+!src/main/resources/config.yml

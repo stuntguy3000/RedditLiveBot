@@ -1,5 +1,6 @@
 package me.stuntguy3000.java.redditlivebot.util;
 
+import lombok.Getter;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
@@ -9,7 +10,13 @@ import java.util.HashMap;
 // @author Luke Anderson | stuntguy3000
 public class Config {
 
+    @Getter
+    public static Config instance;
     private HashMap<String, String> configuration = new HashMap<>();
+
+    public Config() {
+        instance = this;
+    }
 
     public void loadConfig() throws IOException {
         initializeConfig();
@@ -34,6 +41,7 @@ public class Config {
         configuration.put("redditAppID", "");
         configuration.put("redditAppSecret", "");
         configuration.put("telegramKey", "");
+        configuration.put("telegramAdmin", "");
     }
 
     public String getRedditUsername() {
@@ -56,6 +64,10 @@ public class Config {
         return configuration.get("telegramKey");
     }
 
+    public int getTelegramAdmin() {
+        return Integer.parseInt(configuration.get("telegramAdmin"));
+    }
+
     /**
      * Writes an embedded resource to a local file by the resource name.
      *
@@ -69,9 +81,8 @@ public class Config {
 
         final URL resourceUrl = getClass().getClassLoader().getResource(resourceName);
 
-        // 1Kb buffer
         byte[] buffer = new byte[1024];
-        int byteCount = 0;
+        int byteCount;
 
         InputStream inputStream = null;
         OutputStream outputStream = null;
@@ -84,7 +95,6 @@ public class Config {
                 outputStream.write(buffer, 0, byteCount);
             }
 
-            // report success
             result = true;
         } catch (final IOException e) {
             LogHandler.log("Failure on saving the embedded resource " + resourceName + " to the file " + configFile.getAbsolutePath());

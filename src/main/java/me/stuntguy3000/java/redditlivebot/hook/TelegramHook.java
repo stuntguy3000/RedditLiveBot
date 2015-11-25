@@ -2,10 +2,7 @@ package me.stuntguy3000.java.redditlivebot.hook;
 
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
-import me.stuntguy3000.java.redditlivebot.command.StartLiveCommand;
-import me.stuntguy3000.java.redditlivebot.command.StatusCommand;
-import me.stuntguy3000.java.redditlivebot.command.StopLiveCommand;
-import me.stuntguy3000.java.redditlivebot.command.VersionCommand;
+import me.stuntguy3000.java.redditlivebot.command.*;
 import me.stuntguy3000.java.redditlivebot.handler.LiveFeedHandler;
 import me.stuntguy3000.java.redditlivebot.util.LogHandler;
 import pro.zackpollard.telegrambot.api.TelegramBot;
@@ -37,6 +34,7 @@ public class TelegramHook implements Listener {
         new StatusCommand(instance);
         new StopLiveCommand(instance);
         new VersionCommand(instance);
+        new AdminCommand(instance);
     }
 
     @Override
