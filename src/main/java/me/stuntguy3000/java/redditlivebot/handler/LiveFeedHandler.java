@@ -35,7 +35,7 @@ public class LiveFeedHandler {
     public void startFeed(Chat chat, String redditThread) {
         if (getFeedTimer(chat) == null) {
             chat.sendMessage(SendableTextMessage.builder().message("Starting Live Feed: " + redditThread).build(), bot);
-            currentFeedTasks.put(chat.getId(), new LiveFeedUpdateTask(redditThread, chat, RedditLiveBot.getRedditClient()));
+            currentFeedTasks.put(chat.getId(), new LiveFeedUpdateTask(redditThread, chat, RedditLiveBot.instance.getRedditClient()));
         } else {
             chat.sendMessage(SendableTextMessage.builder().message("A feed is already running in this channel!").build(), bot);
         }

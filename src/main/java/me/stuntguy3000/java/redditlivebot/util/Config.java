@@ -10,19 +10,34 @@ import java.net.URL;
 public class Config {
 
     @Getter
-    public BotSettings botSettings;
+    private final BotSettings botSettings;
 
-    public void loadConfig() throws IOException {
+    public Config() {
         Gson gson = new Gson();
         File configFile = new File("config.json");
 
         if (configFile.exists()) {
-            BufferedReader br = new BufferedReader(new FileReader(configFile));
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new FileReader(configFile));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             botSettings = gson.fromJson(br, BotSettings.class);
-
+            LogHandler.log("RedditUsername: " + botSettings.getRedditUsername());
+            LogHandler.log("RedditPassword: " + botSettings.getRedditPassword());
+            LogHandler.log("RedditAppID: " + botSettings.getRedditAppID());
+            LogHandler.log("RedditAppSecret: " + botSettings.getRedditAppSecret());
+            LogHandler.log("telegramKey: " + botSettings.getTelegramKey());
+            LogHandler.log("getTelegramAdmins: " + botSettings.getTelegramAdmins().size());
             LogHandler.log("Loaded configuration.");
         } else {
-            configFile.createNewFile();
+            botSettings = null;
+            try {
+                configFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             writeEmbeddedResourceToLocalFile("config.json", configFile);
             LogHandler.log("Please modify config.json!");
             System.exit(0);

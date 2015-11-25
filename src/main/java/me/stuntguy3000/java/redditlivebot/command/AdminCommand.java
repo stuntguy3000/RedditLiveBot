@@ -1,7 +1,6 @@
 package me.stuntguy3000.java.redditlivebot.command;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
-import me.stuntguy3000.java.redditlivebot.util.LogHandler;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 import pro.zackpollard.telegrambot.api.user.User;
@@ -16,7 +15,7 @@ public class AdminCommand extends TelegramCommand {
         Chat chat = event.getChat();
         User sender = event.getMessage().getSender();
 
-        LogHandler.log("Admins: ", RedditLiveBot.getInstance().getConfig().getBotSettings().getRedditAppID());
+        //LogHandler.log("Admins: ", RedditLiveBot.getInstance().getConfig().getBotSettings().getRedditAppID());
         //if (Config.getInstance().getTelegramAdmins().containsValue(sender.getUsername())) {
         //    chat.sendMessage("You're chill, " + sender.getUsername(), TelegramHook.getBot());
         //} else {
