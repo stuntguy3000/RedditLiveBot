@@ -3,6 +3,7 @@ package me.stuntguy3000.java.redditlivebot.hook;
 import me.stuntguy3000.java.redditlivebot.command.StartLiveCommand;
 import me.stuntguy3000.java.redditlivebot.command.StatusCommand;
 import me.stuntguy3000.java.redditlivebot.command.StopLiveCommand;
+import me.stuntguy3000.java.redditlivebot.command.VersionCommand;
 import me.stuntguy3000.java.redditlivebot.handler.LiveFeedHandler;
 import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.event.Listener;
@@ -39,6 +40,8 @@ public class TelegramHook implements Listener {
             new StatusCommand(event);
         } else if (command.equalsIgnoreCase("stoplive")) {
             new StopLiveCommand(event);
+        } else if (command.equalsIgnoreCase("version")) {
+            new VersionCommand(event);
         }
     }
 }
