@@ -17,11 +17,16 @@ import java.io.IOException;
 // @author Luke Anderson | stuntguy3000
 public class RedditLiveBot {
 
+    private static RedditClient redditClient;
     private Config config;
     private TelegramHook telegramHook;
 
     public static void main(String[] args) {
         new RedditLiveBot().main();
+    }
+
+    public static RedditClient getRedditBot() {
+        return redditClient;
     }
 
     public void main() {
@@ -54,7 +59,7 @@ public class RedditLiveBot {
     private void connectReddit() {
         System.out.println("Connecting to Reddit...");
         UserAgent myUserAgent = UserAgent.of("desktop", "me.stuntguy3000.java.redditlivebot", "1", config.getRedditUsername());
-        RedditClient redditClient = new RedditClient(myUserAgent);
+        redditClient = new RedditClient(myUserAgent);
         Credentials credentials = Credentials.script(
                 config.getRedditUsername(),
                 config.getRedditPassword(),

@@ -1,29 +1,35 @@
 package me.stuntguy3000.java.redditlivebot.scheduler;
 
+import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.util.LiveUpdateWrapper;
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.LiveUpdate;
 import net.dean.jraw.paginators.LiveThreadPaginator;
+import pro.zackpollard.telegrambot.api.chat.Chat;
+import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
+import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 
 import java.util.*;
 
 // @author Luke Anderson | stuntguy3000
-public class LiveThreadUpdateTask extends TimerTask {
+public class LiveFeedUpdateTask extends TimerTask {
     private Timer timer = new Timer();
-    private String threadID;
+    private String feedID;
     private LiveUpdate lastPostedListing;
     private RedditClient redditClient;
+    private Chat chat;
 
-    public LiveThreadUpdateTask(String threadID, RedditClient redditClient) {
-        this.threadID = threadID;
+    public LiveFeedUpdateTask(String feedID, Chat chat, RedditClient redditClient) {
+        this.feedID = feedID;
         this.redditClient = redditClient;
-        timer.schedule(this, 0, 10000);
+        this.chat = chat;
+        timer.schedule(this, 0, 2000);
     }
 
     @Override
     public void run() {
-        LiveThreadPaginator liveThreadPaginator = new LiveThreadPaginator(redditClient, threadID);
+        LiveThreadPaginator liveThreadPaginator = new LiveThreadPaginator(redditClient, feedID);
 
         if (liveThreadPaginator.hasNext()) {
             liveThreadPaginator.next();
@@ -31,7 +37,7 @@ public class LiveThreadUpdateTask extends TimerTask {
 
             if (lastPostedListing == null) {
                 if (currentPage.size() > 0) {
-                    lastPostedListing = currentPage.get(currentPage.size() - 1);
+                    lastPostedListing = currentPage.get(0);
                 }
             } else {
                 long originalPostedAt = lastPostedListing.getCreatedUtc().getTime();
@@ -57,13 +63,24 @@ public class LiveThreadUpdateTask extends TimerTask {
                     Arrays.sort(updatesStorted);
 
                     for (LiveUpdateWrapper liveUpdateWrapper : updatesStorted) {
-                        System.out.println("[NEW] " + liveUpdateWrapper.getLiveUpdate().getBody());
+                        chat.sendMessage(
+                                SendableTextMessage.builder().message(
+                                        "([" + feedID + "](https://www.reddit.com/live/" + feedID + ")) New update by "
+                                                + liveUpdateWrapper.getLiveUpdate().getAuthor() + "\n\n"
+                                                + liveUpdateWrapper.getLiveUpdate().getBody()
+                                ).disableWebPagePreview(true).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
+                        );
                     }
 
                     lastPostedListing = updatesStorted[updatesStorted.length - 1].getLiveUpdate();
                 }
             }
         }
+    }
+
+    public String getFeedID() {
+        System.out.println("getFeedID Debug: " + feedID + " " + lastPostedListing);
+        return feedID;
     }
 }
     

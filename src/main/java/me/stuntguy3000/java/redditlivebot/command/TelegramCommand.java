@@ -33,4 +33,8 @@ public abstract class TelegramCommand {
     public void respond(SendableMessage message) {
         event.getChat().sendMessage(message, TelegramHook.getBot());
     }
+
+    public void respond(String message) {
+        event.getChat().sendMessage(message, TelegramHook.getBot());
+    }
 }
