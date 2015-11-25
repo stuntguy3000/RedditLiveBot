@@ -1,7 +1,6 @@
 package me.stuntguy3000.java.redditlivebot.handler;
 
 import me.stuntguy3000.java.redditlivebot.command.TelegramCommand;
-import me.stuntguy3000.java.redditlivebot.util.LogHandler;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
 import java.util.HashMap;
@@ -22,11 +21,7 @@ public class CommandHandler {
 
     public void executeCommand(String s, CommandMessageReceivedEvent event) {
         TelegramCommand cmd = commands.get(s.toLowerCase());
-
-        LogHandler.log("Command: " + s.toLowerCase());
         if (cmd == null) return;
-
-        LogHandler.log("Processing Command: " + s.toLowerCase());
         cmd.processCommand(event);
     }
 

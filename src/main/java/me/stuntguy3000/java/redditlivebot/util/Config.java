@@ -1,71 +1,32 @@
 package me.stuntguy3000.java.redditlivebot.util;
 
+import com.google.gson.Gson;
 import lombok.Getter;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.net.URL;
-import java.util.HashMap;
 
 // @author Luke Anderson | stuntguy3000
 public class Config {
 
     @Getter
-    public static Config instance;
-    private HashMap<String, String> configuration = new HashMap<>();
-
-    public Config() {
-        instance = this;
-    }
+    public BotSettings botSettings;
 
     public void loadConfig() throws IOException {
-        initializeConfig();
-        File configFile = new File("config.yml");
+        Gson gson = new Gson();
+        File configFile = new File("config.json");
 
         if (configFile.exists()) {
-            Yaml yaml = new Yaml();
-            InputStream input = new FileInputStream(new File("config.yml"));
-            configuration = (HashMap<String, String>) yaml.load(input);
+            BufferedReader br = new BufferedReader(new FileReader(configFile));
+            botSettings = gson.fromJson(br, BotSettings.class);
+
             LogHandler.log("Loaded configuration.");
         } else {
             configFile.createNewFile();
-            writeEmbeddedResourceToLocalFile("config.yml", configFile);
-            LogHandler.log("Please modify config.yml!");
+            writeEmbeddedResourceToLocalFile("config.json", configFile);
+            LogHandler.log("Please modify config.json!");
             System.exit(0);
         }
-    }
-
-    private void initializeConfig() {
-        configuration.put("redditUsername", "");
-        configuration.put("redditPassword", "");
-        configuration.put("redditAppID", "");
-        configuration.put("redditAppSecret", "");
-        configuration.put("telegramKey", "");
-        configuration.put("telegramAdmin", "");
-    }
-
-    public String getRedditUsername() {
-        return configuration.get("redditUsername");
-    }
-
-    public String getRedditPassword() {
-        return configuration.get("redditPassword");
-    }
-
-    public String getRedditAppID() {
-        return configuration.get("redditAppID");
-    }
-
-    public String getRedditAppSecret() {
-        return configuration.get("redditAppSecret");
-    }
-
-    public String getTelegramKey() {
-        return configuration.get("telegramKey");
-    }
-
-    public int getTelegramAdmin() {
-        return Integer.parseInt(configuration.get("telegramAdmin"));
     }
 
     /**
@@ -119,4 +80,5 @@ public class Config {
         return result;
     }
 }
+
     

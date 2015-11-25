@@ -1,0 +1,10 @@
+{
+  "redditUsername": "",
+  "redditPassword": "",
+  "redditAppID": "",
+  "redditAppSecret": "",
+  "telegramKey": "",
+  "telegramAdmins": [
+    97312446
+  ]
+}

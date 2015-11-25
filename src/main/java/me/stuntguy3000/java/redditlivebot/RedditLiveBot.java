@@ -22,7 +22,7 @@ public class RedditLiveBot {
     @Getter
     public static RedditClient redditClient;
     @Getter
-    public Config config;
+    public static Config config;
     @Getter
     private CommandHandler commandHandler = new CommandHandler();
 
@@ -61,6 +61,10 @@ public class RedditLiveBot {
                     System.exit(0);
                     return;
                 }
+                case "admins": {
+                    LogHandler.log("Admins: ", RedditLiveBot.getConfig().getBotSettings().getTelegramAdmins());
+                    continue;
+                }
                 default: {
                     LogHandler.log("Unknown command! Commands: count, stoplive, stop, botfather1");
                 }
@@ -70,18 +74,18 @@ public class RedditLiveBot {
 
     private void connectTelegram() {
         LogHandler.log("Connecting to Telegram...");
-        new TelegramHook(config.getTelegramKey(), this);
+        new TelegramHook(config.getBotSettings().getTelegramKey(), this);
     }
 
     private void connectReddit() {
         LogHandler.log("Connecting to Reddit...");
-        UserAgent myUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", config.getRedditUsername());
+        UserAgent myUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", config.getBotSettings().getRedditUsername());
         redditClient = new RedditClient(myUserAgent);
         Credentials credentials = Credentials.script(
-                config.getRedditUsername(),
-                config.getRedditPassword(),
-                config.getRedditAppID(),
-                config.getRedditAppSecret());
+                config.getBotSettings().getRedditUsername(),
+                config.getBotSettings().getRedditPassword(),
+                config.getBotSettings().getRedditAppID(),
+                config.getBotSettings().getRedditAppSecret());
         try {
             OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
             redditClient.authenticate(authData);
@@ -89,7 +93,6 @@ public class RedditLiveBot {
             LogHandler.log("Connected to Reddit. Username: " + redditClient.me().getFullName());
         } catch (OAuthException e) {
             e.printStackTrace();
-            // TODO: Improve error messages, add admin PM system
         }
     }
 }
