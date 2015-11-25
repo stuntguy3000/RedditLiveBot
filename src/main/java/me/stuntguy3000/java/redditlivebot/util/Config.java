@@ -33,9 +33,12 @@ public class Config {
             LogHandler.log("getTelegramAdmins: " + botSettings.getTelegramAdmins().size());
             LogHandler.log("Loaded configuration.");
         } else {
+
+            botSettings = new BotSettings();
+
             GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
             gson = builder.create();
-            String json = gson.toJson(config);
+            String json = gson.toJson(botSettings);
     
             FileOutputStream outputStream;
     
@@ -45,14 +48,12 @@ public class Config {
                 outputStream = new FileOutputStream(configFile);
                 outputStream.write(json.getBytes());
                 outputStream.close();
-    
-                return true;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                instance.getLogger().severe("The config could not be saved as the file couldn't be found on the storage device. Please check the directories read/write permissions and contact the developer!");
+                LogHandler.log("The config could not be saved as the file couldn't be found on the storage device. Please check the directories read/write permissions and contact the developer!");
             } catch (IOException e) {
                 e.printStackTrace();
-                instance.getLogger().severe("The config could not be written to as an error occured. Please check the directories read/write permissions and contact the developer!");
+                LogHandler.log("The config could not be written to as an error occured. Please check the directories read/write permissions and contact the developer!");
             }
             LogHandler.log("Please modify config.json!");
             System.exit(0);
