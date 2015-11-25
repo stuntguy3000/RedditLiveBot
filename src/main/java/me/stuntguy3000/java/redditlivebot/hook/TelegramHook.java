@@ -1,10 +1,7 @@
 package me.stuntguy3000.java.redditlivebot.hook;
 
 import lombok.Getter;
-import me.stuntguy3000.java.redditlivebot.command.StartLiveCommand;
-import me.stuntguy3000.java.redditlivebot.command.StatusCommand;
-import me.stuntguy3000.java.redditlivebot.command.StopLiveCommand;
-import me.stuntguy3000.java.redditlivebot.command.VersionCommand;
+import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.LiveFeedHandler;
 import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.event.Listener;
@@ -16,28 +13,24 @@ public class TelegramHook implements Listener {
     private static TelegramBot bot;
     @Getter
     private static LiveFeedHandler liveFeedHandler;
+    private final RedditLiveBot instance;
 
-    public TelegramHook(String authKey) {
+    public TelegramHook(String authKey, RedditLiveBot instance) {
+        this.instance = instance;
+
         bot = TelegramBot.login(authKey);
         bot.startUpdates(false);
         bot.getEventsManager().register(this);
         System.out.println("Connected to Telegram.");
         liveFeedHandler = new LiveFeedHandler(bot);
+
     }
 
     @Override
     public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
         String command = event.getCommand();
 
-        if (command.equalsIgnoreCase("startlive")) {
-            new StartLiveCommand(event);
-        } else if (command.equalsIgnoreCase("status")) {
-            new StatusCommand(event);
-        } else if (command.equalsIgnoreCase("stoplive")) {
-            new StopLiveCommand(event);
-        } else if (command.equalsIgnoreCase("version")) {
-            new VersionCommand(event);
-        }
+        instance.getCommandHandler().executeCommand(command, event);
     }
 }
     
