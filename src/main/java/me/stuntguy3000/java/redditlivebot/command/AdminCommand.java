@@ -16,7 +16,7 @@ public class AdminCommand extends TelegramCommand {
         Chat chat = event.getChat();
         User sender = event.getMessage().getSender();
 
-        LogHandler.log("Admins: ", RedditLiveBot.getConfig().getBotSettings().getRedditAppID());
+        LogHandler.log("Admins: ", RedditLiveBot.getInstance().getConfig().getBotSettings().getRedditAppID());
         //if (Config.getInstance().getTelegramAdmins().containsValue(sender.getUsername())) {
         //    chat.sendMessage("You're chill, " + sender.getUsername(), TelegramHook.getBot());
         //} else {

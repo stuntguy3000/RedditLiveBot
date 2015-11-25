@@ -22,7 +22,9 @@ public class RedditLiveBot {
     @Getter
     public static RedditClient redditClient;
     @Getter
-    public static Config config;
+    public static RedditLiveBot instance;
+    @Getter
+    public Config config;
     @Getter
     private CommandHandler commandHandler = new CommandHandler();
 
@@ -31,6 +33,7 @@ public class RedditLiveBot {
     }
 
     public void main() {
+        instance = this;
         try {
             config = new Config();
             config.loadConfig();
@@ -62,7 +65,7 @@ public class RedditLiveBot {
                     return;
                 }
                 case "admins": {
-                    LogHandler.log("Admins: ", RedditLiveBot.getConfig().getBotSettings().getTelegramAdmins());
+                    LogHandler.log("Admins: ", getConfig().getBotSettings().getTelegramAdmins());
                     continue;
                 }
                 default: {
