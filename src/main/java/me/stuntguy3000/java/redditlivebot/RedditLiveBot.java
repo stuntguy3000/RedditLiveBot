@@ -8,9 +8,6 @@ import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.http.oauth.Credentials;
 import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
-import pro.zackpollard.telegrambot.api.TelegramBot;
-import pro.zackpollard.telegrambot.api.chat.Chat;
-import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 
 import java.io.IOException;
 
@@ -40,14 +37,20 @@ public class RedditLiveBot {
         connectReddit();
         connectTelegram();
 
-        Chat mazenchat = TelegramBot.getChat(-17349250);
         while (true) {
             String in = System.console().readLine();
-            if ("quit".equals(in)) {
+            if (in.equalsIgnoreCase("count")) {
+                System.out.println("Live feed count: " + TelegramHook.getLiveFeedHandler().getCount());
+            } else if (in.equalsIgnoreCase("stoplive")) {
+                TelegramHook.getLiveFeedHandler().stopAll();
+                System.out.println("Stopped all live feeds.");
+            } else if (in.equalsIgnoreCase("stop")) {
+                TelegramHook.getLiveFeedHandler().stopAll();
+                System.exit(0);
                 break;
+            } else {
+                System.out.println("Unknown command! Commands: count, stoplive, stop");
             }
-            SendableTextMessage message = SendableTextMessage.builder().message(in).build();
-            TelegramHook.getBot().sendMessage(mazenchat, message);
         }
     }
 

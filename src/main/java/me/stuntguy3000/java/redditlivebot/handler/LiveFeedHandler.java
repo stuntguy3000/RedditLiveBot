@@ -7,6 +7,7 @@ import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 
 import java.util.HashMap;
+import java.util.Map;
 
 // @author Luke Anderson | stuntguy3000
 public class LiveFeedHandler {
@@ -46,6 +47,18 @@ public class LiveFeedHandler {
                 currentFeedTasks.remove(chat.getId());
             } else {
                 chat.sendMessage(SendableTextMessage.builder().message("Error Occurred! Contact @stuntguy3000").build(), bot);
+            }
+        }
+    }
+
+    public int getCount() {
+        return currentFeedTasks.size();
+    }
+
+    public void stopAll() {
+        for (Map.Entry<String, LiveFeedUpdateTask> entry : new HashMap<>(currentFeedTasks).entrySet()) {
+            if (entry.getValue().cancel()) {
+                currentFeedTasks.remove(entry.getKey());
             }
         }
     }

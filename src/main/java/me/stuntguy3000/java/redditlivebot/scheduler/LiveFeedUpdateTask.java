@@ -19,6 +19,7 @@ public class LiveFeedUpdateTask extends TimerTask {
     private LiveUpdate lastPostedListing;
     private RedditClient redditClient;
     private Chat chat;
+    private boolean firstRun = true;
 
     public LiveFeedUpdateTask(String feedID, Chat chat, RedditClient redditClient) {
         this.feedID = feedID;
@@ -38,6 +39,16 @@ public class LiveFeedUpdateTask extends TimerTask {
             if (lastPostedListing == null) {
                 if (currentPage.size() > 0) {
                     lastPostedListing = currentPage.get(0);
+
+                    if (firstRun) {
+                        chat.sendMessage(
+                                SendableTextMessage.builder().message(
+                                        "([" + feedID + "](https://www.reddit.com/live/" + feedID + ")) Last Update by "
+                                                + lastPostedListing.getAuthor() + "\n\n"
+                                                + lastPostedListing.getBody()
+                                ).disableWebPagePreview(true).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
+                        );
+                    }
                 }
             } else {
                 long originalPostedAt = lastPostedListing.getCreatedUtc().getTime();
@@ -65,7 +76,7 @@ public class LiveFeedUpdateTask extends TimerTask {
                     for (LiveUpdateWrapper liveUpdateWrapper : updatesStorted) {
                         chat.sendMessage(
                                 SendableTextMessage.builder().message(
-                                        "([" + feedID + "](https://www.reddit.com/live/" + feedID + ")) New update by "
+                                        "([" + feedID + "](https://www.reddit.com/live/" + feedID + ")) New Update by "
                                                 + liveUpdateWrapper.getLiveUpdate().getAuthor() + "\n\n"
                                                 + liveUpdateWrapper.getLiveUpdate().getBody()
                                 ).disableWebPagePreview(true).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
@@ -74,12 +85,12 @@ public class LiveFeedUpdateTask extends TimerTask {
 
                     lastPostedListing = updatesStorted[updatesStorted.length - 1].getLiveUpdate();
                 }
+                firstRun = false;
             }
         }
     }
 
     public String getFeedID() {
-        System.out.println("getFeedID Debug: " + feedID + " " + lastPostedListing);
         return feedID;
     }
 }
