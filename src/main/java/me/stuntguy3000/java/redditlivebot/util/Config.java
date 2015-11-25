@@ -19,11 +19,11 @@ public class Config {
             Yaml yaml = new Yaml();
             InputStream input = new FileInputStream(new File("config.yml"));
             configuration = (HashMap<String, String>) yaml.load(input);
-            System.out.println("Loaded configuration.");
+            LogHandler.log("Loaded configuration.");
         } else {
             configFile.createNewFile();
             writeEmbeddedResourceToLocalFile("config.yml", configFile);
-            System.out.println("Please modify config.yml!");
+            LogHandler.log("Please modify config.yml!");
             System.exit(0);
         }
     }
@@ -87,13 +87,13 @@ public class Config {
             // report success
             result = true;
         } catch (final IOException e) {
-            System.out.println("Failure on saving the embedded resource " + resourceName + " to the file " + configFile.getAbsolutePath());
+            LogHandler.log("Failure on saving the embedded resource " + resourceName + " to the file " + configFile.getAbsolutePath());
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (final IOException e) {
-                    System.out.println("Problem closing an input stream while reading data from the embedded resource " + resourceName);
+                    LogHandler.log("Problem closing an input stream while reading data from the embedded resource " + resourceName);
                 }
             }
             if (outputStream != null) {
@@ -101,7 +101,7 @@ public class Config {
                     outputStream.flush();
                     outputStream.close();
                 } catch (final IOException e) {
-                    System.out.println("Problem closing the output stream while writing the file " + configFile.getAbsolutePath());
+                    LogHandler.log("Problem closing the output stream while writing the file " + configFile.getAbsolutePath());
                 }
             }
         }

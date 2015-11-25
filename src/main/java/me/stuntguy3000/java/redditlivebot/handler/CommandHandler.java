@@ -20,7 +20,7 @@ public class CommandHandler {
     }
 
     public void executeCommand(String s, CommandMessageReceivedEvent event) {
-        TelegramCommand cmd = commands.get(s);
+        TelegramCommand cmd = commands.get(s.toLowerCase());
 
         if (cmd == null) return;
 

@@ -2,7 +2,12 @@ package me.stuntguy3000.java.redditlivebot.hook;
 
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
+import me.stuntguy3000.java.redditlivebot.command.StartLiveCommand;
+import me.stuntguy3000.java.redditlivebot.command.StatusCommand;
+import me.stuntguy3000.java.redditlivebot.command.StopLiveCommand;
+import me.stuntguy3000.java.redditlivebot.command.VersionCommand;
 import me.stuntguy3000.java.redditlivebot.handler.LiveFeedHandler;
+import me.stuntguy3000.java.redditlivebot.util.LogHandler;
 import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.event.Listener;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
@@ -21,9 +26,17 @@ public class TelegramHook implements Listener {
         bot = TelegramBot.login(authKey);
         bot.startUpdates(false);
         bot.getEventsManager().register(this);
-        System.out.println("Connected to Telegram.");
+        LogHandler.log("Connected to Telegram.");
         liveFeedHandler = new LiveFeedHandler(bot);
 
+        this.initializeCommands();
+    }
+
+    private void initializeCommands() {
+        new StartLiveCommand(instance);
+        new StatusCommand(instance);
+        new StopLiveCommand(instance);
+        new VersionCommand(instance);
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.io.IOException;
 public class RedditLiveBot {
 
     @Getter
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.1";
     @Getter
     public static RedditClient redditClient;
     @Getter
@@ -45,7 +45,7 @@ public class RedditLiveBot {
             String in = System.console().readLine();
             switch (in.toLowerCase()) {
                 case "count": {
-                    System.out.println("Live feed count: " + TelegramHook.getLiveFeedHandler().getCount());
+                    LogHandler.log("Live feed count: " + TelegramHook.getLiveFeedHandler().getCount());
                     continue;
                 }
                 case "stoplive": {
@@ -54,6 +54,7 @@ public class RedditLiveBot {
                 }
                 case "botfather": {
                     LogHandler.logn(commandHandler.getBotFatherString());
+                    continue;
                 }
                 case "stop": {
                     TelegramHook.getLiveFeedHandler().stopAll();
@@ -61,19 +62,19 @@ public class RedditLiveBot {
                     return;
                 }
                 default: {
-                    System.out.println("Unknown command! Commands: count, stoplive, stop");
+                    LogHandler.log("Unknown command! Commands: count, stoplive, stop, botfather1");
                 }
             }
         }
     }
 
     private void connectTelegram() {
-        System.out.println("Connecting to Telegram...");
+        LogHandler.log("Connecting to Telegram...");
         new TelegramHook(config.getTelegramKey(), this);
     }
 
     private void connectReddit() {
-        System.out.println("Connecting to Reddit...");
+        LogHandler.log("Connecting to Reddit...");
         UserAgent myUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", config.getRedditUsername());
         redditClient = new RedditClient(myUserAgent);
         Credentials credentials = Credentials.script(
@@ -85,7 +86,7 @@ public class RedditLiveBot {
             OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
             redditClient.authenticate(authData);
 
-            System.out.println("Connected to Reddit. Username: " + redditClient.me().getFullName());
+            LogHandler.log("Connected to Reddit. Username: " + redditClient.me().getFullName());
         } catch (OAuthException e) {
             e.printStackTrace();
             // TODO: Improve error messages, add admin PM system

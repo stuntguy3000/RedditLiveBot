@@ -7,7 +7,7 @@ public class LogHandler {
 
     public static void log(String s, Object... format) {
         String msg = String.format(s, format);
-        System.out.print(msg);
+        System.out.println(msg);
     }
 
     public static void logn(String s, Object... format) {

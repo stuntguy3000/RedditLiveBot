@@ -14,7 +14,6 @@ public abstract class TelegramCommand {
     @Getter
     private final String description;
 
-
     public TelegramCommand(RedditLiveBot instance, String name, String description) {
         this.instance = instance;
         this.name = name;
