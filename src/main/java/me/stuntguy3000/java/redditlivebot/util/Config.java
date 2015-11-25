@@ -1,6 +1,7 @@
 package me.stuntguy3000.java.redditlivebot.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Getter;
 
 import java.io.*;
