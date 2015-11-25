@@ -58,7 +58,7 @@ public class RedditLiveBot {
 
     private void connectReddit() {
         System.out.println("Connecting to Reddit...");
-        UserAgent myUserAgent = UserAgent.of("desktop", "me.stuntguy3000.java.redditlivebot", "1", config.getRedditUsername());
+        UserAgent myUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", config.getRedditUsername());
         redditClient = new RedditClient(myUserAgent);
         Credentials credentials = Credentials.script(
                 config.getRedditUsername(),
