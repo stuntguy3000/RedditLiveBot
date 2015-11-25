@@ -15,6 +15,7 @@ import java.io.IOException;
 public class RedditLiveBot {
 
     private static RedditClient redditClient;
+    private static String version = "1.0";
     private Config config;
     private TelegramHook telegramHook;
 
@@ -24,6 +25,10 @@ public class RedditLiveBot {
 
     public static RedditClient getRedditBot() {
         return redditClient;
+    }
+
+    public static String getVersion() {
+        return version;
     }
 
     public void main() {
