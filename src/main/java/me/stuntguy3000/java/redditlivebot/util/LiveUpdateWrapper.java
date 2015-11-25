@@ -1,15 +1,17 @@
 package me.stuntguy3000.java.redditlivebot.util;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.dean.jraw.models.LiveUpdate;
 
 // @author Luke Anderson | stuntguy3000
 public class LiveUpdateWrapper implements Comparable {
+    @Getter
+    @Setter
     private LiveUpdate liveUpdate;
-    private long timestamp;
 
-    public LiveUpdateWrapper(LiveUpdate liveUpdate, long timestamp) {
+    public LiveUpdateWrapper(LiveUpdate liveUpdate) {
         this.liveUpdate = liveUpdate;
-        this.timestamp = timestamp;
     }
 
     @Override
@@ -25,20 +27,8 @@ public class LiveUpdateWrapper implements Comparable {
         return (otherTime > getTimestamp() ? -1 : 1);
     }
 
-    public LiveUpdate getLiveUpdate() {
-        return liveUpdate;
-    }
-
-    public void setLiveUpdate(LiveUpdate liveUpdate) {
-        this.liveUpdate = liveUpdate;
-    }
-
     public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+        return liveUpdate.getCreatedUtc().getTime();
     }
 }
     

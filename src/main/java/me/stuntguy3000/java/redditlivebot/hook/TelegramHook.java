@@ -1,5 +1,6 @@
 package me.stuntguy3000.java.redditlivebot.hook;
 
+import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.command.StartLiveCommand;
 import me.stuntguy3000.java.redditlivebot.command.StatusCommand;
 import me.stuntguy3000.java.redditlivebot.command.StopLiveCommand;
@@ -11,7 +12,9 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 
 // @author Luke Anderson | stuntguy3000
 public class TelegramHook implements Listener {
+    @Getter
     private static TelegramBot bot;
+    @Getter
     private static LiveFeedHandler liveFeedHandler;
 
     public TelegramHook(String authKey) {
@@ -20,14 +23,6 @@ public class TelegramHook implements Listener {
         bot.getEventsManager().register(this);
         System.out.println("Connected to Telegram.");
         liveFeedHandler = new LiveFeedHandler(bot);
-    }
-
-    public static TelegramBot getBot() {
-        return bot;
-    }
-
-    public static LiveFeedHandler getLiveFeedHandler() {
-        return liveFeedHandler;
     }
 
     @Override

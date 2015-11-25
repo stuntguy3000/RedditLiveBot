@@ -1,13 +1,16 @@
 package me.stuntguy3000.java.redditlivebot.command;
 
+import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableMessage;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
 public abstract class TelegramCommand {
+    @Getter
     private final String cmd;
+    @Getter
     private final String description;
-
+    @Getter
     private final CommandMessageReceivedEvent event;
 
     public TelegramCommand(String cmd, String description, CommandMessageReceivedEvent event) {
@@ -17,18 +20,6 @@ public abstract class TelegramCommand {
     }
 
     public abstract void processCommand();
-
-    public CommandMessageReceivedEvent getEvent() {
-        return event;
-    }
-
-    public String getCmd() {
-        return cmd;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 
     public void respond(SendableMessage message) {
         event.getChat().sendMessage(message, TelegramHook.getBot());

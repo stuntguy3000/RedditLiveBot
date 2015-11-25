@@ -1,5 +1,6 @@
 package me.stuntguy3000.java.redditlivebot.scheduler;
 
+import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.util.LiveUpdateWrapper;
 import net.dean.jraw.RedditClient;
@@ -10,11 +11,15 @@ import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 // @author Luke Anderson | stuntguy3000
 public class LiveFeedUpdateTask extends TimerTask {
     private Timer timer = new Timer();
+    @Getter
     private String feedID;
     private LiveUpdate lastPostedListing;
     private RedditClient redditClient;
@@ -66,8 +71,8 @@ public class LiveFeedUpdateTask extends TimerTask {
                     LiveUpdateWrapper[] updatesStorted = new LiveUpdateWrapper[unposted.size()];
 
                     int i = 0;
-                    for (Map.Entry<LiveUpdate, Long> newUpdate : unposted.entrySet()) {
-                        updatesStorted[i] = new LiveUpdateWrapper(newUpdate.getKey(), newUpdate.getValue());
+                    for (LiveUpdate newUpdate : unposted.keySet()) {
+                        updatesStorted[i] = new LiveUpdateWrapper(newUpdate);
                         i++;
                     }
 
@@ -88,10 +93,6 @@ public class LiveFeedUpdateTask extends TimerTask {
                 firstRun = false;
             }
         }
-    }
-
-    public String getFeedID() {
-        return feedID;
     }
 }
     
