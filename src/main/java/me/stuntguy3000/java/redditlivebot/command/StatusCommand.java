@@ -1,5 +1,6 @@
 package me.stuntguy3000.java.redditlivebot.command;
 
+import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveFeedUpdateTask;
 import pro.zackpollard.telegrambot.api.chat.Chat;
@@ -9,20 +10,20 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 
 // @author Luke Anderson | stuntguy3000
 public class StatusCommand extends TelegramCommand {
-    public StatusCommand(CommandMessageReceivedEvent event) {
-        super("status", "/status Reddit Live Bot status for the current channel\n", event);
-        processCommand();
+    public StatusCommand(RedditLiveBot instance) {
+        super(instance, "status", "/status Reddit Live Bot status for the current channel\n");
     }
 
     @Override
-    public void processCommand() {
-        Chat chat = getEvent().getChat();
+    public void processCommand(CommandMessageReceivedEvent event) {
+        Chat chat = event.getChat();
+
         LiveFeedUpdateTask liveFeedUpdateTask = TelegramHook.getLiveFeedHandler().getFeedTimer(chat);
 
         if (liveFeedUpdateTask == null) {
-            respond("No Reddit Live feed is active in this channel.");
+            respond(chat, "No Reddit Live feed is active in this channel.");
         } else {
-            respond(SendableTextMessage.builder().message("Following Reddit Live feed "
+            respond(chat, SendableTextMessage.builder().message("Following Reddit Live feed "
                     + "[" + liveFeedUpdateTask.getFeedID() + "](https://www.reddit.com/live/" + liveFeedUpdateTask.getFeedID() + ").")
                     .parseMode(ParseMode.MARKDOWN).disableWebPagePreview(true).build());
         }

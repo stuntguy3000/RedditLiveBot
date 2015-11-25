@@ -2,8 +2,10 @@ package me.stuntguy3000.java.redditlivebot;
 
 
 import lombok.Getter;
+import me.stuntguy3000.java.redditlivebot.handler.CommandHandler;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.util.Config;
+import me.stuntguy3000.java.redditlivebot.util.LogHandler;
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.http.oauth.Credentials;
@@ -16,11 +18,13 @@ import java.io.IOException;
 public class RedditLiveBot {
 
     @Getter
+    public static final String VERSION = "1.0";
+    @Getter
     public static RedditClient redditClient;
     @Getter
-    public static String VERSION = "1.0";
-    @Getter
     public Config config;
+    @Getter
+    private CommandHandler commandHandler = new CommandHandler();
 
     public static void main(String[] args) {
         new RedditLiveBot().main();
@@ -48,6 +52,9 @@ public class RedditLiveBot {
                     TelegramHook.getLiveFeedHandler().stopAll();
                     continue;
                 }
+                case "botfather": {
+                    LogHandler.logn(commandHandler.getBotFatherString());
+                }
                 case "stop": {
                     TelegramHook.getLiveFeedHandler().stopAll();
                     System.exit(0);
@@ -62,7 +69,7 @@ public class RedditLiveBot {
 
     private void connectTelegram() {
         System.out.println("Connecting to Telegram...");
-        new TelegramHook(config.getTelegramKey());
+        new TelegramHook(config.getTelegramKey(), this);
     }
 
     private void connectReddit() {
