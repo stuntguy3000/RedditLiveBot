@@ -30,12 +30,11 @@ public class Updater implements Runnable {
         while (true) {
             try {
                 newBuild = Integer.parseInt(Unirest.get("http://ci.zackpollard.pro/job/RedditLiveBot/lastSuccessfulBuild/buildNumber").asString().getBody());
-                System.out.println("New build: " + newBuild);
             } catch (UnirestException e) {
                 e.printStackTrace();
             }
             if (newBuild > currentBuild) {
-                System.out.println("New build found!");
+                System.out.println("New build found! Updating...");
                 redditLiveBot.sendToAdmins("New build found! Updating...");
                 try {
                     FileUtils.writeStringToFile(build, String.valueOf(newBuild));

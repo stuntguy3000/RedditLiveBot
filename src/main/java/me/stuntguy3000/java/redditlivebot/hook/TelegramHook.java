@@ -26,6 +26,8 @@ public class TelegramHook implements Listener {
         LogHandler.log("Connected to Telegram.");
         liveFeedHandler = new LiveFeedHandler(bot);
 
+        instance.sendToAdmins("Bot has connected");
+
         this.initializeCommands();
     }
 
