@@ -24,18 +24,13 @@ public class Updater implements Runnable {
     public void run() {
         File build = new File("build");
         File jar = new File("RedditLiveBot.new");
-        int currentBuild = 0;
+        int currentBuild = RedditLiveBot.BUILD;
         int newBuild = 0;
-
-        try {
-            currentBuild = Integer.parseInt(FileUtils.readFileToString(build));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         while (true) {
             try {
                 newBuild = Integer.parseInt(Unirest.get("http://ci.zackpollard.pro/job/RedditLiveBot/lastSuccessfulBuild/buildNumber").asString().getBody());
+                System.out.println("New build: " + newBuild);
             } catch (UnirestException e) {
                 e.printStackTrace();
             }
