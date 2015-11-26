@@ -34,13 +34,13 @@ public class Updater implements Runnable {
                 e.printStackTrace();
             }
             if (newBuild > currentBuild) {
-                System.out.println("New build found! Updating...");
-                redditLiveBot.sendToAdmins("New build found! Updating...");
+                LogHandler.log("Downloading build #" + newBuild);
+                redditLiveBot.sendToAdmins("Downloading build #" + newBuild);
                 try {
                     FileUtils.writeStringToFile(build, String.valueOf(newBuild));
                     FileUtils.copyURLToFile(new URL("http://ci.zackpollard.pro/job/RedditLiveBot/lastSuccessfulBuild/artifact/target/RedditLiveBot.jar"), jar);
-                    System.out.println("New build downloaded - restarting!");
-                    redditLiveBot.sendToAdmins("New build downloaded - restarting!");
+                    LogHandler.log("Build #" + newBuild + " downloaded. Restarting...");
+                    redditLiveBot.sendToAdmins("Build #" + newBuild + " downloaded. Restarting...");
                 } catch (IOException e) {
                     System.err.println("Updater failed!");
                     e.printStackTrace();
