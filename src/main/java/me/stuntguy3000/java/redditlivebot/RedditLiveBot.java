@@ -11,11 +11,16 @@ import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.http.oauth.Credentials;
 import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
+import org.apache.commons.io.FileUtils;
+import pro.zackpollard.telegrambot.api.TelegramBot;
+
+import java.io.File;
+import java.io.IOException;
 
 // @author Luke Anderson | stuntguy3000
 public class RedditLiveBot {
 
-    public static final String VERSION = "1.1";
+    public static Integer BUILD = 0;
     @Getter
     public static RedditLiveBot instance;
     @Getter
@@ -35,6 +40,12 @@ public class RedditLiveBot {
 
         connectReddit();
         connectTelegram();
+
+        try {
+            BUILD = Integer.parseInt(FileUtils.readFileToString(new File("build")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         while (true) {
             String in = System.console().readLine();
@@ -89,6 +100,12 @@ public class RedditLiveBot {
             LogHandler.log("Connected to Reddit. Username: " + redditClient.me().getFullName());
         } catch (OAuthException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void sendToAdmins(String message) {
+        for (int admin : config.getBotSettings().getTelegramAdmins()) {
+            TelegramBot.getChat(admin).sendMessage(message, TelegramHook.getBot());
         }
     }
 }

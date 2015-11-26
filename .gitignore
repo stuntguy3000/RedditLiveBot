@@ -59,3 +59,5 @@ buildNumber.properties
 config.yml
 config.json
 !src/main/resources/config.json
+build
+RedditLiveBot.new
