@@ -6,6 +6,7 @@ import me.stuntguy3000.java.redditlivebot.handler.CommandHandler;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.util.Config;
 import me.stuntguy3000.java.redditlivebot.util.LogHandler;
+import me.stuntguy3000.java.redditlivebot.util.Updater;
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.http.oauth.Credentials;
@@ -46,6 +47,8 @@ public class RedditLiveBot {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        new Thread(new Updater(this)).start();
 
         while (true) {
             String in = System.console().readLine();
