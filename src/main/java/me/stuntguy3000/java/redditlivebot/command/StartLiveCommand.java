@@ -9,7 +9,7 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 // @author Luke Anderson | stuntguy3000
 public class StartLiveCommand extends TelegramCommand {
     public StartLiveCommand(RedditLiveBot instance) {
-        super(instance, "startlive", "/startlive [ID] Start a Reddit Live feed\n");
+        super(instance, "startlive", "/startlive [ID] Start a Reddit Live feed");
     }
 
     public void processCommand(CommandMessageReceivedEvent event) {

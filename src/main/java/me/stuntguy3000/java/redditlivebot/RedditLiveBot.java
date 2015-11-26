@@ -57,7 +57,7 @@ public class RedditLiveBot {
                     return;
                 }
                 case "admins": {
-                    LogHandler.log("Admins: ", config.getBotSettings().getTelegramAdmins());
+                    LogHandler.log("Admins: " + config.getBotSettings().getTelegramAdmins());
                     continue;
                 }
                 default: {
@@ -70,7 +70,6 @@ public class RedditLiveBot {
     private void connectTelegram() {
         LogHandler.log("Connecting to Telegram...");
         new TelegramHook(config.getBotSettings().getTelegramKey(), this);
-        LogHandler.log("Telegram Key: ", config.getBotSettings().getTelegramKey());
     }
 
     private void connectReddit() {

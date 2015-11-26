@@ -3,7 +3,6 @@ package me.stuntguy3000.java.redditlivebot.command;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.util.BotSettings;
-import me.stuntguy3000.java.redditlivebot.util.LogHandler;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 import pro.zackpollard.telegrambot.api.user.User;
@@ -16,11 +15,43 @@ public class AdminCommand extends TelegramCommand {
     public void processCommand(CommandMessageReceivedEvent event) {
         Chat chat = event.getChat();
         User sender = event.getMessage().getSender();
+        String[] args = event.getArgs();
 
         BotSettings botSettings = RedditLiveBot.getInstance().getConfig().getBotSettings();
-        LogHandler.log("Admins: " + botSettings.getRedditAppID());
+
         if (botSettings.getTelegramAdmins().contains(sender.getId())) {
-            chat.sendMessage("You're chill, " + sender.getUsername(), TelegramHook.getBot());
+            if (args.length == 0) {
+                chat.sendMessage("Admin Commands: count, stoplive, stop, botfather", TelegramHook.getBot());
+            } else {
+                switch (args[0].toLowerCase()) {
+                    case "count": {
+                        chat.sendMessage("Live feed count: " + TelegramHook.getLiveFeedHandler().getCount(), TelegramHook.getBot());
+                        return;
+                    }
+                    case "stoplive": {
+                        chat.sendMessage("Shutting down live feeds.", TelegramHook.getBot());
+                        TelegramHook.getLiveFeedHandler().stopAll();
+                        return;
+                    }
+                    case "botfather": {
+                        chat.sendMessage(RedditLiveBot.getInstance().getCommandHandler().getBotFatherString(), TelegramHook.getBot());
+                        return;
+                    }
+                    case "stop": {
+                        chat.sendMessage("Shutting bot down.", TelegramHook.getBot());
+                        TelegramHook.getLiveFeedHandler().stopAll();
+                        System.exit(0);
+                        return;
+                    }
+                    case "admins": {
+                        chat.sendMessage("Admins: " + botSettings.getTelegramAdmins(), TelegramHook.getBot());
+                        return;
+                    }
+                    default: {
+                        chat.sendMessage("Admin Commands: count, stoplive, stop, botfather", TelegramHook.getBot());
+                    }
+                }
+            }
         } else {
             chat.sendMessage("You cannot use this command " + sender.getUsername(), TelegramHook.getBot());
         }

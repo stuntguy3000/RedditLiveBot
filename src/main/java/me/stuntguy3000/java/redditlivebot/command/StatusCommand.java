@@ -11,7 +11,7 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 // @author Luke Anderson | stuntguy3000
 public class StatusCommand extends TelegramCommand {
     public StatusCommand(RedditLiveBot instance) {
-        super(instance, "status", "/status Reddit Live Bot status for the current channel\n");
+        super(instance, "status", "/status Reddit Live Bot status for the current channel");
     }
 
     @Override

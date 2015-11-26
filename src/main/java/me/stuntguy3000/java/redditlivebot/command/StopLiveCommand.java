@@ -11,7 +11,7 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 // @author Luke Anderson | stuntguy3000
 public class StopLiveCommand extends TelegramCommand {
     public StopLiveCommand(RedditLiveBot instance) {
-        super(instance, "stoplive", "/stoplive [ID] Cancel the Reddit Live feed\n");
+        super(instance, "stoplive", "/stoplive [ID] Cancel the Reddit Live feed");
     }
 
     @Override
