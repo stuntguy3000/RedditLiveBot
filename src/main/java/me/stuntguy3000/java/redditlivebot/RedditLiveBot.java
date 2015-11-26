@@ -88,7 +88,6 @@ public class RedditLiveBot {
 
             LogHandler.log("Connected to Reddit. Username: " + redditClient.me().getFullName());
         } catch (OAuthException e) {
-            LogHandler.log("Connected to Reddit. Username: " + redditClient.me().getFullName());
             e.printStackTrace();
         }
     }
