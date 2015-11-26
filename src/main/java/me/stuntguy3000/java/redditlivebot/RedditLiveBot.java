@@ -48,7 +48,7 @@ public class RedditLiveBot {
                     continue;
                 }
                 case "botfather": {
-                    LogHandler.logn(commandHandler.getBotFatherString());
+                    LogHandler.log(commandHandler.getBotFatherString());
                     continue;
                 }
                 case "stop": {
