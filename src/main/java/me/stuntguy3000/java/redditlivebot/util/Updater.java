@@ -16,7 +16,7 @@ public class Updater implements Runnable {
 
     RedditLiveBot redditLiveBot;
 
-    public Updater(RedditLiveBot topKekBot) {
+    public Updater(RedditLiveBot redditLiveBot) {
         this.redditLiveBot = redditLiveBot;
     }
 
