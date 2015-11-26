@@ -21,7 +21,6 @@ public class BotSettings {
     private List<Integer> telegramAdmins;
 
     public BotSettings() {
-
         this.redditUsername = "";
         this.redditPassword = "";
         this.redditAppID = "";

@@ -8,8 +8,4 @@ public class LogHandler {
     public static void log(String s, Object... format) {
         System.out.println(String.format(s, format));
     }
-
-    public static void logn(String s, Object... format) {
-        log(s + "%n", format);
-    }
 }
