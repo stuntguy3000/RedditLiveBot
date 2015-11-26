@@ -39,14 +39,14 @@ public class RedditLiveBot {
         instance = this;
         config = new Config();
 
-        connectReddit();
-        connectTelegram();
-
         try {
             BUILD = Integer.parseInt(FileUtils.readFileToString(new File("build")));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        connectReddit();
+        connectTelegram();
 
         new Thread(new Updater(this)).start();
 
