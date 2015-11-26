@@ -75,7 +75,7 @@ public class RedditLiveBot {
                     continue;
                 }
                 default: {
-                    LogHandler.log("Unknown command! Commands: count, stoplive, stop, botfather1");
+                    LogHandler.log("Unknown command! Commands: count, stoplive, stop, botfather");
                 }
             }
         }
