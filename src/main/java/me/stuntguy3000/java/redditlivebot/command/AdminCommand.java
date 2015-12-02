@@ -6,6 +6,7 @@ import me.stuntguy3000.java.redditlivebot.util.BotSettings;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 import pro.zackpollard.telegrambot.api.user.User;
+
 // @author Luke Anderson | stuntguy3000
 public class AdminCommand extends TelegramCommand {
     public AdminCommand(RedditLiveBot instance) {

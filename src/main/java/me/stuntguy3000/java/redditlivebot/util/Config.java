@@ -25,15 +25,14 @@ public class Config {
             }
             botSettings = gson.fromJson(br, BotSettings.class);
         } else {
-
             botSettings = new BotSettings();
 
             GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
             gson = builder.create();
             String json = gson.toJson(botSettings);
-    
+
             FileOutputStream outputStream;
-    
+
             try {
                 configFile.createNewFile();
                 outputStream = new FileOutputStream(configFile);
