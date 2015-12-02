@@ -48,7 +48,7 @@ public class LiveFeedUpdateTask extends TimerTask {
                     if (firstRun) {
                         chat.sendMessage(
                                 SendableTextMessage.builder()
-                                        .message(String.format("(%s) Last update by %s\n%s", feedID,
+                                        .message(String.format("*(%s) Last update by %s*\n%s", feedID,
                                                         lastPostedListing.getAuthor()
                                                         , lastPostedListing.getBody())
                                         ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
@@ -81,7 +81,7 @@ public class LiveFeedUpdateTask extends TimerTask {
                     for (LiveUpdateWrapper liveUpdateWrapper : updatesStorted) {
                         chat.sendMessage(
                                 SendableTextMessage.builder()
-                                        .message(String.format("(%s) New update by %s\n%s", feedID,
+                                        .message(String.format("*(%s) New update by %s*\n%s", feedID,
                                                         liveUpdateWrapper.getLiveUpdate().getAuthor()
                                                         , liveUpdateWrapper.getLiveUpdate().getBody())
                                         ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
