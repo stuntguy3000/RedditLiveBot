@@ -14,6 +14,9 @@ import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
 import org.apache.commons.io.FileUtils;
 import pro.zackpollard.telegrambot.api.TelegramBot;
+import pro.zackpollard.telegrambot.api.chat.Chat;
+import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
+import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,8 +77,18 @@ public class RedditLiveBot {
                     LogHandler.log("Admins: " + config.getBotSettings().getTelegramAdmins());
                     continue;
                 }
+                case "broadcast": {
+                    Chat chat = TelegramBot.getChat("RedditLive");
+                    chat.sendMessage(
+                            SendableTextMessage.builder()
+                                    .message("*(Broadcast)* " + in.substring(10))
+                                    .parseMode(ParseMode.MARKDOWN)
+                                    .build()
+                            , TelegramHook.getBot());
+                    continue;
+                }
                 default: {
-                    LogHandler.log("Unknown command! Commands: count, stoplive, stop, botfather");
+                    LogHandler.log("Unknown command! Commands: count, stoplive, stop, botfather, broadcast");
                 }
             }
         }
