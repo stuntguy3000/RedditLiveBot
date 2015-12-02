@@ -47,11 +47,11 @@ public class LiveFeedUpdateTask extends TimerTask {
 
                     if (firstRun) {
                         chat.sendMessage(
-                                SendableTextMessage.builder().message(
-                                        "([" + feedID + "](https://www.reddit.com/live/" + feedID + ")) Last Update by "
-                                                + lastPostedListing.getAuthor() + "\n\n"
-                                                + lastPostedListing.getBody()
-                                ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
+                                SendableTextMessage.builder()
+                                        .message(feedID + "- Last Update by "
+                                                        + lastPostedListing.getAuthor() + "\n\n"
+                                                        + lastPostedListing.getBody()
+                                        ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
                         );
                     }
                 }
@@ -80,11 +80,11 @@ public class LiveFeedUpdateTask extends TimerTask {
 
                     for (LiveUpdateWrapper liveUpdateWrapper : updatesStorted) {
                         chat.sendMessage(
-                                SendableTextMessage.builder().message(
-                                        "([" + feedID + "](https://www.reddit.com/live/" + feedID + ")) New Update by "
-                                                + liveUpdateWrapper.getLiveUpdate().getAuthor() + "\n\n"
-                                                + liveUpdateWrapper.getLiveUpdate().getBody()
-                                ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
+                                SendableTextMessage.builder()
+                                        .message(feedID + "- New Update by "
+                                                        + liveUpdateWrapper.getLiveUpdate().getAuthor() + "\n\n"
+                                                        + liveUpdateWrapper.getLiveUpdate().getBody()
+                                        ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
                         );
                     }
 
