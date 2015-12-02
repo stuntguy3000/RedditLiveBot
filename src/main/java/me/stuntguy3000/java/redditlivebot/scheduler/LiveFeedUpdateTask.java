@@ -51,7 +51,7 @@ public class LiveFeedUpdateTask extends TimerTask {
                                         "([" + feedID + "](https://www.reddit.com/live/" + feedID + ")) Last Update by "
                                                 + lastPostedListing.getAuthor() + "\n\n"
                                                 + lastPostedListing.getBody()
-                                ).disableWebPagePreview(false).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
+                                ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
                         );
                     }
                 }
@@ -84,7 +84,7 @@ public class LiveFeedUpdateTask extends TimerTask {
                                         "([" + feedID + "](https://www.reddit.com/live/" + feedID + ")) New Update by "
                                                 + liveUpdateWrapper.getLiveUpdate().getAuthor() + "\n\n"
                                                 + liveUpdateWrapper.getLiveUpdate().getBody()
-                                ).disableWebPagePreview(false).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
+                                ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
                         );
                     }
 
