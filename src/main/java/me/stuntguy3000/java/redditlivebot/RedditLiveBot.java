@@ -55,7 +55,7 @@ public class RedditLiveBot {
 
         while (true) {
             String in = System.console().readLine();
-            switch (in.toLowerCase()) {
+            switch ((in.contains(" ") ? in.toLowerCase().split(" ")[0] : in.toLowerCase())) {
                 case "count": {
                     LogHandler.log("Live feed count: " + TelegramHook.getLiveFeedHandler().getCount());
                     continue;
