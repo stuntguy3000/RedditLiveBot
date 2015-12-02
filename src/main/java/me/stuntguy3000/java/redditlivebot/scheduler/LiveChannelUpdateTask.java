@@ -1,13 +1,15 @@
 package me.stuntguy3000.java.redditlivebot.scheduler;
 
-import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
+import java.util.Timer;
+import java.util.TimerTask;
 
 // @author Luke Anderson | stuntguy3000
-public class LiveChannelUpdateTask {
-    private RedditLiveBot plugin;
+public class LiveChannelUpdateTask extends TimerTask {
+    private Timer timer = new Timer();
 
-    public LiveChannelUpdateTask() {
-        this.plugin = RedditLiveBot.getInstance();
+    @Override
+    public void run() {
+
     }
 }
     

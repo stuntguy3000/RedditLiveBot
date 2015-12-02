@@ -16,6 +16,8 @@ public class LiveFeedHandler {
 
     public LiveFeedHandler(TelegramBot bot) {
         this.bot = bot;
+
+        startFeed(TelegramBot.getChat("@RedditLive"), "w0nn1o5hu90y");
     }
 
     public LiveFeedUpdateTask getFeedTimer(Chat chat) {
