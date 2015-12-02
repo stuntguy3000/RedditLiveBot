@@ -78,7 +78,7 @@ public class RedditLiveBot {
                     continue;
                 }
                 case "broadcast": {
-                    Chat chat = TelegramBot.getChat("@  RedditLive");
+                    Chat chat = TelegramBot.getChat("@RedditLive");
                     chat.sendMessage(
                             SendableTextMessage.builder()
                                     .message("*(Broadcast)* " + in.substring(10))
