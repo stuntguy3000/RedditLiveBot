@@ -3,6 +3,7 @@ package me.stuntguy3000.java.redditlivebot.command;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.util.BotSettings;
+import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 import pro.zackpollard.telegrambot.api.user.User;
@@ -46,6 +47,16 @@ public class AdminCommand extends TelegramCommand {
                     }
                     case "admins": {
                         chat.sendMessage("Admins: " + botSettings.getTelegramAdmins(), TelegramHook.getBot());
+                        return;
+                    }
+                    case "startbroadcast": {
+                        chat.sendMessage("Starting broadcast...", TelegramHook.getBot());
+                        TelegramHook.getLiveFeedHandler().startFeed(TelegramBot.getChat("@RedditLive"), args[1].toLowerCase());
+                        return;
+                    }
+                    case "stopbroadcast": {
+                        chat.sendMessage("Stopping broadcast...", TelegramHook.getBot());
+                        TelegramHook.getLiveFeedHandler().stop(TelegramBot.getChat("@RedditLive"));
                         return;
                     }
                     default: {
