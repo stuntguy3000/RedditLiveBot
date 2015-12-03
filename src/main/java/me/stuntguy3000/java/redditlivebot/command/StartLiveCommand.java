@@ -17,7 +17,7 @@ public class StartLiveCommand extends TelegramCommand {
 
         String[] args = event.getArgs();
         if (args.length == 1) {
-            TelegramHook.getLiveFeedHandler().startFeed(event.getChat(), args[0]);
+            TelegramHook.getLiveFeedHandler().startFeed(event.getChat(), args[0], false);
             return;
         }
 
