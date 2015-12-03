@@ -1,20 +1,23 @@
-package me.stuntguy3000.java.redditlivebot.util;
+package me.stuntguy3000.java.redditlivebot.handler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
+import me.stuntguy3000.java.redditlivebot.util.BotSettings;
+import me.stuntguy3000.java.redditlivebot.util.LiveThreads;
+import me.stuntguy3000.java.redditlivebot.util.LogHandler;
 
 import java.io.*;
 
 // @author Luke Anderson | stuntguy3000
-public class Config {
+public class ConfigHandler {
 
     @Getter
     private BotSettings botSettings = new BotSettings();
     @Getter
     private LiveThreads liveThreads = new LiveThreads();
 
-    public Config() {
+    public ConfigHandler() {
         loadFile("config.json");
         loadFile("threads.json");
     }

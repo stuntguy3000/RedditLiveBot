@@ -19,6 +19,8 @@ public class BotSettings {
     private String telegramKey;
     @Getter
     private List<Integer> telegramAdmins;
+    @Getter
+    private Boolean autoUpdater;
 
     public BotSettings() {
         this.redditUsername = "";
@@ -27,6 +29,7 @@ public class BotSettings {
         this.redditAppSecret = "";
         this.telegramKey = "";
         this.telegramAdmins = new ArrayList<>();
+        this.autoUpdater = true;
     }
 }
     

@@ -23,45 +23,49 @@ public class LiveFeedUpdateTask extends TimerTask {
     private Timer timer = new Timer();
     @Getter
     private String feedID;
-    private LiveUpdate lastPostedListing;
+    @Getter
+    private LiveUpdate lastPost;
     private RedditClient redditClient;
     private Chat chat;
-    private boolean firstRun = true;
-    private boolean loadExisting = false;
 
-    public LiveFeedUpdateTask(String feedID, Chat chat, boolean loadExisting, RedditClient redditClient) {
+    public LiveFeedUpdateTask(String feedID, Chat chat, RedditClient redditClient) {
         this.feedID = feedID;
         this.redditClient = redditClient;
         this.chat = chat;
-        this.loadExisting = loadExisting;
-        timer.schedule(this, 0, 2000);
+        load();
+        timer.schedule(this, 2000, 2000);
+    }
+
+    private void load() {
+        LiveThreadPaginator liveThreadPaginator = new LiveThreadPaginator(redditClient, feedID);
+
+        if (liveThreadPaginator.hasNext()) {
+            liveThreadPaginator.next();
+            Listing<LiveUpdate> currentPage = liveThreadPaginator.getCurrentListing();
+
+            if (currentPage.size() > 0) {
+                lastPost = currentPage.get(0);
+            }
+        }
     }
 
     @Override
     public void run() {
         try {
+
             LiveThreadPaginator liveThreadPaginator = new LiveThreadPaginator(redditClient, feedID);
 
             if (liveThreadPaginator.hasNext()) {
                 liveThreadPaginator.next();
                 Listing<LiveUpdate> currentPage = liveThreadPaginator.getCurrentListing();
 
-                if (lastPostedListing == null) {
+                if (lastPost == null) {
                     if (currentPage.size() > 0) {
-                        lastPostedListing = currentPage.get(0);
-
-                        if (firstRun && !loadExisting) {
-                            chat.sendMessage(
-                                    SendableTextMessage.builder()
-                                            .message(String.format("*(%s) Last update by %s*\n%s", feedID,
-                                                            lastPostedListing.getAuthor()
-                                                            , lastPostedListing.getBody())
-                                            ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
-                            );
-                        }
+                        lastPost = currentPage.get(0);
+                        postUpdate(lastPost);
                     }
                 } else {
-                    long originalPostedAt = lastPostedListing.getCreatedUtc().getTime();
+                    long originalPostedAt = lastPost.getCreatedUtc().getTime();
 
                     HashMap<LiveUpdate, Long> unposted = new HashMap<>();
 
@@ -84,18 +88,11 @@ public class LiveFeedUpdateTask extends TimerTask {
                         Arrays.sort(updatesStorted);
 
                         for (LiveUpdateWrapper liveUpdateWrapper : updatesStorted) {
-                            chat.sendMessage(
-                                    SendableTextMessage.builder()
-                                            .message(String.format("*(%s) New update by %s*\n%s", feedID,
-                                                            liveUpdateWrapper.getLiveUpdate().getAuthor()
-                                                            , liveUpdateWrapper.getLiveUpdate().getBody())
-                                            ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
-                            );
+                            postUpdate(liveUpdateWrapper.getLiveUpdate());
                         }
 
-                        lastPostedListing = updatesStorted[updatesStorted.length - 1].getLiveUpdate();
+                        lastPost = updatesStorted[updatesStorted.length - 1].getLiveUpdate();
                     }
-                    firstRun = false;
                 }
             }
         } catch (Exception ex) {
@@ -103,6 +100,17 @@ public class LiveFeedUpdateTask extends TimerTask {
             ex.printStackTrace();
             RedditLiveBot.getInstance().sendToAdmins("Exception caught: " + ex.getLocalizedMessage());
         }
+    }
+
+    private void postUpdate(LiveUpdate liveUpdate) {
+        chat.sendMessage(
+                SendableTextMessage.builder()
+                        .message(String.format("*(%s) New update by %s*\n%s",
+                                        feedID,
+                                        liveUpdate.getAuthor(),
+                                        liveUpdate.getBody())
+                        ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
+        );
     }
 }
     
