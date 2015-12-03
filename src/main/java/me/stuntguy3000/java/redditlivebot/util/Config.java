@@ -54,10 +54,11 @@ public class Config {
         switch (fileName.split(".json")[0].toLowerCase()) {
             case "config": {
                 json = gson.toJson(botSettings);
-                return;
+                break;
             }
             case "threads": {
                 json = gson.toJson(liveThreads);
+                break;
             }
         }
 
@@ -76,6 +77,9 @@ public class Config {
         } catch (IOException e) {
             e.printStackTrace();
             LogHandler.log("The config could not be written to as an error occurred. Please check the directories read/write permissions and contact the developer!");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            LogHandler.log("Invalid Config Specified! Please check the directories read/write permissions and contact the developer!");
         }
     }
 }
