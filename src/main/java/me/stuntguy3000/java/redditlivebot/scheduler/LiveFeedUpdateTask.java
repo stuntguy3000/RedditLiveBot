@@ -52,7 +52,6 @@ public class LiveFeedUpdateTask extends TimerTask {
     @Override
     public void run() {
         try {
-
             LiveThreadPaginator liveThreadPaginator = new LiveThreadPaginator(redditClient, feedID);
 
             if (liveThreadPaginator.hasNext()) {
