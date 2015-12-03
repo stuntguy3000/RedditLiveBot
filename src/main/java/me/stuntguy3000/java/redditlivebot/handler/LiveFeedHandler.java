@@ -40,7 +40,8 @@ public class LiveFeedHandler {
             chat.sendMessage(SendableTextMessage.builder().message("A feed is already running in this channel!").build(), bot);
         }
 
-        RedditLiveBot.getInstance().getConfig().getBotSettings().addFeed(chat, redditThread);
+        RedditLiveBot.getInstance().getConfig().getLiveThreads().addFeed(chat, redditThread);
+        RedditLiveBot.getInstance().getConfig().saveConfig("threads.yml");
     }
 
     public void stop(Chat chat) {
@@ -52,7 +53,8 @@ public class LiveFeedHandler {
             }
         }
 
-        RedditLiveBot.getInstance().getConfig().getBotSettings().removeFeed(chat);
+        RedditLiveBot.getInstance().getConfig().getLiveThreads().removeFeed(chat);
+        RedditLiveBot.getInstance().getConfig().saveConfig("threads.yml");
     }
 
     public int getCount() {
@@ -66,7 +68,7 @@ public class LiveFeedHandler {
     }
 
     public void load() {
-        for (Map.Entry<String, String> chat : RedditLiveBot.getInstance().getConfig().getBotSettings().getActiveChats().entrySet()) {
+        for (Map.Entry<String, String> chat : RedditLiveBot.getInstance().getConfig().getLiveThreads().getActiveChats().entrySet()) {
             Chat chatInstance = TelegramBot.getChat(chat.getKey());
 
             if (chatInstance != null) {

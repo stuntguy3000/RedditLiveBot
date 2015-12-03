@@ -58,6 +58,7 @@ buildNumber.properties
 .mvn/timing.properties
 config.yml
 config.json
+threads.json
 !src/main/resources/config.json
 build
 RedditLiveBot.new

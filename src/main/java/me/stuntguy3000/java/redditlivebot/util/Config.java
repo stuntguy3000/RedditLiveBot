@@ -10,11 +10,18 @@ import java.io.*;
 public class Config {
 
     @Getter
-    private final BotSettings botSettings;
+    private BotSettings botSettings = new BotSettings();
+    @Getter
+    private LiveThreads liveThreads = new LiveThreads();
 
     public Config() {
+        loadFile("config.json");
+        loadFile("threads.json");
+    }
+
+    public void loadFile(String fileName) {
         Gson gson = new Gson();
-        File configFile = new File("config.json");
+        File configFile = new File(fileName);
 
         if (configFile.exists()) {
             BufferedReader br = null;
@@ -23,20 +30,36 @@ public class Config {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            botSettings = gson.fromJson(br, BotSettings.class);
+
+            switch (fileName.split(".json")[0].toLowerCase()) {
+                case "config": {
+                    botSettings = gson.fromJson(br, BotSettings.class);
+                    return;
+                }
+                case "threads": {
+                    liveThreads = gson.fromJson(br, LiveThreads.class);
+                }
+            }
         } else {
-            botSettings = new BotSettings();
-            saveConfig();
-            LogHandler.log("Please modify config.json!");
-            System.exit(0);
+            saveConfig(fileName);
         }
     }
 
-    public void saveConfig() {
-        File configFile = new File("config.json");
+    public void saveConfig(String fileName) {
+        File configFile = new File(fileName);
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
         Gson gson = builder.create();
-        String json = gson.toJson(botSettings);
+        String json = null;
+
+        switch (fileName.split(".json")[0].toLowerCase()) {
+            case "config": {
+                json = gson.toJson(botSettings);
+                return;
+            }
+            case "threads": {
+                json = gson.toJson(liveThreads);
+            }
+        }
 
         FileOutputStream outputStream;
 
