@@ -25,11 +25,13 @@ public class LiveFeedUpdateTask extends TimerTask {
     private RedditClient redditClient;
     private Chat chat;
     private boolean firstRun = true;
+    private boolean loadExisting = false;
 
-    public LiveFeedUpdateTask(String feedID, Chat chat, RedditClient redditClient) {
+    public LiveFeedUpdateTask(String feedID, Chat chat, boolean loadExisting, RedditClient redditClient) {
         this.feedID = feedID;
         this.redditClient = redditClient;
         this.chat = chat;
+        this.loadExisting = loadExisting;
         timer.schedule(this, 0, 2000);
     }
 
@@ -45,7 +47,7 @@ public class LiveFeedUpdateTask extends TimerTask {
                 if (currentPage.size() > 0) {
                     lastPostedListing = currentPage.get(0);
 
-                    if (firstRun) {
+                    if (firstRun && !loadExisting) {
                         chat.sendMessage(
                                 SendableTextMessage.builder()
                                         .message(String.format("*(%s) Last update by %s*\n%s", feedID,

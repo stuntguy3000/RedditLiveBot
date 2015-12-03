@@ -2,6 +2,7 @@ package me.stuntguy3000.java.redditlivebot.handler;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveFeedUpdateTask;
+import me.stuntguy3000.java.redditlivebot.util.LogHandler;
 import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
@@ -32,16 +33,22 @@ public class LiveFeedHandler {
         return null;
     }
 
-    public void startFeed(Chat chat, String redditThread) {
-        if (getFeedTimer(chat) == null) {
-            chat.sendMessage(SendableTextMessage.builder().message("Starting Live Feed: " + redditThread).build(), bot);
-            currentFeedTasks.put(chat.getId(), new LiveFeedUpdateTask(redditThread, chat, RedditLiveBot.instance.getRedditClient()));
+    public void startFeed(Chat chat, String redditThread, boolean loadExisting) {
+        if (!loadExisting) {
+            if (getFeedTimer(chat) == null) {
+                chat.sendMessage(SendableTextMessage.builder().message("Starting Live Feed: " + redditThread).build(), bot);
+            } else {
+                chat.sendMessage(SendableTextMessage.builder().message("A feed is already running in this channel!").build(), bot);
+            }
+
+            RedditLiveBot.getInstance().getConfig().getLiveThreads().addFeed(chat, redditThread);
+            RedditLiveBot.getInstance().getConfig().saveConfig("threads.json");
         } else {
-            chat.sendMessage(SendableTextMessage.builder().message("A feed is already running in this channel!").build(), bot);
+            LogHandler.log("Loading existing chat: " + chat.getId());
         }
 
-        RedditLiveBot.getInstance().getConfig().getLiveThreads().addFeed(chat, redditThread);
-        RedditLiveBot.getInstance().getConfig().saveConfig("threads.json");
+        currentFeedTasks.put(chat.getId(), new LiveFeedUpdateTask(redditThread, chat, loadExisting, RedditLiveBot.instance.getRedditClient()));
+
     }
 
     public void stop(Chat chat) {
@@ -72,7 +79,7 @@ public class LiveFeedHandler {
             Chat chatInstance = TelegramBot.getChat(chat.getKey());
 
             if (chatInstance != null) {
-                startFeed(chatInstance, chat.getValue());
+                startFeed(chatInstance, chat.getValue(), true);
             }
         }
     }
