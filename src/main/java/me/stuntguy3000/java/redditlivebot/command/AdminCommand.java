@@ -59,8 +59,12 @@ public class AdminCommand extends TelegramCommand {
                         TelegramHook.getLiveFeedHandler().stop(TelegramBot.getChat("@RedditLive"));
                         return;
                     }
+                    case "chats": {
+                        chat.sendMessage("Active Chats: " + RedditLiveBot.getInstance().getConfig().getLiveThreads().toString(), TelegramHook.getBot());
+                        return;
+                    }
                     default: {
-                        chat.sendMessage("Admin Commands: count, stoplive, stop, botfather", TelegramHook.getBot());
+                        chat.sendMessage("Admin Commands: count, stoplive, stop, botfather, admins, startbroadcast, stopbroadcast, chats", TelegramHook.getBot());
                     }
                 }
             }
