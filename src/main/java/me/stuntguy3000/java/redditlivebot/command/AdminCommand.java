@@ -60,7 +60,7 @@ public class AdminCommand extends TelegramCommand {
                         return;
                     }
                     case "chats": {
-                        chat.sendMessage("Active Chats: " + RedditLiveBot.getInstance().getConfig().getLiveThreads().toString(), TelegramHook.getBot());
+                        chat.sendMessage("Active Chats: " + RedditLiveBot.getInstance().getConfig().getLiveThreads().getActiveChats().toString(), TelegramHook.getBot());
                         return;
                     }
                     default: {
