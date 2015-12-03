@@ -19,7 +19,7 @@ public class AdminCommand extends TelegramCommand {
         User sender = event.getMessage().getSender();
         String[] args = event.getArgs();
 
-        BotSettings botSettings = RedditLiveBot.getInstance().getConfig().getBotSettings();
+        BotSettings botSettings = RedditLiveBot.getInstance().getConfigHandler().getBotSettings();
 
         if (botSettings.getTelegramAdmins().contains(sender.getId())) {
             if (args.length == 0) {
@@ -60,7 +60,7 @@ public class AdminCommand extends TelegramCommand {
                         return;
                     }
                     case "chats": {
-                        chat.sendMessage("Active Chats: " + RedditLiveBot.getInstance().getConfig().getLiveThreads().getActiveChats().toString(), TelegramHook.getBot());
+                        chat.sendMessage("Active Chats: " + RedditLiveBot.getInstance().getConfigHandler().getLiveThreads().getActiveChats().toString(), TelegramHook.getBot());
                         return;
                     }
                     default: {
@@ -68,8 +68,6 @@ public class AdminCommand extends TelegramCommand {
                     }
                 }
             }
-        } else {
-            chat.sendMessage("You cannot use this command " + sender.getUsername(), TelegramHook.getBot());
         }
     }
 }

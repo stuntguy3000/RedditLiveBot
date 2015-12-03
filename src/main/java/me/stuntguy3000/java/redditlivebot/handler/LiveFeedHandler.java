@@ -41,13 +41,13 @@ public class LiveFeedHandler {
                 chat.sendMessage(SendableTextMessage.builder().message("A feed is already running in this channel!").build(), bot);
             }
 
-            RedditLiveBot.getInstance().getConfig().getLiveThreads().addFeed(chat, redditThread);
-            RedditLiveBot.getInstance().getConfig().saveConfig("threads.json");
+            RedditLiveBot.getInstance().getConfigHandler().getLiveThreads().addFeed(chat, redditThread);
+            RedditLiveBot.getInstance().getConfigHandler().saveConfig("threads.json");
         } else {
             LogHandler.log("Loading existing chat: " + chat.getId());
         }
 
-        currentFeedTasks.put(chat.getId(), new LiveFeedUpdateTask(redditThread, chat, loadExisting, RedditLiveBot.instance.getRedditClient()));
+        currentFeedTasks.put(chat.getId(), new LiveFeedUpdateTask(redditThread, chat, RedditLiveBot.instance.getRedditClient()));
 
     }
 
@@ -60,8 +60,8 @@ public class LiveFeedHandler {
             }
         }
 
-        RedditLiveBot.getInstance().getConfig().getLiveThreads().removeFeed(chat);
-        RedditLiveBot.getInstance().getConfig().saveConfig("threads.json");
+        RedditLiveBot.getInstance().getConfigHandler().getLiveThreads().removeFeed(chat);
+        RedditLiveBot.getInstance().getConfigHandler().saveConfig("threads.json");
     }
 
     public int getCount() {
@@ -75,7 +75,7 @@ public class LiveFeedHandler {
     }
 
     public void load() {
-        for (Map.Entry<String, String> chat : RedditLiveBot.getInstance().getConfig().getLiveThreads().getActiveChats().entrySet()) {
+        for (Map.Entry<String, String> chat : RedditLiveBot.getInstance().getConfigHandler().getLiveThreads().getActiveChats().entrySet()) {
             Chat chatInstance = TelegramBot.getChat(chat.getKey());
 
             if (chatInstance != null) {
