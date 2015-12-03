@@ -41,7 +41,7 @@ public class LiveFeedHandler {
         }
 
         RedditLiveBot.getInstance().getConfig().getLiveThreads().addFeed(chat, redditThread);
-        RedditLiveBot.getInstance().getConfig().saveConfig("threads.yml");
+        RedditLiveBot.getInstance().getConfig().saveConfig("threads.json");
     }
 
     public void stop(Chat chat) {
@@ -54,7 +54,7 @@ public class LiveFeedHandler {
         }
 
         RedditLiveBot.getInstance().getConfig().getLiveThreads().removeFeed(chat);
-        RedditLiveBot.getInstance().getConfig().saveConfig("threads.yml");
+        RedditLiveBot.getInstance().getConfig().saveConfig("threads.json");
     }
 
     public int getCount() {
