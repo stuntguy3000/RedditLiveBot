@@ -39,6 +39,8 @@ public class LiveFeedHandler {
         } else {
             chat.sendMessage(SendableTextMessage.builder().message("A feed is already running in this channel!").build(), bot);
         }
+
+        RedditLiveBot.getInstance().getConfig().getBotSettings().addFeed(chat, redditThread);
     }
 
     public void stop(Chat chat) {
@@ -49,6 +51,8 @@ public class LiveFeedHandler {
                 chat.sendMessage(SendableTextMessage.builder().message("Error Occurred! Contact @stuntguy3000").build(), bot);
             }
         }
+
+        RedditLiveBot.getInstance().getConfig().getBotSettings().removeFeed(chat);
     }
 
     public int getCount() {
@@ -56,9 +60,17 @@ public class LiveFeedHandler {
     }
 
     public void stopAll() {
-        for (Map.Entry<String, LiveFeedUpdateTask> entry : new HashMap<>(currentFeedTasks).entrySet()) {
-            if (entry.getValue().cancel()) {
-                currentFeedTasks.remove(entry.getKey());
+        new HashMap<>(currentFeedTasks).entrySet().stream().filter(entry -> entry.getValue().cancel()).forEach(entry -> {
+            currentFeedTasks.remove(entry.getKey());
+        });
+    }
+
+    public void load() {
+        for (Map.Entry<String, String> chat : RedditLiveBot.getInstance().getConfig().getBotSettings().getActiveChats().entrySet()) {
+            Chat chatInstance = TelegramBot.getChat(chat.getKey());
+
+            if (chatInstance != null) {
+                startFeed(chatInstance, chat.getValue());
             }
         }
     }

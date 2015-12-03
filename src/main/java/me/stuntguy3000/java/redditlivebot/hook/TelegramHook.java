@@ -25,6 +25,7 @@ public class TelegramHook implements Listener {
         bot.getEventsManager().register(this);
         LogHandler.log("Connected to Telegram.");
         liveFeedHandler = new LiveFeedHandler(bot);
+        liveFeedHandler.load();
 
         instance.sendToAdmins("Bot has connected, running build #" + RedditLiveBot.BUILD);
 

@@ -26,27 +26,33 @@ public class Config {
             botSettings = gson.fromJson(br, BotSettings.class);
         } else {
             botSettings = new BotSettings();
-
-            GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
-            gson = builder.create();
-            String json = gson.toJson(botSettings);
-
-            FileOutputStream outputStream;
-
-            try {
-                configFile.createNewFile();
-                outputStream = new FileOutputStream(configFile);
-                outputStream.write(json.getBytes());
-                outputStream.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                LogHandler.log("The config could not be saved as the file couldn't be found on the storage device. Please check the directories read/write permissions and contact the developer!");
-            } catch (IOException e) {
-                e.printStackTrace();
-                LogHandler.log("The config could not be written to as an error occurred. Please check the directories read/write permissions and contact the developer!");
-            }
+            saveConfig();
             LogHandler.log("Please modify config.json!");
             System.exit(0);
+        }
+    }
+
+    public void saveConfig() {
+        File configFile = new File("config.json");
+        GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
+        Gson gson = builder.create();
+        String json = gson.toJson(botSettings);
+
+        FileOutputStream outputStream;
+
+        try {
+            if (!configFile.exists()) {
+                configFile.createNewFile();
+            }
+            outputStream = new FileOutputStream(configFile);
+            outputStream.write(json.getBytes());
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            LogHandler.log("The config could not be saved as the file couldn't be found on the storage device. Please check the directories read/write permissions and contact the developer!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            LogHandler.log("The config could not be written to as an error occurred. Please check the directories read/write permissions and contact the developer!");
         }
     }
 }
