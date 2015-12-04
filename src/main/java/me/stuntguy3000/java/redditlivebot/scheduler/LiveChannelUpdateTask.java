@@ -1,5 +1,7 @@
 package me.stuntguy3000.java.redditlivebot.scheduler;
 
+import net.dean.jraw.paginators.SubredditStream;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -9,7 +11,7 @@ public class LiveChannelUpdateTask extends TimerTask {
 
     @Override
     public void run() {
-
+        SubredditStream subredditStream = new SubredditStream()
     }
 }
     
