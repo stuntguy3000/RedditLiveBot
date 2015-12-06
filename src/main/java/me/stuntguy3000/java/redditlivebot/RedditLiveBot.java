@@ -28,11 +28,33 @@ public class RedditLiveBot {
     @Getter
     public static RedditLiveBot instance;
     @Getter
-    private RedditClient redditClient;
+    private CommandHandler commandHandler = new CommandHandler();
     @Getter
     private ConfigHandler configHandler;
     @Getter
-    private CommandHandler commandHandler = new CommandHandler();
+    private RedditClient redditClient;
+    private Thread updaterThread;
+
+    private void connectReddit() {
+        LogHandler.log("Connecting to Reddit...");
+        UserAgent myUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", configHandler.getBotSettings().getRedditUsername());
+        redditClient = new RedditClient(myUserAgent);
+
+        Credentials credentials = Credentials.script(configHandler.getBotSettings().getRedditUsername(), configHandler.getBotSettings().getRedditPassword(), configHandler.getBotSettings().getRedditAppID(), configHandler.getBotSettings().getRedditAppSecret());
+        try {
+            OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
+            redditClient.authenticate(authData);
+
+            LogHandler.log("Connected to Reddit. Username: " + redditClient.me().getFullName());
+        } catch (OAuthException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void connectTelegram() {
+        LogHandler.log("Connecting to Telegram...");
+        new TelegramHook(configHandler.getBotSettings().getTelegramKey(), this);
+    }
 
     public static void main(String[] args) {
         new RedditLiveBot().main();
@@ -53,7 +75,9 @@ public class RedditLiveBot {
 
         if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
             LogHandler.log("Starting auto updater...");
-            new Thread(new UpdateHandler(this)).start();
+            Thread updater = new Thread(new UpdateHandler(this, "Telegames"));
+            updater.start();
+            updaterThread = updater;
         } else {
             LogHandler.log("** Auto Updater is set to false **");
         }
@@ -84,12 +108,7 @@ public class RedditLiveBot {
                 }
                 case "broadcast": {
                     Chat chat = TelegramBot.getChat("@RedditLive");
-                    chat.sendMessage(
-                            SendableTextMessage.builder()
-                                    .message("*(Broadcast)* " + in.substring(10))
-                                    .parseMode(ParseMode.MARKDOWN)
-                                    .build()
-                            , TelegramHook.getBot());
+                    chat.sendMessage(SendableTextMessage.builder().message("*(Broadcast)* " + in.substring(10)).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot());
                     continue;
                 }
                 default: {
@@ -99,35 +118,14 @@ public class RedditLiveBot {
         }
     }
 
-    private void connectTelegram() {
-        LogHandler.log("Connecting to Telegram...");
-        new TelegramHook(configHandler.getBotSettings().getTelegramKey(), this);
-    }
-
-    private void connectReddit() {
-        LogHandler.log("Connecting to Reddit...");
-        UserAgent myUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", configHandler.getBotSettings().getRedditUsername());
-        redditClient = new RedditClient(myUserAgent);
-
-        Credentials credentials = Credentials.script(
-                configHandler.getBotSettings().getRedditUsername(),
-                configHandler.getBotSettings().getRedditPassword(),
-                configHandler.getBotSettings().getRedditAppID(),
-                configHandler.getBotSettings().getRedditAppSecret());
-        try {
-            OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
-            redditClient.authenticate(authData);
-
-            LogHandler.log("Connected to Reddit. Username: " + redditClient.me().getFullName());
-        } catch (OAuthException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void sendToAdmins(String message) {
         for (int admin : configHandler.getBotSettings().getTelegramAdmins()) {
             TelegramBot.getChat(admin).sendMessage(message, TelegramHook.getBot());
         }
+    }
+
+    public void stopUpdater() {
+        updaterThread.interrupt();
     }
 }
     
