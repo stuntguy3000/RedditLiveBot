@@ -75,7 +75,7 @@ public class RedditLiveBot {
 
         if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
             LogHandler.log("Starting auto updater...");
-            Thread updater = new Thread(new UpdateHandler(this, "Telegames"));
+            Thread updater = new Thread(new UpdateHandler(this, "RedditLiveBot"));
             updater.start();
             updaterThread = updater;
         } else {
