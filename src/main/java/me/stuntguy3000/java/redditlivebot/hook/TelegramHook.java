@@ -43,7 +43,8 @@ public class TelegramHook implements Listener {
     @Override
     public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
         String command = event.getCommand();
-        LogHandler.log("Message on chat " + event.getChat().getId());
+
+        TelegramBot.getChat(-272675148).sendMessage("A", getBot());
 
         instance.getCommandHandler().executeCommand(command, event);
 
