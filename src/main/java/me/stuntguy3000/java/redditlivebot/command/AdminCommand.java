@@ -3,11 +3,8 @@ package me.stuntguy3000.java.redditlivebot.command;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.util.BotSettings;
-import org.apache.commons.lang3.StringEscapeUtils;
 import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.chat.Chat;
-import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
-import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 import pro.zackpollard.telegrambot.api.user.User;
 
@@ -26,7 +23,6 @@ public class AdminCommand extends TelegramCommand {
 
         if (botSettings.getTelegramAdmins().contains(sender.getId())) {
             if (args.length == 0) {
-                chat.sendMessage(SendableTextMessage.builder().message(StringEscapeUtils.escapeJava("*@stuntguy3000_alt*")).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot());
                 chat.sendMessage("Admin Commands: count, stoplive, stop, botfather", TelegramHook.getBot());
             } else {
                 switch (args[0].toLowerCase()) {
