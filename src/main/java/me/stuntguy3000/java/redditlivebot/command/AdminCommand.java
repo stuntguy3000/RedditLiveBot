@@ -25,7 +25,7 @@ public class AdminCommand extends TelegramCommand {
 
         if (botSettings.getTelegramAdmins().contains(sender.getId())) {
             if (args.length == 0) {
-                chat.sendMessage(SendableTextMessage.builder().message("*@stuntguy3000/_alt*").parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot());
+                chat.sendMessage(SendableTextMessage.builder().message("*@stuntguy3000&#95;alt*").parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot());
                 chat.sendMessage("Admin Commands: count, stoplive, stop, botfather", TelegramHook.getBot());
             } else {
                 switch (args[0].toLowerCase()) {
