@@ -1,4 +1,4 @@
-package me.stuntguy3000.java.redditlivebot.command;
+package me.stuntguy3000.java.redditlivebot.model;
 
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
@@ -14,11 +14,14 @@ public abstract class TelegramCommand {
     private final String name;
     @Getter
     private final String description;
+    @Getter
+    private final CommandType commandType;
 
-    public TelegramCommand(RedditLiveBot instance, String name, String description) {
+    public TelegramCommand(RedditLiveBot instance, String name, String description, CommandType commandType) {
         this.instance = instance;
         this.name = name;
         this.description = description;
+        this.commandType = commandType;
 
         instance.getCommandHandler().registerCommand(this);
     }

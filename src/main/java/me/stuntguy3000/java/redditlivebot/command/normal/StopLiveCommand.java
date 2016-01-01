@@ -1,7 +1,8 @@
-package me.stuntguy3000.java.redditlivebot.command;
+package me.stuntguy3000.java.redditlivebot.command.normal;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
+import me.stuntguy3000.java.redditlivebot.model.commandtypes.TelegramNormalCommand;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveFeedUpdateTask;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
@@ -9,7 +10,7 @@ import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
 // @author Luke Anderson | stuntguy3000
-public class StopLiveCommand extends TelegramCommand {
+public class StopLiveCommand extends TelegramNormalCommand {
     public StopLiveCommand(RedditLiveBot instance) {
         super(instance, "stoplive", "/stoplive [ID] Cancel the Reddit Live feed");
     }

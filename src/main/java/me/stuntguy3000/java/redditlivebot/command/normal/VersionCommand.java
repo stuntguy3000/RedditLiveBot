@@ -1,11 +1,12 @@
-package me.stuntguy3000.java.redditlivebot.command;
+package me.stuntguy3000.java.redditlivebot.command.normal;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
+import me.stuntguy3000.java.redditlivebot.model.commandtypes.TelegramNormalCommand;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
 // @author Luke Anderson | stuntguy3000
-public class VersionCommand extends TelegramCommand {
+public class VersionCommand extends TelegramNormalCommand {
     public VersionCommand(RedditLiveBot instance) {
         super(instance, "version", "/version View the bot's current version");
     }
