@@ -33,7 +33,11 @@ public class CommandHandler {
         TelegramCommand cmd = null;
 
         if (s.equals("admin")) {
-            cmd = adminCommands.get(s);
+            if (event.getArgs().length == 0) {
+                // Send help message.
+                return;
+            }
+            cmd = adminCommands.get(event.getArgs()[0].toLowerCase());
         } else {
             cmd = normalCommands.get(s);
         }
