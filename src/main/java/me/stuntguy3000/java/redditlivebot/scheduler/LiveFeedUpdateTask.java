@@ -20,20 +20,20 @@ import java.util.TimerTask;
 
 // @author Luke Anderson | stuntguy3000
 public class LiveFeedUpdateTask extends TimerTask {
-    private Timer timer = new Timer();
+    private Chat chat;
     @Getter
     private String feedID;
     @Getter
     private LiveUpdate lastPost;
     private RedditClient redditClient;
-    private Chat chat;
+    private Timer timer = new Timer();
 
     public LiveFeedUpdateTask(String feedID, Chat chat, RedditClient redditClient) {
         this.feedID = feedID;
         this.redditClient = redditClient;
         this.chat = chat;
         load();
-        timer.schedule(this, 2000, 2000);
+        timer.schedule(this, 5000, 5000);
     }
 
     private void load() {
@@ -47,6 +47,10 @@ public class LiveFeedUpdateTask extends TimerTask {
                 lastPost = currentPage.get(0);
             }
         }
+    }
+
+    private void postUpdate(LiveUpdate liveUpdate) {
+        chat.sendMessage(SendableTextMessage.builder().message(String.format("*(%s) New update by %s*\n%s", feedID, liveUpdate.getAuthor(), liveUpdate.getBody())).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot());
     }
 
     @Override
@@ -99,17 +103,6 @@ public class LiveFeedUpdateTask extends TimerTask {
             ex.printStackTrace();
             RedditLiveBot.getInstance().sendToAdmins("Exception caught: " + ex.getLocalizedMessage());
         }
-    }
-
-    private void postUpdate(LiveUpdate liveUpdate) {
-        chat.sendMessage(
-                SendableTextMessage.builder()
-                        .message(String.format("*(%s) New update by %s*\n%s",
-                                        feedID,
-                                        liveUpdate.getAuthor(),
-                                        liveUpdate.getBody())
-                        ).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot()
-        );
     }
 }
     
