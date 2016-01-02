@@ -35,6 +35,10 @@ public class RedditLiveBot {
     private RedditClient redditClient;
     private Thread updaterThread;
 
+    public static void main(String[] args) {
+        new RedditLiveBot().main();
+    }
+
     private void connectReddit() {
         LogHandler.log("Connecting to Reddit...");
         UserAgent myUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", configHandler.getBotSettings().getRedditUsername());
@@ -56,13 +60,18 @@ public class RedditLiveBot {
         new TelegramHook(configHandler.getBotSettings().getTelegramKey(), this);
     }
 
-    public static void main(String[] args) {
-        new RedditLiveBot().main();
-    }
-
     public void main() {
         instance = this;
         configHandler = new ConfigHandler();
+
+        if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
+            LogHandler.log("Starting auto updater...");
+            Thread updater = new Thread(new UpdateHandler(this, "RedditLiveBot"));
+            updater.start();
+            updaterThread = updater;
+        } else {
+            LogHandler.log("** Auto Updater is set to false **");
+        }
 
         try {
             BUILD = Integer.parseInt(FileUtils.readFileToString(new File("build")));
@@ -73,14 +82,6 @@ public class RedditLiveBot {
         connectReddit();
         connectTelegram();
 
-        if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
-            LogHandler.log("Starting auto updater...");
-            Thread updater = new Thread(new UpdateHandler(this, "RedditLiveBot"));
-            updater.start();
-            updaterThread = updater;
-        } else {
-            LogHandler.log("** Auto Updater is set to false **");
-        }
 
         while (true) {
             String in = System.console().readLine();
