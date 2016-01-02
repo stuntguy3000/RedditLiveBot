@@ -17,6 +17,7 @@ public class CommandHandler {
 
     public CommandHandler() {
         normalCommands = new HashMap<>();
+        adminCommands = new HashMap<>();
     }
 
     public void registerCommand(TelegramCommand cmd) {
