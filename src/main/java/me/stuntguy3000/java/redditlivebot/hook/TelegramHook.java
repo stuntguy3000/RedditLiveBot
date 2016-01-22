@@ -42,6 +42,7 @@ public class TelegramHook implements Listener {
         new AdminBotfatherCommand(instance);
         new AdminChatsCommand(instance);
         new AdminCountCommand(instance);
+        new AdminRestartCommand(instance);
         new AdminStartBroadcastCommand(instance);
         new AdminStopBroadcastCommand(instance);
         new AdminStopLiveCommand(instance);
