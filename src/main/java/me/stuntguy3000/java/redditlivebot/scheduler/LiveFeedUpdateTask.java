@@ -33,7 +33,7 @@ public class LiveFeedUpdateTask extends TimerTask {
         this.redditClient = redditClient;
         this.chat = chat;
         load();
-        timer.schedule(this, 5000, 5000);
+        timer.schedule(this, 5000, 20000);
     }
 
     private void load() {
