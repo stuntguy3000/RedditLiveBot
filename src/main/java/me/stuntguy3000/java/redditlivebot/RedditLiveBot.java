@@ -63,6 +63,7 @@ public class RedditLiveBot {
     public void main() {
         instance = this;
         configHandler = new ConfigHandler();
+        connectTelegram();
 
         if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
             LogHandler.log("Starting auto updater...");
@@ -80,7 +81,6 @@ public class RedditLiveBot {
         }
 
         connectReddit();
-        connectTelegram();
 
 
         while (true) {
