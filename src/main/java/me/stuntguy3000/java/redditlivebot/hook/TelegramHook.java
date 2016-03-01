@@ -12,6 +12,7 @@ import me.stuntguy3000.java.redditlivebot.util.LogHandler;
 import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.event.Listener;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
+import pro.zackpollard.telegrambot.api.event.chat.message.TextMessageReceivedEvent;
 
 // @author Luke Anderson | stuntguy3000
 public class TelegramHook implements Listener {
@@ -58,7 +59,14 @@ public class TelegramHook implements Listener {
     public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
         String command = event.getCommand();
 
+        LogHandler.log("DEBUG: Processing command %s by %s", command, event.getMessage().getSender().getUsername());
+
         instance.getCommandHandler().executeCommand(command, event);
+    }
+
+    @Override
+    public void onTextMessageReceived(TextMessageReceivedEvent event) {
+        LogHandler.log("DEBUG: Processing message %s by %s", event.getContent().getContent(), event.getMessage().getSender().getUsername());
     }
 }
     
