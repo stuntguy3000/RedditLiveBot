@@ -34,7 +34,7 @@ public class CommandHandler {
             }
 
             for (int adminID : botSettings.getTelegramAdmins()) {
-                LogHandler.log("Admin Test: %s User: %s Result: %s containsInList: ", adminID, user.getId(), adminID == user.getId(), botSettings.getTelegramAdmins().contains(user.getId()));
+                LogHandler.log("Admin Test: %s User: %s Result: %s containsInList: %s", adminID, user.getId(), adminID == user.getId(), botSettings.getTelegramAdmins().contains(user.getId()));
             }
 
             if (!botSettings.getTelegramAdmins().contains(user.getId())) {
