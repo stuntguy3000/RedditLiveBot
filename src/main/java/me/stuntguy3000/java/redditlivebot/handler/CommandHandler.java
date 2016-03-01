@@ -23,7 +23,7 @@ public class CommandHandler {
 
     public void executeCommand(String s, CommandMessageReceivedEvent event) {
         s = s.toLowerCase();
-        TelegramCommand cmd;
+        TelegramCommand cmd = null;
         BotSettings botSettings = RedditLiveBot.getInstance().getConfigHandler().getBotSettings();
         User user = event.getMessage().getSender();
 
@@ -34,16 +34,11 @@ public class CommandHandler {
             }
 
             for (int adminID : botSettings.getTelegramAdmins()) {
-                LogHandler.log("Admin Test: %s User: %s Result: %s containsInList: %s", adminID, user.getId(), adminID == user.getId(), botSettings.getTelegramAdmins().contains(user.getId()));
+                if (adminID == user.getId()) {
+                    cmd = adminCommands.get(event.getArgs()[0].toLowerCase());
+                    break;
+                }
             }
-
-            if (!botSettings.getTelegramAdmins().contains(user.getId())) {
-                // Send a no permission message.
-                LogHandler.log("User %s (%s) tried to run an admin command!", user.getId(), user.getUsername());
-                return;
-            }
-
-            cmd = adminCommands.get(event.getArgs()[0].toLowerCase());
         } else {
             cmd = normalCommands.get(s);
         }
