@@ -35,10 +35,6 @@ public class RedditLiveBot {
     private RedditClient redditClient;
     private Thread updaterThread;
 
-    public static void main(String[] args) {
-        new RedditLiveBot().main();
-    }
-
     private void connectReddit() {
         LogHandler.log("Connecting to Reddit...");
         UserAgent myUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", configHandler.getBotSettings().getRedditUsername());
@@ -58,6 +54,10 @@ public class RedditLiveBot {
     private void connectTelegram() {
         LogHandler.log("Connecting to Telegram...");
         new TelegramHook(configHandler.getBotSettings().getTelegramKey(), this);
+    }
+
+    public static void main(String[] args) {
+        new RedditLiveBot().main();
     }
 
     public void main() {
@@ -99,7 +99,6 @@ public class RedditLiveBot {
                     continue;
                 }
                 case "stop": {
-                    TelegramHook.getLiveFeedHandler().stopAll();
                     System.exit(0);
                     return;
                 }
