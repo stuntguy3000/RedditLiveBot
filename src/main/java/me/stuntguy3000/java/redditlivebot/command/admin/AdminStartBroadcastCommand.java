@@ -22,6 +22,5 @@ public class AdminStartBroadcastCommand extends TelegramAdminCommand {
 
         chat.sendMessage("Starting broadcast...", TelegramHook.getBot());
         TelegramHook.getLiveFeedHandler().startFeed(TelegramBot.getChat("@RedditLive"), args[1].toLowerCase(), true);
-
     }
 }
