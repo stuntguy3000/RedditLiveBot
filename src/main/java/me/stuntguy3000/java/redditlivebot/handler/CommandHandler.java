@@ -36,15 +36,16 @@ public class CommandHandler {
             for (int adminID : botSettings.getTelegramAdmins()) {
                 if (adminID == user.getId()) {
                     cmd = adminCommands.get(event.getArgs()[0].toLowerCase());
+                    LogHandler.log("Admin Commands: %s", adminCommands.keySet());
                     break;
                 }
             }
         } else {
-            cmd = normalCommands.get(s);
+            cmd = normalCommands.get(s.toLowerCase());
         }
 
         if (cmd == null) {
-            LogHandler.log("Command %s is unknown!", s);
+            LogHandler.log("Command %s is unknown! Arguments: %s", s, event.getArgs());
             return;
         }
         cmd.processCommand(event);

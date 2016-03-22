@@ -70,7 +70,7 @@ public class RedditLiveBot {
         new RedditLiveBot().main();
     }
 
-    public void main() {
+    private void main() {
         instance = this;
         configHandler = new ConfigHandler();
 
@@ -91,7 +91,7 @@ public class RedditLiveBot {
 
         connectReddit();
         connectTelegram();
-        
+
         while (true) {
             String in = System.console().readLine();
             switch ((in.contains(" ") ? in.toLowerCase().split(" ")[0] : in.toLowerCase())) {
