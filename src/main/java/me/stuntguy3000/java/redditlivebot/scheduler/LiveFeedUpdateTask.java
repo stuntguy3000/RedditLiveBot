@@ -52,7 +52,7 @@ public class LiveFeedUpdateTask extends TimerTask {
     }
 
     private void postUpdate(LiveUpdate liveUpdate) {
-        chat.sendMessage(SendableTextMessage.builder().message(String.format("*(%s) New update by %s*\n%s", feedID, liveUpdate.getAuthor(), liveUpdate.getBody().replace("*", "\\*").replace("_", "\\_").replace("`", "\\`"))).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot());
+        chat.sendMessage(SendableTextMessage.builder().message(String.format("`%s` _New update by %s_\n\n%s", feedID, liveUpdate.getAuthor(), liveUpdate.getBody())).parseMode(ParseMode.MARKDOWN).build(), TelegramHook.getBot());
     }
 
     @Override
