@@ -102,7 +102,6 @@ public class LiveFeedUpdateTask extends TimerTask {
             }
         } catch (Exception ex) {
             LogHandler.log("Exception caught! Reconnecting bot...");
-            ex.printStackTrace();
             RedditLiveBot.getInstance().sendToAdmins("Reconnecting bot...\n\nException caught: " + ex.getLocalizedMessage());
             RedditLiveBot.getInstance().connectReddit();
         }
