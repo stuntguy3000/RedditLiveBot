@@ -74,6 +74,15 @@ public class RedditLiveBot {
         instance = this;
         configHandler = new ConfigHandler();
 
+        try {
+            BUILD = Integer.parseInt(FileUtils.readFileToString(new File("build")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        connectReddit();
+        connectTelegram();
+
         if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
             LogHandler.log("Starting auto updater...");
             Thread updater = new Thread(new UpdateHandler(this, "RedditLiveBot"));
@@ -82,15 +91,6 @@ public class RedditLiveBot {
         } else {
             LogHandler.log("** Auto Updater is set to false **");
         }
-
-        try {
-            BUILD = Integer.parseInt(FileUtils.readFileToString(new File("build")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        connectReddit();
-        connectTelegram();
 
         while (true) {
             String in = System.console().readLine();
