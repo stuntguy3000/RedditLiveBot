@@ -1,5 +1,5 @@
 # RedditLive
-A simple bot to connect a RedditLive feed to a Telegram channel. Beta.
+A simple bot to connect a RedditLive feed to a Telegram channel.
 
 # Commands
 /startlive - [ID] Start a Reddit Live feed
