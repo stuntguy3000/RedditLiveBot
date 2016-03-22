@@ -36,15 +36,15 @@ public class RedditLiveBot {
     private Thread updaterThread;
 
     public void connectReddit() {
-        LogHandler.log("Connecting to Reddit...");
+        sendToAdmins("Connecting to Reddit...");
         UserAgent myUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", configHandler.getBotSettings().getRedditUsername());
 
         if (redditClient != null) {
             try {
-                LogHandler.log("Deauthenticating...");
+                sendToAdmins("Deauthenticating...");
                 redditClient.deauthenticate();
             } catch (Exception ex) {
-                LogHandler.log("Deauthenticating Failed!");
+                sendToAdmins("Deauthenticating Failed!");
             }
         }
 
@@ -55,7 +55,7 @@ public class RedditLiveBot {
             OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
             redditClient.authenticate(authData);
 
-            LogHandler.log("Connected to Reddit. Username: " + redditClient.me().getFullName());
+            sendToAdmins("Connected to Reddit. Username: " + redditClient.me().getFullName());
         } catch (OAuthException e) {
             e.printStackTrace();
         }
@@ -79,9 +79,9 @@ public class RedditLiveBot {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        connectReddit();
+
         connectTelegram();
+        connectReddit();
 
         if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
             LogHandler.log("Starting auto updater...");
