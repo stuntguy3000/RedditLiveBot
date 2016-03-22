@@ -6,6 +6,7 @@ import me.stuntguy3000.java.redditlivebot.model.commandtypes.TelegramAdminComman
 import me.stuntguy3000.java.redditlivebot.util.DateUtil;
 import net.dean.jraw.RedditClient;
 import pro.zackpollard.telegrambot.api.chat.Chat;
+import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
@@ -27,15 +28,17 @@ public class AdminDebugCommand extends TelegramAdminCommand {
 
         RedditClient redditClient = RedditLiveBot.getInstance().getRedditClient();
 
-        debugMessages.append("*Debug Information: *");
-        debugMessages.append("*Reddit isAuthenticated:* `").append(redditClient.isAuthenticated()).append("`");
-        debugMessages.append("*Reddit OAuth Access Code:* `").append(redditClient.getOAuthData().getAccessToken()).append("`");
-        debugMessages.append("*Reddit OAuth Refresh Code:* `").append(redditClient.getOAuthData().getRefreshToken()).append("`");
+        debugMessages.append("*Debug Information:*\n");
+        debugMessages.append("*Reddit isAuthenticated:* `").append(redditClient.isAuthenticated()).append("`\n");
+        debugMessages.append("*Reddit OAuth Access Code:* `").append(redditClient.getOAuthData().getAccessToken()).append("`\n");
+        debugMessages.append("*Reddit OAuth Refresh Code:* `").append(redditClient.getOAuthData().getRefreshToken()).append("`\n");
         debugMessages.append("*Reddit OAuth Expiration Time:* `")
-                .append(DateUtil.printDifference(redditClient.getOAuthData().getExpirationDate(), new Date())).append("`");
+                .append(DateUtil.printDifference(redditClient.getOAuthData().getExpirationDate(), new Date())).append("`\n");
 
         SendableTextMessage.SendableTextMessageBuilder sendableTextMessageBuilder = SendableTextMessage.builder();
         sendableTextMessageBuilder.message(debugMessages.toString());
+        sendableTextMessageBuilder.disableNotification(true);
+        sendableTextMessageBuilder.parseMode(ParseMode.MARKDOWN);
 
         chat.sendMessage(sendableTextMessageBuilder.build(), TelegramHook.getBot());
     }
