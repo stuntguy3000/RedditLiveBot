@@ -29,6 +29,7 @@ public class AdminDebugCommand extends TelegramAdminCommand {
         RedditClient redditClient = RedditLiveBot.getInstance().getRedditClient();
 
         debugMessages.append("*Debug Information:*\n");
+        debugMessages.append("*Live Threads:* `").append(RedditLiveBot.getInstance().getConfigHandler().getLiveThreads().getActiveChats()).append("`\n");
         debugMessages.append("*Reddit isAuthenticated:* `").append(redditClient.isAuthenticated()).append("`\n");
         debugMessages.append("*Reddit OAuth Access Code:* `").append(redditClient.getOAuthData().getAccessToken()).append("`\n");
         debugMessages.append("*Reddit OAuth Refresh Code:* `").append(redditClient.getOAuthData().getRefreshToken()).append("`\n");
@@ -38,7 +39,7 @@ public class AdminDebugCommand extends TelegramAdminCommand {
         SendableTextMessage.SendableTextMessageBuilder sendableTextMessageBuilder = SendableTextMessage.builder();
         sendableTextMessageBuilder.message(debugMessages.toString());
         sendableTextMessageBuilder.disableNotification(true);
-        sendableTextMessageBuilder.parseMode(ParseMode.MARKDOWN);   
+        sendableTextMessageBuilder.parseMode(ParseMode.MARKDOWN);
 
         chat.sendMessage(sendableTextMessageBuilder.build(), TelegramHook.getBot());
     }
