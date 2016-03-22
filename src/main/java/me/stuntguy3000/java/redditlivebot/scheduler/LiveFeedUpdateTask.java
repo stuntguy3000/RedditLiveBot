@@ -39,14 +39,12 @@ public class LiveFeedUpdateTask extends TimerTask {
     private void load() {
         LiveThreadPaginator liveThreadPaginator = new LiveThreadPaginator(redditClient, feedID);
 
-        if (liveThreadPaginator != null) {
-            if (liveThreadPaginator.hasNext()) {
-                liveThreadPaginator.next();
-                Listing<LiveUpdate> currentPage = liveThreadPaginator.getCurrentListing();
+        if (liveThreadPaginator.hasNext()) {
+            liveThreadPaginator.next();
+            Listing<LiveUpdate> currentPage = liveThreadPaginator.getCurrentListing();
 
-                if (currentPage.size() > 0) {
-                    lastPost = currentPage.get(0);
-                }
+            if (currentPage.size() > 0) {
+                lastPost = currentPage.get(0);
             }
         }
     }

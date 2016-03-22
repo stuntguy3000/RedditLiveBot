@@ -39,11 +39,15 @@ public class RedditLiveBot {
 
     public void connectReddit() {
         sendToAdmins("Connecting to Reddit...");
+
         UserAgent myUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", configHandler.getBotSettings().getRedditUsername());
+        Credentials credentials = Credentials.script(configHandler.getBotSettings().getRedditUsername(), configHandler.getBotSettings().getRedditPassword(), configHandler.getBotSettings().getRedditAppID(), configHandler.getBotSettings().getRedditAppSecret());
 
         if (redditClient != null) {
             try {
                 sendToAdmins("Deauthenticating...");
+                redditClient.getOAuthHelper().revokeAccessToken(credentials);
+                redditClient.getOAuthHelper().revokeRefreshToken(credentials);
                 redditClient.deauthenticate();
             } catch (Exception ex) {
                 sendToAdmins("Deauthenticating Failed! " + ex.getMessage());
@@ -52,7 +56,6 @@ public class RedditLiveBot {
 
         redditClient = new RedditClient(myUserAgent);
 
-        Credentials credentials = Credentials.script(configHandler.getBotSettings().getRedditUsername(), configHandler.getBotSettings().getRedditPassword(), configHandler.getBotSettings().getRedditAppID(), configHandler.getBotSettings().getRedditAppSecret());
         try {
             OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
             redditClient.authenticate(authData);
