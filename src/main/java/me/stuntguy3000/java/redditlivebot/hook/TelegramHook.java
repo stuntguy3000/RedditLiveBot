@@ -24,6 +24,7 @@ public class TelegramHook implements Listener {
 
     public TelegramHook(String authKey, RedditLiveBot instance) {
         this.instance = instance;
+        this.initializeCommands();
 
         bot = TelegramBot.login(authKey);
         bot.startUpdates(false);
@@ -33,8 +34,6 @@ public class TelegramHook implements Listener {
         liveFeedHandler.load();
 
         instance.sendToAdmins("Bot has connected, running build #" + RedditLiveBot.BUILD);
-
-        this.initializeCommands();
     }
 
     private void initializeCommands() {

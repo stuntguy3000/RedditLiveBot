@@ -39,12 +39,14 @@ public class LiveFeedUpdateTask extends TimerTask {
     private void load() {
         LiveThreadPaginator liveThreadPaginator = new LiveThreadPaginator(redditClient, feedID);
 
-        if (liveThreadPaginator.hasNext()) {
-            liveThreadPaginator.next();
-            Listing<LiveUpdate> currentPage = liveThreadPaginator.getCurrentListing();
+        if (liveThreadPaginator != null) {
+            if (liveThreadPaginator.hasNext()) {
+                liveThreadPaginator.next();
+                Listing<LiveUpdate> currentPage = liveThreadPaginator.getCurrentListing();
 
-            if (currentPage.size() > 0) {
-                lastPost = currentPage.get(0);
+                if (currentPage.size() > 0) {
+                    lastPost = currentPage.get(0);
+                }
             }
         }
     }
@@ -99,10 +101,10 @@ public class LiveFeedUpdateTask extends TimerTask {
                 }
             }
         } catch (Exception ex) {
-            LogHandler.log("Exception caught! Restarting bot...");
+            LogHandler.log("Exception caught! Reconnecting bot...");
             ex.printStackTrace();
-            RedditLiveBot.getInstance().sendToAdmins("Restarting bot...\n\nException caught: " + ex.getLocalizedMessage());
-            System.exit(0);
+            RedditLiveBot.getInstance().sendToAdmins("Reconnecting bot...\n\nException caught: " + ex.getLocalizedMessage());
+            RedditLiveBot.getInstance().connectReddit();
         }
     }
 }
