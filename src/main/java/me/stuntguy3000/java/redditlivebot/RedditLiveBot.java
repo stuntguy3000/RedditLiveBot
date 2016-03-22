@@ -47,7 +47,6 @@ public class RedditLiveBot {
             try {
                 sendToAdmins("Deauthenticating...");
                 redditClient.getOAuthHelper().revokeAccessToken(credentials);
-                redditClient.getOAuthHelper().revokeRefreshToken(credentials);
                 redditClient.deauthenticate();
             } catch (Exception ex) {
                 sendToAdmins("Deauthenticating Failed! " + ex.getMessage());

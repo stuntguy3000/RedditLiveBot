@@ -34,7 +34,7 @@ public class AdminDebugCommand extends TelegramAdminCommand {
         debugMessages.append("*Reddit OAuth Access Code:* `").append(redditClient.getOAuthData().getAccessToken()).append("`\n");
         debugMessages.append("*Reddit OAuth Refresh Code:* `").append(redditClient.getOAuthData().getRefreshToken()).append("`\n");
         debugMessages.append("*Reddit OAuth Expiration Time:* `")
-                .append(DateUtil.printDifference(redditClient.getOAuthData().getExpirationDate(), new Date())).append("`\n");
+                .append(DateUtil.printDifference(new Date(), redditClient.getOAuthData().getExpirationDate())).append("`\n");
 
         SendableTextMessage.SendableTextMessageBuilder sendableTextMessageBuilder = SendableTextMessage.builder();
         sendableTextMessageBuilder.message(debugMessages.toString());
