@@ -28,8 +28,7 @@ public class TelegramHook implements Listener {
         bot.startUpdates(false);
         bot.getEventsManager().register(this);
         LogHandler.log("Connected to Telegram.");
-        liveFeedHandler = new LiveFeedHandler(bot);
-        liveFeedHandler.load();
+        startFeedHandler();
 
         instance.sendToAdmins("Bot has connected, running build #" + RedditLiveBot.BUILD);
     }
@@ -64,6 +63,11 @@ public class TelegramHook implements Listener {
     @Override
     public void onTextMessageReceived(TextMessageReceivedEvent event) {
         LogHandler.log("DEBUG: Processing message %s by %s", event.getContent().getContent(), event.getMessage().getSender().getUsername());
+    }
+
+    public void startFeedHandler() {
+        liveFeedHandler = new LiveFeedHandler(bot);
+        liveFeedHandler.load();
     }
 }
     

@@ -33,6 +33,8 @@ public class RedditLiveBot {
     private ConfigHandler configHandler;
     @Getter
     private RedditClient redditClient;
+    @Getter
+    private TelegramHook telegramHook;
     private Thread updaterThread;
 
     public void connectReddit() {
@@ -63,7 +65,7 @@ public class RedditLiveBot {
 
     private void connectTelegram() {
         LogHandler.log("Connecting to Telegram...");
-        new TelegramHook(configHandler.getBotSettings().getTelegramKey(), this);
+        telegramHook = new TelegramHook(configHandler.getBotSettings().getTelegramKey(), this);
     }
 
     public static void main(String[] args) {
@@ -82,6 +84,8 @@ public class RedditLiveBot {
 
         connectTelegram();
         connectReddit();
+
+        getTelegramHook().startFeedHandler();
 
         if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
             LogHandler.log("Starting auto updater...");
