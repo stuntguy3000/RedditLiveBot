@@ -46,7 +46,7 @@ public class RedditLiveBot {
                 sendToAdmins("Deauthenticating...");
                 redditClient.deauthenticate();
             } catch (Exception ex) {
-                sendToAdmins("Deauthenticating Failed!");
+                sendToAdmins("Deauthenticating Failed! " + ex.getMessage());
             }
         }
 
