@@ -38,7 +38,7 @@ public class AdminDebugCommand extends TelegramAdminCommand {
         SendableTextMessage.SendableTextMessageBuilder sendableTextMessageBuilder = SendableTextMessage.builder();
         sendableTextMessageBuilder.message(debugMessages.toString());
         sendableTextMessageBuilder.disableNotification(true);
-        sendableTextMessageBuilder.parseMode(ParseMode.MARKDOWN);
+        sendableTextMessageBuilder.parseMode(ParseMode.MARKDOWN);   
 
         chat.sendMessage(sendableTextMessageBuilder.build(), TelegramHook.getBot());
     }

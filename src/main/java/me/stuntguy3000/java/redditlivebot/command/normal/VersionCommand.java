@@ -14,8 +14,10 @@ public class VersionCommand extends TelegramNormalCommand {
     public void processCommand(CommandMessageReceivedEvent event) {
         Chat chat = event.getChat();
 
-        respond(chat, "RedditLive by @stuntguy3000 build " + RedditLiveBot.BUILD + ".\n" +
-                "A huge thank you to zackpollard, aaomidi and bo0tzz for helping to create this bot.");
+        respond(chat, "*RedditLive by* @stuntguy3000\n" +
+                "`Build " + RedditLiveBot.BUILD + "`\n\n" +
+                "Source [Available on GitHub](https://github.com/stuntguy3000/RedditLiveBot)\n" +
+                "Created using @zackpollard's [JavaTelegramBotAPI](https://github.com/zackpollard/JavaTelegramBot-API)");
     }
 }
     
