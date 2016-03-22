@@ -59,7 +59,7 @@ public class RedditLiveBot {
             OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
             redditClient.authenticate(authData);
 
-            sendToAdmins("Connected to Reddit. Username: " + redditClient.me().getFullName());
+            sendToAdmins("Connected to Reddit. Username: " + redditClient.me().getFullName() + " Token: " + authData.getAccessToken());
         } catch (OAuthException e) {
             e.printStackTrace();
         }
