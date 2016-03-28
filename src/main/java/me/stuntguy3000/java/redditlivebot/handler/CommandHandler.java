@@ -7,6 +7,7 @@ import me.stuntguy3000.java.redditlivebot.util.LogHandler;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 import pro.zackpollard.telegrambot.api.user.User;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -45,7 +46,7 @@ public class CommandHandler {
         }
 
         if (cmd == null) {
-            LogHandler.log("Command %s is unknown! Arguments: %s", s, event.getArgs());
+            LogHandler.log("Command %s is unknown! Arguments: %s", s, Arrays.toString(event.getArgs()));
             return;
         }
         cmd.processCommand(event);

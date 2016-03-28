@@ -31,17 +31,16 @@ public class RedditLiveBot {
     private CommandHandler commandHandler = new CommandHandler();
     @Getter
     private ConfigHandler configHandler;
+    private Credentials credentials;
     @Getter
     private RedditClient redditClient;
+    private UserAgent redditUserAgent;
     @Getter
     private TelegramHook telegramHook;
     private Thread updaterThread;
 
     public void connectReddit() {
         sendToAdmins("Connecting to Reddit...");
-
-        UserAgent myUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", configHandler.getBotSettings().getRedditUsername());
-        Credentials credentials = Credentials.script(configHandler.getBotSettings().getRedditUsername(), configHandler.getBotSettings().getRedditPassword(), configHandler.getBotSettings().getRedditAppID(), configHandler.getBotSettings().getRedditAppSecret());
 
         if (redditClient != null) {
             try {
@@ -53,7 +52,7 @@ public class RedditLiveBot {
             }
         }
 
-        redditClient = new RedditClient(myUserAgent);
+        redditClient = new RedditClient(redditUserAgent);
 
         try {
             OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
@@ -83,6 +82,9 @@ public class RedditLiveBot {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        redditUserAgent = UserAgent.of("telegram", "me.stuntguy3000.java.redditlivebot", "1", configHandler.getBotSettings().getRedditUsername());
+        credentials = Credentials.script(configHandler.getBotSettings().getRedditUsername(), configHandler.getBotSettings().getRedditPassword(), configHandler.getBotSettings().getRedditAppID(), configHandler.getBotSettings().getRedditAppSecret());
 
         connectTelegram();
         connectReddit();
