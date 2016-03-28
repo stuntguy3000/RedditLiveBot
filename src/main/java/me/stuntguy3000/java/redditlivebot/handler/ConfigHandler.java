@@ -3,9 +3,8 @@ package me.stuntguy3000.java.redditlivebot.handler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
-import me.stuntguy3000.java.redditlivebot.util.BotSettings;
-import me.stuntguy3000.java.redditlivebot.util.LiveThreads;
-import me.stuntguy3000.java.redditlivebot.util.LogHandler;
+import me.stuntguy3000.java.redditlivebot.object.config.BotSettings;
+import me.stuntguy3000.java.redditlivebot.object.config.SavedThreads;
 
 import java.io.*;
 
@@ -15,23 +14,24 @@ public class ConfigHandler {
     @Getter
     private BotSettings botSettings = new BotSettings();
     @Getter
-    private LiveThreads liveThreads = new LiveThreads();
+    private SavedThreads savedThreads = new SavedThreads();
 
     public ConfigHandler() {
         loadFile("config.json");
         loadFile("threads.json");
     }
 
-    public void loadFile(String fileName) {
+    private void loadFile(String fileName) {
         Gson gson = new Gson();
         File configFile = new File(fileName);
 
         if (configFile.exists()) {
-            BufferedReader br = null;
+            BufferedReader br;
             try {
                 br = new BufferedReader(new FileReader(configFile));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+                return;
             }
 
             switch (fileName.split(".json")[0].toLowerCase()) {
@@ -40,7 +40,7 @@ public class ConfigHandler {
                     return;
                 }
                 case "threads": {
-                    liveThreads = gson.fromJson(br, LiveThreads.class);
+                    savedThreads = gson.fromJson(br, SavedThreads.class);
                 }
             }
         } else {
@@ -48,7 +48,7 @@ public class ConfigHandler {
         }
     }
 
-    public void saveConfig(String fileName) {
+    private void saveConfig(String fileName) {
         File configFile = new File(fileName);
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
         Gson gson = builder.create();
@@ -60,7 +60,7 @@ public class ConfigHandler {
                 break;
             }
             case "threads": {
-                json = gson.toJson(liveThreads);
+                json = gson.toJson(savedThreads);
                 break;
             }
         }
@@ -72,6 +72,7 @@ public class ConfigHandler {
                 configFile.createNewFile();
             }
             outputStream = new FileOutputStream(configFile);
+            assert json != null;
             outputStream.write(json.getBytes());
             outputStream.close();
         } catch (FileNotFoundException e) {
