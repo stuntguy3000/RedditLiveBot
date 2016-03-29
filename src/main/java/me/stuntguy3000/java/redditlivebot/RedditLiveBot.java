@@ -64,6 +64,10 @@ public class RedditLiveBot {
         LogHandler.log(" RedditLive build " + BUILD + " by @stuntguy3000");
         LogHandler.log("======================================");
 
+        commandHandler = new CommandHandler();
+
+        connectTelegram();
+        
         if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
             LogHandler.log("Starting auto updater...");
             Thread updater = new Thread(new UpdateHandler("RedditLiveBot", "RedditLiveBot"));
@@ -72,10 +76,6 @@ public class RedditLiveBot {
         } else {
             LogHandler.log("** Auto Updater is set to false **");
         }
-
-        commandHandler = new CommandHandler();
-
-        connectTelegram();
 
         redditHandler = new RedditHandler();
     }
