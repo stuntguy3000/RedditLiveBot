@@ -17,6 +17,11 @@ public class ConfigHandler {
         loadFile("config.json");
     }
 
+    public void addFeed(String id) {
+        botSettings.getKnownLiveFeeds().add(id.toLowerCase());
+        saveConfig("config");
+    }
+
     private void loadFile(String fileName) {
         Gson gson = new Gson();
         File configFile = new File(fileName);

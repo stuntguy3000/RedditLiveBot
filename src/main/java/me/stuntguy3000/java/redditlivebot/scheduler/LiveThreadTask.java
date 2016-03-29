@@ -9,6 +9,7 @@ import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildren;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,9 +31,11 @@ public class LiveThreadTask extends TimerTask {
     }
 
     private void postUpdate(LiveThreadChildrenData data) {
-        lastPost = data.getCreated_utc();
-        Lang.send(TelegramHook.getRedditLiveChat(),
-                Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
+        if (data != null) {
+            lastPost = data.getCreated_utc();
+            Lang.send(TelegramHook.getRedditLiveChat(),
+                    Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
+        }
     }
 
     @Override
@@ -55,6 +58,16 @@ public class LiveThreadTask extends TimerTask {
                 postUpdate(updates.get(0));
             } else {
                 updates.forEach(this::postUpdate);
+
+                if (updates.isEmpty()) {
+                    long secs = (new Date().getTime()) / 1000;
+
+                    // Older than 6 hours?
+                    if (secs - lastPost > 21600) {
+                        Lang.sendDebug("Stopping live thread! " + (secs - lastPost));
+                        plugin.getRedditHandler().stopLiveThread();
+                    }
+                }
             }
         } catch (Exception e) {
             Lang.sendDebug("Exception Caught: " + e.getMessage());

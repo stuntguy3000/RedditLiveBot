@@ -15,6 +15,7 @@ public class Lang {
     public static final String ERROR_NOT_ADMIN = Emoji.RED_CROSS.getText() + " *You are not an admin!*";
     public static final String LIVE_THREAD_START = Emoji.BLUE_RIGHT_ARROW.getText() + " *Following a new feed!*\n\n" +
             "_Name: _ %s\n_URL: _ https://reddit.com/live/%s";
+    public static final String LIVE_THREAD_STOP = Emoji.REPLAY.getText() + " *RedditLive has stopped tracking this live feed due to inactivity*";
     public static final String LIVE_THREAD_UPDATE = Emoji.PERSON_SPEAKING.getText() + " `%s` *New update by %s*\n\n%s";
 
     private static SendableMessage build(String message, Object... format) {
@@ -39,7 +40,7 @@ public class Lang {
 
     public static void sendAdmin(String message, Object... format) {
         for (long adminID : RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getTelegramAdmins()) {
-            send(adminID, "[ADMIN] " + message, format);
+            sendRaw(adminID, "[ADMIN] " + message, format);
         }
 
         LogHandler.log("[ADMIN] " + message, format);
@@ -49,6 +50,10 @@ public class Lang {
         if (RedditLiveBot.DEV_MODE) {
             sendAdmin("[DEBUG] " + message, format);
         }
+    }
+
+    private static void sendRaw(long chatID, String message, Object... format) {
+        TelegramHook.getBot().sendMessage(TelegramBot.getChat(chatID), SendableTextMessage.builder().message(String.format(message, format)).build());
     }
 }
     

@@ -68,10 +68,25 @@ public class RedditHandler {
             newLiveThreadsTask.cancel();
         }
 
-        currentLiveThread = new LiveThreadTask(redditThreadChildrenData.getMedia().getEvent_id());
+        String id = redditThreadChildrenData.getMedia().getEvent_id();
+        currentLiveThread = new LiveThreadTask(id);
 
+        RedditLiveBot.getInstance().getConfigHandler().addFeed(id);
 
         Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_START, redditThreadChildrenData.getTitle(), redditThreadChildrenData.getMedia().getEvent_id());
+    }
+
+    public void stopLiveThread() {
+        if (currentLiveThread != null) {
+            currentLiveThread.cancel();
+        }
+
+        if (newLiveThreadsTask != null) {
+            newLiveThreadsTask.cancel();
+        }
+
+        newLiveThreadsTask = new NewLiveThreadsTask();
+        Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_STOP);
     }
 }
     
