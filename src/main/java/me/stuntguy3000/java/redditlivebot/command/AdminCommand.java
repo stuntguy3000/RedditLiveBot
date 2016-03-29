@@ -14,7 +14,7 @@ public class AdminCommand extends Command {
 
     @Override
     public void processCommand(CommandMessageReceivedEvent event) {
-        Lang.send(event.getChat(), "Fetching data for you, %s", event.getMessage().getSender().getUsername());
+        Lang.send(event.getChat(), "Coming soon, %s", event.getMessage().getSender().getUsername());
     }
 }
     
