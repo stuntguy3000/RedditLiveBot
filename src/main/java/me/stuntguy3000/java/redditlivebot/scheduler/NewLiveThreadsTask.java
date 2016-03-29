@@ -14,7 +14,7 @@ import java.util.TimerTask;
 // @author Luke Anderson | stuntguy3000
 public class NewLiveThreadsTask extends TimerTask {
     public NewLiveThreadsTask() {
-        new Timer().schedule(this, 0, 15 * 1000);
+        new Timer().schedule(this, 0, 600 * 1000);
     }
 
     @Override
