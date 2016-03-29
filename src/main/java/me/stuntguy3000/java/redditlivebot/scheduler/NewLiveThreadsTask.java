@@ -14,7 +14,7 @@ import java.util.TimerTask;
 // @author Luke Anderson | stuntguy3000
 public class NewLiveThreadsTask extends TimerTask {
     public NewLiveThreadsTask() {
-        new Timer().schedule(this, 0, 600 * 1000);
+        new Timer().schedule(this, 0, 15 * 1000);
     }
 
     @Override
@@ -31,8 +31,8 @@ public class NewLiveThreadsTask extends TimerTask {
                     long secs = (new Date().getTime()) / 1000;
                     String threadID = threadData.getMedia().getEvent_id();
 
-                    // Score more than 20, up to 3 hours old.
-                    if (threadData.getScore() >= 20 &&
+                    // Score more than 5, up to 3 hours old.
+                    if (threadData.getScore() >= 5 &&
                             (secs - threadData.getCreated_utc() < 10800) &&
                             !RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getKnownLiveFeeds().contains(threadID.toLowerCase())) {
                         Lang.sendDebug("Following thread %s.", threadID);
