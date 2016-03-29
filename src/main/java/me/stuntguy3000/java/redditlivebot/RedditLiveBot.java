@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.handler.CommandHandler;
 import me.stuntguy3000.java.redditlivebot.handler.ConfigHandler;
 import me.stuntguy3000.java.redditlivebot.handler.LogHandler;
+import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import org.apache.commons.io.FileUtils;
 
@@ -21,6 +22,8 @@ public class RedditLiveBot {
     private CommandHandler commandHandler;
     @Getter
     private ConfigHandler configHandler;
+    @Getter
+    private RedditHandler redditHandler;
 
     private void connectTelegram() {
         LogHandler.log("Connecting to Telegram...");
@@ -65,6 +68,8 @@ public class RedditLiveBot {
         commandHandler = new CommandHandler();
 
         connectTelegram();
+
+        redditHandler = new RedditHandler();
     }
 
     public static void main(String[] args) {

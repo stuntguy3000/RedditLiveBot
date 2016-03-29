@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.object.config.BotSettings;
-import me.stuntguy3000.java.redditlivebot.object.config.SavedThreads;
 
 import java.io.*;
 
@@ -13,12 +12,9 @@ public class ConfigHandler {
 
     @Getter
     private BotSettings botSettings = new BotSettings();
-    @Getter
-    private SavedThreads savedThreads = new SavedThreads();
 
     public ConfigHandler() {
         loadFile("config.json");
-        loadFile("threads.json");
     }
 
     private void loadFile(String fileName) {
@@ -37,10 +33,6 @@ public class ConfigHandler {
             switch (fileName.split(".json")[0].toLowerCase()) {
                 case "config": {
                     botSettings = gson.fromJson(br, BotSettings.class);
-                    return;
-                }
-                case "threads": {
-                    savedThreads = gson.fromJson(br, SavedThreads.class);
                 }
             }
         } else {
@@ -57,10 +49,6 @@ public class ConfigHandler {
         switch (fileName.split(".json")[0].toLowerCase()) {
             case "config": {
                 json = gson.toJson(botSettings);
-                break;
-            }
-            case "threads": {
-                json = gson.toJson(savedThreads);
                 break;
             }
         }

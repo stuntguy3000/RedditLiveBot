@@ -13,7 +13,9 @@ import pro.zackpollard.telegrambot.api.user.User;
 // @author Luke Anderson | stuntguy3000
 public class Lang {
     public static final String ERROR_NOT_ADMIN = Emoji.RED_CROSS.getText() + " *You are not an admin!*";
-    public static final String LIVE_THREAD_UPDATE = Emoji.PERSON_SPEAKING.getText() + " ```%s``` *New update by %s*\n\n%s";
+    public static final String LIVE_THREAD_START = Emoji.BLUE_RIGHT_ARROW.getText() + " *Following a new feed!*\n\n" +
+            "_Name: _ %s\n_URL: _ https://reddit.com/live/%s";
+    public static final String LIVE_THREAD_UPDATE = Emoji.PERSON_SPEAKING.getText() + " `%s` *New update by %s*\n\n%s";
 
     private static SendableMessage build(String message, Object... format) {
         SendableTextMessage.SendableTextMessageBuilder sendableTextMessageBuilder = SendableTextMessage.builder();

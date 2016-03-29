@@ -9,7 +9,7 @@ import java.util.UUID;
 public class LiveThreadChildrenData {
     private String author;
     private String body;
-    private long creted_utc;
+    private long created_utc;
     private UUID id;
     private boolean stricken;
 }

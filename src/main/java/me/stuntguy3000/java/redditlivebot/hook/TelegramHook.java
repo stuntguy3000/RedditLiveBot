@@ -6,6 +6,7 @@ import me.stuntguy3000.java.redditlivebot.object.ClassGetter;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.command.Command;
 import pro.zackpollard.telegrambot.api.TelegramBot;
+import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.event.Listener;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
@@ -16,6 +17,8 @@ import java.util.List;
 public class TelegramHook implements Listener {
     @Getter
     private static TelegramBot bot;
+    @Getter
+    private static Chat redditLiveChat;
     @Getter
     private final RedditLiveBot instance;
 
@@ -29,6 +32,9 @@ public class TelegramHook implements Listener {
         Lang.sendAdmin("Bot has connected, running build #%d", RedditLiveBot.BUILD);
 
         this.initializeCommands();
+
+        redditLiveChat = TelegramBot.getChat("@RedditLive");
+        //redditLiveChat = TelegramBot.getChat(-14978569);
     }
 
     private void initializeCommands() {
