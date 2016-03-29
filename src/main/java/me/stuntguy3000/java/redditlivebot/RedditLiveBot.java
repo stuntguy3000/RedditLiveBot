@@ -1,10 +1,7 @@
 package me.stuntguy3000.java.redditlivebot;
 
 import lombok.Getter;
-import me.stuntguy3000.java.redditlivebot.handler.CommandHandler;
-import me.stuntguy3000.java.redditlivebot.handler.ConfigHandler;
-import me.stuntguy3000.java.redditlivebot.handler.LogHandler;
-import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
+import me.stuntguy3000.java.redditlivebot.handler.*;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import org.apache.commons.io.FileUtils;
 
@@ -24,6 +21,8 @@ public class RedditLiveBot {
     private ConfigHandler configHandler;
     @Getter
     private RedditHandler redditHandler;
+    @Getter
+    private Thread updaterThread;
 
     private void connectTelegram() {
         LogHandler.log("Connecting to Telegram...");
@@ -64,6 +63,15 @@ public class RedditLiveBot {
         LogHandler.log("======================================");
         LogHandler.log(" RedditLive build " + BUILD + " by @stuntguy3000");
         LogHandler.log("======================================");
+
+        if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
+            LogHandler.log("Starting auto updater...");
+            Thread updater = new Thread(new UpdateHandler("RedditLiveBot", "RedditLiveBot"));
+            updater.start();
+            updaterThread = updater;
+        } else {
+            LogHandler.log("** Auto Updater is set to false **");
+        }
 
         commandHandler = new CommandHandler();
 
