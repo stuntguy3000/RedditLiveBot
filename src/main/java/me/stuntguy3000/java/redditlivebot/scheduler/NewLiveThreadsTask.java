@@ -28,16 +28,18 @@ public class NewLiveThreadsTask extends TimerTask {
                 for (RedditThreadChildren threadChild : redditThread.getData().getChildren()) {
                     RedditThreadChildrenData threadData = threadChild.getData();
 
-                    long secs = (new Date().getTime()) / 1000;
-                    String threadID = threadData.getMedia().getEvent_id();
+                    if (threadData != null && threadData.getMedia() != null) {
+                        long secs = (new Date().getTime()) / 1000;
+                        String threadID = threadData.getMedia().getEvent_id();
 
-                    // Score more than 5, up to 3 hours old.
-                    if (threadData.getScore() >= 5 &&
-                            (secs - threadData.getCreated_utc() < 10800) &&
-                            !RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getKnownLiveFeeds().contains(threadID.toLowerCase())) {
-                        Lang.sendDebug("Following thread %s.", threadID);
-                        RedditLiveBot.getInstance().getRedditHandler().startLiveThread(threadData);
-                        return;
+                        // Score more than 5, up to 3 hours old.
+                        if (threadData.getScore() >= 5 &&
+                                (secs - threadData.getCreated_utc() < 10800) &&
+                                !RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getKnownLiveFeeds().contains(threadID.toLowerCase())) {
+                            Lang.sendDebug("Following thread %s.", threadID);
+                            RedditLiveBot.getInstance().getRedditHandler().startLiveThread(threadData);
+                            return;
+                        }
                     }
                 }
             }
