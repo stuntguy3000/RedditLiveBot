@@ -19,6 +19,11 @@ public class ConfigHandler {
     public ConfigHandler() {
         loadFile("config.json");
         loadFile("subscriptions.json");
+
+        if (subscriptions == null) {
+            System.out.println("Its null");
+            subscriptions = new Subscriptions();
+        }
     }
 
     public void addFeed(String id) {
