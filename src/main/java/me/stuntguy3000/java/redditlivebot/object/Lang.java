@@ -61,13 +61,13 @@ public class Lang {
         TelegramHook.getBot().sendMessage(TelegramBot.getChat(chatID), SendableTextMessage.builder().message(String.format(message, format)).build());
     }
 
-    public static String strJoin(String[] aArr, String sSep) {
+    public static String strJoin(String[] aArr, String prefix, String sSep) {
         StringBuilder sbStr = new StringBuilder();
         for (int i = 0, il = aArr.length; i < il; i++) {
             if (i > 0) {
                 sbStr.append(sSep);
             }
-            sbStr.append(aArr[i]);
+            sbStr.append(prefix).append(aArr[i]);
         }
         return sbStr.toString();
     }
