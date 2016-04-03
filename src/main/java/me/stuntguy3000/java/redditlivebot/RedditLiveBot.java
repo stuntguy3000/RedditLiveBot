@@ -22,6 +22,8 @@ public class RedditLiveBot {
     @Getter
     private RedditHandler redditHandler;
     @Getter
+    private SubscriptionHandler subscriptionHandler;
+    @Getter
     private Thread updaterThread;
 
     private void connectTelegram() {
@@ -78,6 +80,7 @@ public class RedditLiveBot {
         }
 
         redditHandler = new RedditHandler();
+        subscriptionHandler = new SubscriptionHandler();
     }
 
     public static void main(String[] args) {

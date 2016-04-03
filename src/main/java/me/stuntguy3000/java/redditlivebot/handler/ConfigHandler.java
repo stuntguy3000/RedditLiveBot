@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.object.config.BotSettings;
+import me.stuntguy3000.java.redditlivebot.object.config.Subscriptions;
 
 import java.io.*;
 
@@ -12,9 +13,12 @@ public class ConfigHandler {
 
     @Getter
     private BotSettings botSettings = new BotSettings();
+    @Getter
+    private Subscriptions subscriptions = new Subscriptions();
 
     public ConfigHandler() {
         loadFile("config.json");
+        loadFile("subscriptions.json");
     }
 
     public void addFeed(String id) {
@@ -39,6 +43,9 @@ public class ConfigHandler {
                 case "config": {
                     botSettings = gson.fromJson(br, BotSettings.class);
                 }
+                case "subscriptions": {
+                    subscriptions = gson.fromJson(br, Subscriptions.class);
+                }
             }
         } else {
             saveConfig(fileName);
@@ -54,6 +61,10 @@ public class ConfigHandler {
         switch (fileName.split(".json")[0].toLowerCase()) {
             case "config": {
                 json = gson.toJson(botSettings);
+                break;
+            }
+            case "subscriptions": {
+                json = gson.toJson(subscriptions);
                 break;
             }
         }
@@ -78,6 +89,10 @@ public class ConfigHandler {
             e.printStackTrace();
             LogHandler.log("Invalid Config Specified! Please check the directories read/write permissions and contact the developer!");
         }
+    }
+
+    public void saveSubscriptions() {
+        saveConfig("subscriptions.json");
     }
 }
 

@@ -8,6 +8,8 @@ import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildren;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
+import pro.zackpollard.telegrambot.api.TelegramBot;
+import pro.zackpollard.telegrambot.api.chat.Chat;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -35,6 +37,17 @@ public class LiveThreadTask extends TimerTask {
             lastPost = data.getCreated_utc();
             Lang.send(TelegramHook.getRedditLiveChat(),
                     Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
+
+            for (String chatID : plugin.getSubscriptionHandler().getSubscriptions()) {
+                Chat chat = TelegramBot.getChat(chatID);
+
+                if (chat != null) {
+                    Lang.send(TelegramHook.getRedditLiveChat(),
+                            Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
+                } else {
+                    plugin.getSubscriptionHandler().unsubscribeChat(chatID);
+                }
+            }
         }
     }
 

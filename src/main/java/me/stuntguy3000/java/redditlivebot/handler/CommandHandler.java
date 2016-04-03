@@ -1,5 +1,6 @@
 package me.stuntguy3000.java.redditlivebot.handler;
 
+import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.object.command.Command;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandHandler {
+    @Getter
     public HashMap<String[], Command> commands = new HashMap<>();
 
     public void executeCommand(String s, CommandMessageReceivedEvent event) {
