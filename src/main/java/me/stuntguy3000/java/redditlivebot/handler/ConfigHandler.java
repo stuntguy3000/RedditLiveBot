@@ -21,7 +21,6 @@ public class ConfigHandler {
         loadFile("subscriptions.json");
 
         if (subscriptions == null) {
-            System.out.println("Its null");
             subscriptions = new Subscriptions();
         }
     }
