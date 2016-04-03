@@ -7,5 +7,5 @@ import java.util.ArrayList;
 // @author Luke Anderson | stuntguy3000
 @Data
 public class Subscriptions {
-    private ArrayList<String> subscriptions;
+    private ArrayList<String> subscriptions = new ArrayList<>();
 }
