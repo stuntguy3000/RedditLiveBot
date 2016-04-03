@@ -18,7 +18,20 @@ public class SubscriptionHandler {
     }
 
     public boolean isSubscribed(Chat chat) {
-        return plugin.getConfigHandler().getSubscriptions().getSubscriptions().contains(chat.getId());
+        if (plugin.getConfigHandler().getSubscriptions() != null) {
+            if (plugin.getConfigHandler().getSubscriptions().getSubscriptions() != null) {
+                if (chat != null) {
+                    return plugin.getConfigHandler().getSubscriptions().getSubscriptions().contains(chat.getId());
+                } else {
+                    System.out.println("Chat is null");
+                }
+            }
+            System.out.println("getSubscriptions2 is null");
+        } else {
+            System.out.println("getSubscriptions1 is null");
+        }
+
+        return false;
     }
 
     public void subscribeChat(Chat chat) {
