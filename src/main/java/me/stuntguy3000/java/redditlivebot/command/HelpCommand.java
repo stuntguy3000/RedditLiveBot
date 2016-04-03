@@ -17,7 +17,7 @@ public class HelpCommand extends Command {
     public void processCommand(CommandMessageReceivedEvent event) {
         StringBuilder commandHelp = new StringBuilder();
 
-        commandHelp.append("*RedditLiveBot Command Help:*");
+        commandHelp.append("*RedditLiveBot Command Help:*\n");
 
         for (Map.Entry<String[], Command> command : RedditLiveBot.getInstance().getCommandHandler().getCommands().entrySet()) {
             commandHelp.append(String.format("_%s_: `%s`\n", Lang.strJoin(command.getKey(), ", "), command.getValue().getDescription()));
