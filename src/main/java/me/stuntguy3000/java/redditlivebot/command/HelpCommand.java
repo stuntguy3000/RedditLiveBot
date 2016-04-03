@@ -20,7 +20,7 @@ public class HelpCommand extends Command {
         commandHelp.append("*RedditLiveBot Command Help:*");
 
         for (Map.Entry<String[], Command> command : RedditLiveBot.getInstance().getCommandHandler().getCommands().entrySet()) {
-            commandHelp.append(String.format("*%s*: `%s`", Lang.strJoin(command.getKey(), ", "), command.getValue().getDescription()));
+            commandHelp.append(String.format("_%s_: `%s`\n", Lang.strJoin(command.getKey(), ", "), command.getValue().getDescription()));
         }
 
         Lang.send(event.getChat(), commandHelp.toString());
