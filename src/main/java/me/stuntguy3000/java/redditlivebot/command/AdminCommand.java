@@ -14,7 +14,17 @@ public class AdminCommand extends Command {
 
     @Override
     public void processCommand(CommandMessageReceivedEvent event) {
-        Lang.send(event.getChat(), RedditLiveBot.getInstance().getCommandHandler().getBotFatherString());
+        String[] args = event.getArgs();
+
+        if (args.length == 0) {
+            Lang.send(event.getChat(), RedditLiveBot.getInstance().getCommandHandler().getBotFatherString());
+        } else if (args[0].equalsIgnoreCase("follow")) {
+            if (args.length == 3) {
+                RedditLiveBot.getInstance().getRedditHandler().startLiveThread(args[1], args[2]);
+            } else {
+                Lang.send(event.getChat(), Lang.ERROR_NOT_ENOUGH_ARGUMENTS);
+            }
+        }
     }
 }
     

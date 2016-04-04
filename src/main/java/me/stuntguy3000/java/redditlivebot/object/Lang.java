@@ -18,6 +18,7 @@ public class Lang {
     public static final String ERROR_CHAT_NOT_SUBSCRIBED = Emoji.RED_CROSS.getText() + " *This chat is not subscribed.*";
     public static final String ERROR_CHAT_SUBSCRIBED = Emoji.RED_CROSS.getText() + " *This chat is already subscribed.*";
     public static final String ERROR_NOT_ADMIN = Emoji.RED_CROSS.getText() + " *You are not a RedditLiveBot administrator!*";
+    public static final String ERROR_NOT_ENOUGH_ARGUMENTS = Emoji.RED_CROSS.getText() + " *Invalid command usage!*";
     public static final String LIVE_THREAD_START = Emoji.BLUE_RIGHT_ARROW.getText() + " *Following a new feed!*\n\n" +
             "_Name: _ %s\n_URL: _ https://reddit.com/live/%s";
     public static final String LIVE_THREAD_STOP = Emoji.REPLAY.getText() + " *RedditLive has stopped tracking this live feed due to inactivity*";
