@@ -27,7 +27,7 @@ public class ConfigHandler {
 
     public void addFeed(String id) {
         botSettings.getKnownLiveFeeds().add(id.toLowerCase());
-        saveConfig("config");
+        saveConfig("config.json");
     }
 
     private void loadFile(String fileName) {
