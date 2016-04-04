@@ -42,7 +42,7 @@ public class LiveThreadTask extends TimerTask {
                 Chat chat = TelegramBot.getChat(chatID);
 
                 if (chat != null) {
-                    Lang.send(TelegramHook.getRedditLiveChat(),
+                    Lang.send(chat,
                             Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
                 } else {
                     plugin.getSubscriptionHandler().unsubscribeChat(chatID);
