@@ -76,8 +76,8 @@ public class RedditLiveBot {
             LogHandler.log("** Auto Updater is set to false **");
         }
 
-        redditHandler = new RedditHandler();
         subscriptionHandler = new SubscriptionHandler();
+        redditHandler = new RedditHandler();
     }
 
     public static void main(String[] args) {

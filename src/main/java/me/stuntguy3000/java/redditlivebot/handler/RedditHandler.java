@@ -27,7 +27,13 @@ public class RedditHandler {
     private NewLiveThreadsTask newLiveThreadsTask;
 
     public RedditHandler() {
-        newLiveThreadsTask = new NewLiveThreadsTask();
+        String existingID = RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getCurrentLiveFeed();
+
+        if (existingID == null) {
+            newLiveThreadsTask = new NewLiveThreadsTask();
+        } else {
+            startLiveThread(existingID, null);
+        }
     }
 
     public static LiveThread getLiveThread(String id) throws UnirestException, HTTPException {
@@ -79,7 +85,10 @@ public class RedditHandler {
 
         RedditLiveBot.getInstance().getConfigHandler().addFeed(id);
         RedditLiveBot.getInstance().getConfigHandler().setCurrentFeed(id);
-        Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_START, title, id);
+        
+        if (title != null) {
+            Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_START, title, id);
+        }
     }
 
     public void stopLiveThread() {
