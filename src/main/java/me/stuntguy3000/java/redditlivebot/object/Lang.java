@@ -10,6 +10,8 @@ import pro.zackpollard.telegrambot.api.chat.message.send.SendableMessage;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 import pro.zackpollard.telegrambot.api.user.User;
 
+import java.util.List;
+
 // @author Luke Anderson | stuntguy3000
 public class Lang {
     public static final String CHAT_SUBSCRIBED = Emoji.GREEN_BOX_TICK.getText() + " *This chat has subscribed to RedditLiveBot's updates.*";
@@ -74,6 +76,17 @@ public class Lang {
                 sbStr.append(sSep);
             }
             sbStr.append(prefix).append(aArr[i]);
+        }
+        return sbStr.toString();
+    }
+
+    public static String stringJoin(List<String> aArr, String prefix, String sSep) {
+        StringBuilder sbStr = new StringBuilder();
+        for (int i = 0, il = aArr.size(); i < il; i++) {
+            if (i > 0) {
+                sbStr.append(sSep);
+            }
+            sbStr.append(prefix).append(aArr.get(i));
         }
         return sbStr.toString();
     }

@@ -11,6 +11,8 @@ import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
+import java.util.ArrayList;
+
 // @author Luke Anderson | stuntguy3000
 public class AdminCommand extends Command {
 
@@ -65,9 +67,9 @@ public class AdminCommand extends Command {
 
                     Lang.send(event.getChat(), redditData);
                 } else if (args[0].equalsIgnoreCase("subscriptions")) {
-                    String[] subscriptions = (String[]) RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions().toArray();
+                    ArrayList<String> subscriptions = RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions();
                     Lang.sendAdmin(Lang.COMMAND_ADMIN_SUBSCRIPTIONS,
-                            subscriptions.length,
+                            subscriptions.size(),
                             Lang.stringJoin(subscriptions,
                                     null, ", "));
                 }
