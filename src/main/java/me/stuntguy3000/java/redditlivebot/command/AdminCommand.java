@@ -24,16 +24,6 @@ public class AdminCommand extends Command {
     public void processCommand(CommandMessageReceivedEvent event) {
         String[] args = event.getArgs();
 
-        if (args.length == 0) {
-
-        } else if (args[0].equalsIgnoreCase("follow")) {
-            if (args.length == 3) {
-                RedditLiveBot.getInstance().getRedditHandler().startLiveThread(args[1], args[2]);
-            } else {
-                Lang.send(event.getChat(), Lang.ERROR_NOT_ENOUGH_ARGUMENTS);
-            }
-        }
-
         switch (args.length) {
             case 0: {
                 Lang.send(event.getChat(), "*RedditLive Admin Help:*\n" +
