@@ -58,7 +58,7 @@ public class UpdateHandler implements Runnable {
                     return;
                 }
 
-                System.exit(0);
+                RedditLiveBot.getInstance().shutdown();
             }
             try {
                 Thread.sleep(2000L);

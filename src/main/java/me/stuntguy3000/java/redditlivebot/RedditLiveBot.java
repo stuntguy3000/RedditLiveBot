@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 // @author Luke Anderson | stuntguy3000
 public class RedditLiveBot {
     public static int BUILD = 0;
-    public static boolean DEV_MODE = false;
+    public static boolean DEBUG = false;
     @Getter
     public static RedditLiveBot instance;
     @Getter
@@ -28,8 +28,8 @@ public class RedditLiveBot {
 
     private void connectTelegram() {
         LogHandler.log("Connecting to Telegram...");
-        DEV_MODE = getConfigHandler().getBotSettings().getDevMode();
-        LogHandler.log("Developer Mode is set to " + DEV_MODE);
+        DEBUG = getConfigHandler().getBotSettings().getDebugMode();
+        LogHandler.log("Debug Mode is set to " + DEBUG);
         new TelegramHook(configHandler.getBotSettings().getTelegramKey(), this);
     }
 
@@ -59,9 +59,6 @@ public class RedditLiveBot {
             e.printStackTrace();
         }
 
-        /**
-         * Begin CLI for RedditLive
-         */
         LogHandler.log("======================================");
         LogHandler.log(" RedditLive build " + BUILD + " by @stuntguy3000");
         LogHandler.log("======================================");
@@ -85,6 +82,13 @@ public class RedditLiveBot {
 
     public static void main(String[] args) {
         new RedditLiveBot().main();
+    }
+
+    public void shutdown() {
+        configHandler.saveSubscriptions();
+        configHandler.saveConfig();
+
+        System.exit(0);
     }
 }
     

@@ -6,6 +6,7 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
+import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
@@ -20,7 +21,9 @@ import javax.xml.ws.http.HTTPException;
 // @author Luke Anderson | stuntguy3000
 public class RedditHandler {
     private static final String USER_AGENT = "me.stuntguy3000.java.redditlivebot:v" + RedditLiveBot.BUILD + " (by /u/stuntguy3000)";
+    @Getter
     private LiveThreadTask currentLiveThread;
+    @Getter
     private NewLiveThreadsTask newLiveThreadsTask;
 
     public RedditHandler() {
@@ -75,6 +78,7 @@ public class RedditHandler {
         currentLiveThread = new LiveThreadTask(id);
 
         RedditLiveBot.getInstance().getConfigHandler().addFeed(id);
+        RedditLiveBot.getInstance().getConfigHandler().setCurrentFeed(id);
         Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_START, title, id);
     }
 
@@ -88,6 +92,7 @@ public class RedditHandler {
         }
 
         newLiveThreadsTask = new NewLiveThreadsTask();
+        RedditLiveBot.getInstance().getConfigHandler().setCurrentFeed(null);
         Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_STOP);
     }
 }

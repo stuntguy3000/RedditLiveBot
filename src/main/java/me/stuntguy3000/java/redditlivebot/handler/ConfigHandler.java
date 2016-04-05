@@ -56,6 +56,10 @@ public class ConfigHandler {
         }
     }
 
+    public void saveConfig() {
+        saveConfig("config.json");
+    }
+
     private void saveConfig(String fileName) {
         File configFile = new File(fileName);
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
@@ -97,6 +101,10 @@ public class ConfigHandler {
 
     public void saveSubscriptions() {
         saveConfig("subscriptions.json");
+    }
+
+    public void setCurrentFeed(String id) {
+        getBotSettings().setCurrentLiveFeed(id);
     }
 }
 
