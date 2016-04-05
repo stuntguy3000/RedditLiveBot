@@ -2,6 +2,7 @@ package me.stuntguy3000.java.redditlivebot.object.config;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public class BotSettings {
     private Boolean autoUpdater;
     @Getter
     @Setter
-    private long currentFeedPost;
+    private LiveThreadChildrenData currentFeedPost;
     @Getter
     @Setter
     private String currentLiveFeed;

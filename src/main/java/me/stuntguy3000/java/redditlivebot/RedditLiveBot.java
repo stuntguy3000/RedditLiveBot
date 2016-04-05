@@ -88,7 +88,7 @@ public class RedditLiveBot {
         if (getRedditHandler().getCurrentLiveThread() != null) {
             configHandler.getBotSettings().setCurrentFeedPost(getRedditHandler().getCurrentLiveThread().getLastPost());
         } else {
-            configHandler.getBotSettings().setCurrentFeedPost(-1);
+            configHandler.getBotSettings().setCurrentFeedPost(null);
         }
 
         configHandler.saveSubscriptions();

@@ -21,11 +21,11 @@ public class LiveThreadTask extends TimerTask {
     @Getter
     private RedditLiveBot plugin;
     @Getter
-    private long lastPost = -1;
+    private LiveThreadChildrenData lastPost = null;
     @Getter
     private String threadID;
 
-    public LiveThreadTask(String threadID, long lastPost) {
+    public LiveThreadTask(String threadID, LiveThreadChildrenData lastPost) {
         this.lastPost = lastPost;
         this.plugin = RedditLiveBot.getInstance();
         this.threadID = threadID;
@@ -35,7 +35,7 @@ public class LiveThreadTask extends TimerTask {
 
     private void postUpdate(LiveThreadChildrenData data) {
         if (data != null) {
-            lastPost = data.getCreated_utc();
+            lastPost = data;
             Lang.send(TelegramHook.getRedditLiveChat(),
                     Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
 
@@ -49,6 +49,8 @@ public class LiveThreadTask extends TimerTask {
                     plugin.getSubscriptionHandler().unsubscribeChat(chatID);
                 }
             }
+
+
         }
     }
 
@@ -62,13 +64,15 @@ public class LiveThreadTask extends TimerTask {
             for (LiveThreadChildren liveThreadChild : liveThread.getData().getChildren()) {
                 LiveThreadChildrenData data = liveThreadChild.getData();
 
-                if (data.getCreated_utc() > lastPost) {
+                if (data.getId() != lastPost.getId()) {
                     updates.add(data);
+                } else {
+                    break;
                 }
             }
 
 
-            if (lastPost == -1) {
+            if (lastPost == null) {
                 postUpdate(updates.get(0));
             } else {
                 updates.forEach(this::postUpdate);
@@ -77,8 +81,7 @@ public class LiveThreadTask extends TimerTask {
                     long secs = (new Date().getTime()) / 1000;
 
                     // Older than 6 hours?
-                    if (secs - lastPost > 21600) {
-                        Lang.sendDebug("Stopping live thread! " + (secs - lastPost));
+                    if ((secs - lastPost.getCreated_utc()) > 21600) {
                         plugin.getRedditHandler().stopLiveThread();
                     }
                 }
