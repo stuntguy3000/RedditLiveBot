@@ -60,7 +60,7 @@ public class AdminCommand extends Command {
                     NewLiveThreadsTask newLiveThreadsTask = redditHandler.getNewLiveThreadsTask();
 
                     String redditData = Lang.COMMAND_ADMIN_STATUS + "*Current Live Thread: *" + (liveThreadTask == null ? "None!" : liveThreadTask.getThreadID()) +
-                            "*New Live Thread Scanner: *" +
+                            "\n*New Live Thread Scanner: *" +
                             (newLiveThreadsTask == null ? "Not Scanning" : "Scanning");
 
                     Lang.send(event.getChat(), redditData);
