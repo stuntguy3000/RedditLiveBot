@@ -41,7 +41,7 @@ public class AdminCommand extends Command {
                         "*/admin subscriptions* - View subscriptions data\n" +
                         "*/admin broadcast <message>* - Broadcast a message to all subscribers\n" +
                         "*/admin debug [on/off]* - View or toggle debug mode\n" +
-                        "*/admin status - Status of RedditLive's Subscription Service");
+                        "*/admin status* - Status of RedditLive's Subscription Service");
                 return;
             }
             case 1: {
