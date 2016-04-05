@@ -16,7 +16,7 @@ public class Lang {
     public static final String CHAT_UNSUBSCRIBED = Emoji.GREEN_BOX_TICK.getText() + " *You have unsubscribed from updates.*";
     public static final String COMMAND_ADMIN_DEBUG = "*Debug is set to* `%s`*.*";
     public static final String COMMAND_ADMIN_DEBUG_TOGGLE = "*Debug mode has been changed to* `%s`*.*";
-    public static final String COMMAND_ADMIN_STATUS = "*RedditLiveBot Status:*\n\n%s";
+    public static final String COMMAND_ADMIN_STATUS = "*RedditLiveBot Status:*\n\n";
     public static final String COMMAND_ADMIN_SUBSCRIPTIONS = "*RedditLive Subscriptions (%s):* \n`%s`";
     public static final String ERROR_CHAT_NOT_SUBSCRIBED = Emoji.RED_CROSS.getText() + " *This chat is not subscribed.*";
     public static final String ERROR_CHAT_SUBSCRIBED = Emoji.RED_CROSS.getText() + " *This chat is already subscribed.*";
