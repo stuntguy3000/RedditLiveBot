@@ -12,6 +12,9 @@ public class BotSettings {
     private Boolean autoUpdater;
     @Getter
     @Setter
+    private long currentFeedPost;
+    @Getter
+    @Setter
     private String currentLiveFeed;
     @Getter
     @Setter

@@ -32,7 +32,7 @@ public class RedditHandler {
         if (existingID == null) {
             newLiveThreadsTask = new NewLiveThreadsTask();
         } else {
-            startLiveThread(existingID, null);
+            startLiveThread(existingID, null, RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getCurrentFeedPost());
         }
     }
 
@@ -73,6 +73,10 @@ public class RedditHandler {
     }
 
     public void startLiveThread(String id, String title) {
+        startLiveThread(id, title, -1);
+    }
+
+    public void startLiveThread(String id, String title, long lastPost) {
         if (currentLiveThread != null) {
             currentLiveThread.cancel();
         }
@@ -81,11 +85,11 @@ public class RedditHandler {
             newLiveThreadsTask.cancel();
         }
 
-        currentLiveThread = new LiveThreadTask(id);
+        currentLiveThread = new LiveThreadTask(id, lastPost);
 
         RedditLiveBot.getInstance().getConfigHandler().addFeed(id);
         RedditLiveBot.getInstance().getConfigHandler().setCurrentFeed(id);
-        
+
         if (title != null) {
             Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_START, title, id);
         }

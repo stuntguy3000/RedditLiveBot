@@ -25,7 +25,8 @@ public class LiveThreadTask extends TimerTask {
     @Getter
     private String threadID;
 
-    public LiveThreadTask(String threadID) {
+    public LiveThreadTask(String threadID, long lastPost) {
+        this.lastPost = lastPost;
         this.plugin = RedditLiveBot.getInstance();
         this.threadID = threadID;
 
