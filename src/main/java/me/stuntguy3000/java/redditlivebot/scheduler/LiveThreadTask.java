@@ -30,7 +30,7 @@ public class LiveThreadTask extends TimerTask {
         this.plugin = RedditLiveBot.getInstance();
         this.threadID = threadID;
 
-        new Timer().schedule(this, 0, 2 * 1000);
+        new Timer().schedule(this, 0, 10 * 1000);
     }
 
     private void postUpdate(LiveThreadChildrenData data) {
@@ -49,8 +49,6 @@ public class LiveThreadTask extends TimerTask {
                     plugin.getSubscriptionHandler().unsubscribeChat(chatID);
                 }
             }
-
-
         }
     }
 
@@ -64,6 +62,7 @@ public class LiveThreadTask extends TimerTask {
             for (LiveThreadChildren liveThreadChild : liveThread.getData().getChildren()) {
                 LiveThreadChildrenData data = liveThreadChild.getData();
 
+                Lang.sendDebug("LP: %s Data: %s", lastPost.getId(), data.getId());
                 if (lastPost == null || data.getId() != lastPost.getId()) {
                     updates.add(data);
                 } else {
