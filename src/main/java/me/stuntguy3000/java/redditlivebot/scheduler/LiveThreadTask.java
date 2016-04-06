@@ -67,7 +67,7 @@ public class LiveThreadTask extends TimerTask {
                     updates.add(data);
                 } else {
                     if (lastPost != null) {
-                        Lang.sendDebug("Data: " + updates.toString());
+                        Lang.sendDebug("Data: " + liveThread.getData().getChildren().toString());
                     }
                     break;
                 }
