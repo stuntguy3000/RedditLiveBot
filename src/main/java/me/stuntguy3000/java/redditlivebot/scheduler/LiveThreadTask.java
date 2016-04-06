@@ -64,8 +64,10 @@ public class LiveThreadTask extends TimerTask {
 
                 Lang.sendDebug("LP: %s Data: %s", lastPost.getId(), data.getId());
                 if (lastPost == null || data.getId() != lastPost.getId()) {
+                    Lang.sendDebug("1");
                     updates.add(data);
                 } else {
+                    Lang.sendDebug("2");
                     break;
                 }
             }
