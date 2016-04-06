@@ -64,7 +64,7 @@ public class LiveThreadTask extends TimerTask {
             for (LiveThreadChildren liveThreadChild : liveThread.getData().getChildren()) {
                 LiveThreadChildrenData data = liveThreadChild.getData();
 
-                if (data.getId() != lastPost.getId()) {
+                if (lastPost == null || data.getId() != lastPost.getId()) {
                     updates.add(data);
                 } else {
                     break;
