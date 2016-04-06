@@ -16,6 +16,10 @@ import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChi
 import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadTask;
 import me.stuntguy3000.java.redditlivebot.scheduler.NewLiveThreadsTask;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.cache.CacheConfig;
+import org.apache.http.impl.client.cache.CachingHttpClients;
 
 import javax.xml.ws.http.HTTPException;
 
@@ -35,6 +39,21 @@ public class RedditHandler {
         } else {
             startLiveThread(existingID, null, RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getCurrentFeedPost());
         }
+
+        CacheConfig cacheConfig = CacheConfig.custom()
+                .setMaxCacheEntries(0)
+                .setMaxObjectSize(0)
+                .setSharedCache(false)
+                .build();
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(2000)
+                .setSocketTimeout(2000)
+                .build();
+        CloseableHttpClient closeableHttpClient = CachingHttpClients.custom()
+                .setCacheConfig(cacheConfig)
+                .setDefaultRequestConfig(requestConfig)
+                .build();
+        Unirest.setHttpClient(closeableHttpClient);
     }
 
     public static LiveThread getLiveThread(String id) throws UnirestException, HTTPException {
