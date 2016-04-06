@@ -30,7 +30,7 @@ public class LiveThreadTask extends TimerTask {
         this.plugin = RedditLiveBot.getInstance();
         this.threadID = threadID;
 
-        new Timer().schedule(this, 0, 2 * 1000);
+        new Timer().schedule(this, 0, 15 * 1000);
     }
 
     private void postUpdate(LiveThreadChildrenData data) {
@@ -66,10 +66,8 @@ public class LiveThreadTask extends TimerTask {
                     Lang.sendDebug("New data");
                     updates.add(data);
                 } else {
-                    Lang.sendDebug("No new data. could be null?");
-
                     if (lastPost != null) {
-                        Lang.sendDebug("LP: " + lastPost.getId() + " NP: " + data.getId());
+                        Lang.sendDebug("Data: " + updates.toString());
                     }
                     break;
                 }
