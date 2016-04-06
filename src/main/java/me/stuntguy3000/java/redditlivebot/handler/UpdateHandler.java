@@ -42,7 +42,7 @@ public class UpdateHandler implements Runnable {
                     return;
                 }
             } catch (UnirestException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 return;
             }
 
