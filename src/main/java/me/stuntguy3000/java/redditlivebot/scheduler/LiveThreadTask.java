@@ -66,7 +66,11 @@ public class LiveThreadTask extends TimerTask {
                     Lang.sendDebug("New data");
                     updates.add(data);
                 } else {
-                    Lang.sendDebug("No new data");
+                    Lang.sendDebug("No new data. could be null?");
+
+                    if (lastPost != null) {
+                        Lang.sendDebug("LP: " + lastPost.getId() + " NP: " + data.getId());
+                    }
                     break;
                 }
             }
