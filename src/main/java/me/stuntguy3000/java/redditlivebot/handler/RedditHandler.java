@@ -1,11 +1,7 @@
 package me.stuntguy3000.java.redditlivebot.handler;
 
 import com.google.gson.Gson;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.GetRequest;
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
@@ -22,6 +18,10 @@ import org.apache.http.impl.client.cache.CacheConfig;
 import org.apache.http.impl.client.cache.CachingHttpClients;
 
 import javax.xml.ws.http.HTTPException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 // @author Luke Anderson | stuntguy3000
 public class RedditHandler {
@@ -56,35 +56,65 @@ public class RedditHandler {
         Unirest.setHttpClient(closeableHttpClient);
     }
 
-    public static LiveThread getLiveThread(String id) throws UnirestException, HTTPException {
-        GetRequest getRequest = Unirest.get("https://www.reddit.com/live/" + id + ".json?limit=5");
-        getRequest.header("User-agent", USER_AGENT);
+    public static LiveThread getLiveThread(String id) throws Exception {
+        String url = "https://www.reddit.com/live/" + id + ".json?limit=5";
 
-        HttpResponse<JsonNode> liveThread = getRequest.asJson();
+        URL urlObject = new URL(url);
 
-        if (liveThread.getStatus() == 200) {
+        HttpURLConnection htmlConnection = (HttpURLConnection) urlObject.openConnection();
+        htmlConnection.setRequestProperty("User-Agent", USER_AGENT);
+        htmlConnection.setUseCaches(false);
+        htmlConnection.setConnectTimeout(2000);
+        htmlConnection.setReadTimeout(2000);
+        htmlConnection.connect();
+
+        if (htmlConnection.getResponseCode() == 200) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(htmlConnection.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
             Gson gson = new Gson();
-            String threadPostingsJSON = liveThread.getBody().toString();
+            String threadPostingsJSON = response.toString();
 
             return gson.fromJson(threadPostingsJSON, LiveThread.class);
         } else {
-            throw new HTTPException(liveThread.getStatus());
+            throw new HTTPException(htmlConnection.getResponseCode());
         }
     }
 
-    public static RedditThread getThread(String id) throws UnirestException, HTTPException {
-        GetRequest getRequest = Unirest.get("https://www.reddit.com/r/" + id + "/new.json?limit=1");
-        getRequest.header("User-agent", USER_AGENT);
+    public static RedditThread getThread(String id) throws Exception {
+        String url = "https://www.reddit.com/r/" + id + "/new.json?limit=1";
 
-        HttpResponse<JsonNode> redditThread = getRequest.asJson();
+        URL urlObject = new URL(url);
 
-        if (redditThread.getStatus() == 200) {
+        HttpURLConnection htmlConnection = (HttpURLConnection) urlObject.openConnection();
+        htmlConnection.setRequestProperty("User-Agent", USER_AGENT);
+        htmlConnection.setUseCaches(false);
+        htmlConnection.setConnectTimeout(2000);
+        htmlConnection.setReadTimeout(2000);
+        htmlConnection.connect();
+
+        if (htmlConnection.getResponseCode() == 200) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(htmlConnection.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
             Gson gson = new Gson();
-            String threadPostingsJSON = redditThread.getBody().toString();
+            String threadPostingsJSON = response.toString();
 
             return gson.fromJson(threadPostingsJSON, RedditThread.class);
         } else {
-            throw new HTTPException(redditThread.getStatus());
+            throw new HTTPException(htmlConnection.getResponseCode());
         }
     }
 
