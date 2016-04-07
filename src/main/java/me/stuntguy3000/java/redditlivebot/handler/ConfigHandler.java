@@ -3,6 +3,7 @@ package me.stuntguy3000.java.redditlivebot.handler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
+import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.config.BotSettings;
 import me.stuntguy3000.java.redditlivebot.object.config.Subscriptions;
 
@@ -70,6 +71,7 @@ public class ConfigHandler {
 
         switch (fileName.split(".json")[0].toLowerCase()) {
             case "config": {
+                Lang.sendDebug("SAVING CONFIG : " + botSettings.getCurrentLiveFeed());
                 json = gson.toJson(botSettings);
                 break;
             }
