@@ -3,7 +3,6 @@ package me.stuntguy3000.java.redditlivebot.scheduler;
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
-import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildren;
@@ -36,8 +35,8 @@ public class LiveThreadTask extends TimerTask {
     private void postUpdate(LiveThreadChildrenData data) {
         if (data != null) {
             lastPost = data;
-            Lang.send(TelegramHook.getRedditLiveChat(),
-                    Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
+            //Lang.send(TelegramHook.getRedditLiveChat(),
+            //        Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
 
             for (String chatID : plugin.getSubscriptionHandler().getSubscriptions()) {
                 Chat chat = TelegramBot.getChat(chatID);
