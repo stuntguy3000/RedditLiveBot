@@ -3,6 +3,7 @@ package me.stuntguy3000.java.redditlivebot;
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.handler.*;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
+import me.stuntguy3000.java.redditlivebot.object.Lang;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -87,7 +88,10 @@ public class RedditLiveBot {
     public void shutdown() {
         if (getRedditHandler().getCurrentLiveThread() != null) {
             configHandler.getBotSettings().setCurrentFeedPost(getRedditHandler().getCurrentLiveThread().getLastPost());
+            configHandler.getBotSettings().setCurrentLiveFeed(getRedditHandler().getCurrentLiveThread().getThreadID());
+            Lang.sendDebug("Live current thread " + configHandler.getBotSettings().getCurrentLiveFeed());
         } else {
+            Lang.sendDebug("No current thread");
             configHandler.getBotSettings().setCurrentFeedPost(null);
         }
 
