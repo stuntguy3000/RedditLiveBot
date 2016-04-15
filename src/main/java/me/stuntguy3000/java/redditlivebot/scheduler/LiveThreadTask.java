@@ -38,7 +38,13 @@ public class LiveThreadTask extends TimerTask {
             Lang.send(TelegramHook.getRedditLiveChat(),
                     Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
             RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
-                    getThreadID(), data.getAuthor(), data.getBody());
+                    getThreadID(),
+                    data.getAuthor().replace("*", "*\\**")
+                            .replace("_", "_\\__")
+                            .replace("`", "`\\``"),
+                    data.getBody().replace("*", "*\\**")
+                            .replace("_", "_\\__")
+                            .replace("`", "`\\``"));
         }
     }
 
@@ -61,8 +67,6 @@ public class LiveThreadTask extends TimerTask {
             if (lastPost == -1) {
                 postUpdate(updates.get(0));
             } else {
-                updates.forEach(this::postUpdate);
-
                 if (updates.isEmpty()) {
                     long secs = (new Date().getTime()) / 1000;
 
@@ -70,6 +74,16 @@ public class LiveThreadTask extends TimerTask {
                     if ((secs - lastPost) > 21600) {
                         plugin.getRedditHandler().stopLiveThread();
                     }
+                } else {
+                    TreeMap<Long, LiveThreadChildrenData> sortedData = new TreeMap<>();
+
+                    for (LiveThreadChildrenData data : updates) {
+                        sortedData.put(data.getCreated_utc(), data);
+                    }
+
+                    sortedData.descendingMap().entrySet().stream().filter(data -> data.getValue().getCreated_utc() > lastPost).forEachOrdered(data -> {
+                        postUpdate(data.getValue());
+                    });
                 }
             }
         } catch (Exception e) {
