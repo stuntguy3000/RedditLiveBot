@@ -40,7 +40,8 @@ public class AdminCommand extends Command {
                 if (args[0].equalsIgnoreCase("follow")) {
                     Lang.send(event.getChat(), Lang.ERROR_NOT_ENOUGH_ARGUMENTS);
                 } else if (args[0].equalsIgnoreCase("unfollow")) {
-                    Lang.send(event.getChat(), Lang.ERROR_NOT_ENOUGH_ARGUMENTS);
+                    RedditLiveBot.getInstance().getRedditHandler().stopLiveThread();
+                    Lang.sendAdmin(Lang.COMMAND_ADMIN_UNFOLLOW);
                 } else if (args[0].equalsIgnoreCase("debug")) {
                     Lang.send(event.getChat(), Lang.COMMAND_ADMIN_DEBUG, RedditLiveBot.DEBUG);
                 } else if (args[0].equalsIgnoreCase("restart")) {

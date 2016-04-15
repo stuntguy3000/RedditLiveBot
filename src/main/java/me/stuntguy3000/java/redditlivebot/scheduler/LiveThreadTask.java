@@ -3,12 +3,11 @@ package me.stuntguy3000.java.redditlivebot.scheduler;
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
+import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildren;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
-import pro.zackpollard.telegrambot.api.TelegramBot;
-import pro.zackpollard.telegrambot.api.chat.Chat;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -35,19 +34,11 @@ public class LiveThreadTask extends TimerTask {
     private void postUpdate(LiveThreadChildrenData data) {
         if (data != null) {
             lastPost = data;
-            //Lang.send(TelegramHook.getRedditLiveChat(),
-            //        Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
 
-            for (String chatID : plugin.getSubscriptionHandler().getSubscriptions()) {
-                Chat chat = TelegramBot.getChat(chatID);
-
-                if (chat != null) {
-                    Lang.send(chat,
-                            Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
-                } else {
-                    plugin.getSubscriptionHandler().unsubscribeChat(chatID);
-                }
-            }
+            Lang.send(TelegramHook.getRedditLiveChat(),
+                    Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
+            RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
+                    getThreadID(), data.getAuthor(), data.getBody());
         }
     }
 

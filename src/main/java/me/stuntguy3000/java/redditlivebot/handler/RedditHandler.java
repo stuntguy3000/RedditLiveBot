@@ -30,8 +30,10 @@ public class RedditHandler {
         String existingID = RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getCurrentLiveFeed();
 
         if (existingID == null) {
+            Lang.sendDebug("No existing thread.");
             newLiveThreadsTask = new NewLiveThreadsTask();
         } else {
+            Lang.sendDebug("Existing thread.");
             startLiveThread(existingID, null, RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getCurrentFeedPost());
         }
     }
@@ -105,10 +107,12 @@ public class RedditHandler {
     public void startLiveThread(String id, String title, LiveThreadChildrenData lastPost) {
         if (currentLiveThread != null) {
             currentLiveThread.cancel();
+            currentLiveThread = null;
         }
 
         if (newLiveThreadsTask != null) {
             newLiveThreadsTask.cancel();
+            newLiveThreadsTask = null;
         }
 
         currentLiveThread = new LiveThreadTask(id, lastPost);
