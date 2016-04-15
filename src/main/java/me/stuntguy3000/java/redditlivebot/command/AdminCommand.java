@@ -55,7 +55,7 @@ public class AdminCommand extends Command {
                     String redditData = Lang.COMMAND_ADMIN_STATUS +
                             "*Current Live Thread: *" + (liveThreadTask == null ? "None!" : liveThreadTask.getThreadID()) +
                             "\n*New Live Thread Scanner: *" + (newLiveThreadsTask == null ? "Not Scanning" : "Scanning") +
-                            "\n*Last post: *" + (liveThreadTask == null ? "[C] " + RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getLastPost() : "[I]" + liveThreadTask.getLastPost());
+                            "\n*Last post: *" + (liveThreadTask == null ? "C >> " + RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getLastPost() : "I >> " + liveThreadTask.getLastPost());
 
                     Lang.send(event.getChat(), redditData);
                 } else if (args[0].equalsIgnoreCase("subscriptions")) {
