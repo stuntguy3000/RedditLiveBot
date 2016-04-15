@@ -41,11 +41,11 @@ public class AdminCommand extends Command {
                     Lang.send(event.getChat(), Lang.ERROR_NOT_ENOUGH_ARGUMENTS);
                 } else if (args[0].equalsIgnoreCase("unfollow")) {
                     RedditLiveBot.getInstance().getRedditHandler().stopLiveThread();
-                    Lang.sendAdmin(Lang.COMMAND_ADMIN_UNFOLLOW);
+                    Lang.send(event.getChat(), Lang.COMMAND_ADMIN_UNFOLLOW);
                 } else if (args[0].equalsIgnoreCase("debug")) {
                     Lang.send(event.getChat(), Lang.COMMAND_ADMIN_DEBUG, RedditLiveBot.DEBUG);
                 } else if (args[0].equalsIgnoreCase("restart")) {
-                    Lang.sendAdmin(Lang.GENERAL_RESTART, event.getMessage().getSender().getUsername());
+                    Lang.send(event.getChat(), Lang.GENERAL_RESTART, event.getMessage().getSender().getUsername());
                     RedditLiveBot.getInstance().shutdown();
                 } else if (args[0].equalsIgnoreCase("status")) {
                     RedditHandler redditHandler = RedditLiveBot.getInstance().getRedditHandler();
@@ -60,10 +60,10 @@ public class AdminCommand extends Command {
                     Lang.send(event.getChat(), redditData);
                 } else if (args[0].equalsIgnoreCase("subscriptions")) {
                     ArrayList<String> subscriptions = RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions();
-                    Lang.sendAdmin(Lang.COMMAND_ADMIN_SUBSCRIPTIONS,
+                    Lang.send(event.getChat(), Lang.COMMAND_ADMIN_SUBSCRIPTIONS,
                             subscriptions.size(),
                             Lang.stringJoin(subscriptions,
-                                    null, ", "));
+                                    "", ", "));
                 }
                 return;
             }
