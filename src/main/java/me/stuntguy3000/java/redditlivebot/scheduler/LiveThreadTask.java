@@ -32,17 +32,13 @@ public class LiveThreadTask extends TimerTask {
 
     private void postUpdate(LiveThreadChildrenData data) {
         if (data != null && !alreadyPosted.contains(data.getId())) {
-            if (data.getCreated_utc() > lastPost) {
-                lastPost = data.getCreated_utc();
-                alreadyPosted.add(data.getId());
+            lastPost = data.getCreated_utc();
+            alreadyPosted.add(data.getId());
 
-                Lang.send(TelegramHook.getRedditLiveChat(),
-                        Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
-                RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
-                        getThreadID(), data.getAuthor(), data.getBody());
-            } else {
-                Lang.sendDebug("Time check failed! URGENT Post: %s Last: %s PostID: %s", data.getCreated_utc(), lastPost, data.getId());
-            }
+            Lang.send(TelegramHook.getRedditLiveChat(),
+                    Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
+            RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
+                    getThreadID(), data.getAuthor(), data.getBody());
         }
     }
 
