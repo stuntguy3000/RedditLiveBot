@@ -31,14 +31,18 @@ public class LiveThreadTask extends TimerTask {
     }
 
     private void postUpdate(LiveThreadChildrenData data) {
-        if (data != null && !alreadyPosted.contains(data.getId()) && data.getCreated_utc() > lastPost) {
-            lastPost = data.getCreated_utc();
-            alreadyPosted.add(data.getId());
+        if (data != null && !alreadyPosted.contains(data.getId())) {
+            if (data.getCreated_utc() > lastPost) {
+                lastPost = data.getCreated_utc();
+                alreadyPosted.add(data.getId());
 
-            Lang.send(TelegramHook.getRedditLiveChat(),
-                    Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
-            RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
-                    getThreadID(), data.getAuthor(), data.getBody());
+                Lang.send(TelegramHook.getRedditLiveChat(),
+                        Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
+                RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
+                        getThreadID(), data.getAuthor(), data.getBody());
+            } else {
+                Lang.sendDebug("Time check failed! Post: %s Last: %s PostID: %s", data.getCreated_utc(), lastPost, data.getId());
+            }
         }
     }
 
@@ -52,8 +56,7 @@ public class LiveThreadTask extends TimerTask {
             for (LiveThreadChildren liveThreadChild : liveThread.getData().getChildren()) {
                 LiveThreadChildrenData data = liveThreadChild.getData();
 
-                if (data.getCreated_utc() > lastPost && !alreadyPosted.contains(data.getId())) {
-                    Lang.sendDebug("New data");
+                if (!alreadyPosted.contains(data.getId())) {
                     updates.add(data);
                 }
             }
