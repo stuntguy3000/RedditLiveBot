@@ -41,7 +41,7 @@ public class LiveThreadTask extends TimerTask {
                 RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
                         getThreadID(), data.getAuthor(), data.getBody());
             } else {
-                Lang.sendDebug("Time check failed! Post: %s Last: %s PostID: %s", data.getCreated_utc(), lastPost, data.getId());
+                Lang.sendDebug("Time check failed! URGENT Post: %s Last: %s PostID: %s", data.getCreated_utc(), lastPost, data.getId());
             }
         }
     }
@@ -56,7 +56,7 @@ public class LiveThreadTask extends TimerTask {
             for (LiveThreadChildren liveThreadChild : liveThread.getData().getChildren()) {
                 LiveThreadChildrenData data = liveThreadChild.getData();
 
-                if (!alreadyPosted.contains(data.getId())) {
+                if (!alreadyPosted.contains(data.getId()) && data.getCreated_utc() > lastPost) {
                     updates.add(data);
                 }
             }
