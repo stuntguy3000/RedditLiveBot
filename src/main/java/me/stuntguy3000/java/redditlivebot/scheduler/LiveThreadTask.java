@@ -9,10 +9,7 @@ import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildren;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 // @author Luke Anderson | stuntguy3000
 public class LiveThreadTask extends TimerTask {
@@ -20,6 +17,8 @@ public class LiveThreadTask extends TimerTask {
     private RedditLiveBot plugin;
     @Getter
     private LiveThreadChildrenData lastPost = null;
+    @Getter
+    private List<UUID> alreadyPosted = new ArrayList<>();
     @Getter
     private String threadID;
 
@@ -32,8 +31,9 @@ public class LiveThreadTask extends TimerTask {
     }
 
     private void postUpdate(LiveThreadChildrenData data) {
-        if (data != null) {
+        if (data != null && !alreadyPosted.contains(data.getId())) {
             lastPost = data;
+            alreadyPosted.add(data.getId());
 
             Lang.send(TelegramHook.getRedditLiveChat(),
                     Lang.LIVE_THREAD_UPDATE, getThreadID(), data.getAuthor(), data.getBody());
@@ -52,14 +52,9 @@ public class LiveThreadTask extends TimerTask {
             for (LiveThreadChildren liveThreadChild : liveThread.getData().getChildren()) {
                 LiveThreadChildrenData data = liveThreadChild.getData();
 
-                if (lastPost == null || !data.getId().equals(lastPost.getId())) {
+                if (lastPost != null && !data.getId().equals(lastPost.getId()) && !alreadyPosted.contains(data.getId())) {
                     Lang.sendDebug("New data");
                     updates.add(data);
-                } else {
-                    if (lastPost != null) {
-                        Lang.sendDebug("Data: " + liveThread.getData().getChildren().toString());
-                    }
-                    break;
                 }
             }
 
