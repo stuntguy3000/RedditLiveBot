@@ -27,6 +27,10 @@ public class RedditLiveBot {
     @Getter
     private Thread updaterThread;
 
+    public static void main(String[] args) {
+        new RedditLiveBot().main();
+    }
+
     private void connectTelegram() {
         LogHandler.log("Connecting to Telegram...");
         DEBUG = getConfigHandler().getBotSettings().getDebugMode();
@@ -67,7 +71,7 @@ public class RedditLiveBot {
         commandHandler = new CommandHandler();
 
         connectTelegram();
-        
+
         if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
             LogHandler.log("Starting auto updater...");
             Thread updater = new Thread(new UpdateHandler("RedditLiveBot", "RedditLiveBot"));
@@ -81,18 +85,14 @@ public class RedditLiveBot {
         redditHandler = new RedditHandler();
     }
 
-    public static void main(String[] args) {
-        new RedditLiveBot().main();
-    }
-
     public void shutdown() {
         if (getRedditHandler().getCurrentLiveThread() != null) {
-            configHandler.getBotSettings().setCurrentFeedPost(getRedditHandler().getCurrentLiveThread().getLastPost());
+            configHandler.getBotSettings().setLastPost(getRedditHandler().getCurrentLiveThread().getLastPost());
             configHandler.getBotSettings().setCurrentLiveFeed(getRedditHandler().getCurrentLiveThread().getThreadID());
             Lang.sendDebug("Live current thread " + configHandler.getBotSettings().getCurrentLiveFeed());
         } else {
             Lang.sendDebug("No current thread");
-            configHandler.getBotSettings().setCurrentFeedPost(null);
+            configHandler.getBotSettings().setLastPost(-1);
         }
 
         configHandler.saveSubscriptions();

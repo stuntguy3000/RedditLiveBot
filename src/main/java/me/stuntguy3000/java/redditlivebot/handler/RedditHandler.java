@@ -7,7 +7,6 @@ import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.RedditThread;
-import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadTask;
 import me.stuntguy3000.java.redditlivebot.scheduler.NewLiveThreadsTask;
@@ -34,7 +33,7 @@ public class RedditHandler {
             newLiveThreadsTask = new NewLiveThreadsTask();
         } else {
             Lang.sendDebug("Existing thread.");
-            startLiveThread(existingID, null, RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getCurrentFeedPost());
+            startLiveThread(existingID, null, RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getLastPost());
         }
     }
 
@@ -101,10 +100,10 @@ public class RedditHandler {
     }
 
     public void startLiveThread(String id, String title) {
-        startLiveThread(id, title, null);
+        startLiveThread(id, title, -1);
     }
 
-    public void startLiveThread(String id, String title, LiveThreadChildrenData lastPost) {
+    public void startLiveThread(String id, String title, long lastPost) {
         if (currentLiveThread != null) {
             currentLiveThread.cancel();
             currentLiveThread = null;
@@ -126,7 +125,7 @@ public class RedditHandler {
     }
 
     public void startLiveThread(RedditThreadChildrenData threadData) {
-        startLiveThread(threadData.getMedia().getEvent_id(), threadData.getTitle(), null);
+        startLiveThread(threadData.getMedia().getEvent_id(), threadData.getTitle(), -1);
     }
 
     public void stopLiveThread() {
