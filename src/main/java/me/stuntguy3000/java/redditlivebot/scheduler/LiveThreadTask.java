@@ -1,5 +1,14 @@
 package me.stuntguy3000.java.redditlivebot.scheduler;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeMap;
+import java.util.UUID;
+
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
@@ -8,8 +17,6 @@ import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildren;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
-
-import java.util.*;
 
 // @author Luke Anderson | stuntguy3000
 public class LiveThreadTask extends TimerTask {
@@ -27,7 +34,7 @@ public class LiveThreadTask extends TimerTask {
         this.plugin = RedditLiveBot.getInstance();
         this.threadID = threadID;
 
-        new Timer().schedule(this, 0, 15 * 1000);
+        new Timer().schedule(this, 0, 2 * 1000);
     }
 
     private void postUpdate(LiveThreadChildrenData data) {
