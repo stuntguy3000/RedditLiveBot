@@ -97,7 +97,7 @@ public class Lang {
         Object[] newFormatters = new String[format.length - 1];
 
         for (int i = 0; i < format.length; i++) {
-            newFormatters[i] = format[i].replace("_", "").replace("*", "").replace("/", "").replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
+            newFormatters[i] = format[i].replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
         }
 
         message = String.format(message, newFormatters);
