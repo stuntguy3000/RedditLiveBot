@@ -95,7 +95,9 @@ public class LiveThreadTask extends TimerTask {
                         sortedData.put(data.getCreated_utc(), data);
                     }
 
-                    sortedData.descendingMap().entrySet().stream().filter(data -> data.getValue().getCreated_utc() > lastPost).forEachOrdered(data -> {
+                    double actualLastPost = lastPost;
+
+                    sortedData.descendingMap().entrySet().stream().filter(data -> data.getValue().getCreated_utc() > actualLastPost).forEachOrdered(data -> {
                         postUpdate(data.getValue());
                     });
                 }
