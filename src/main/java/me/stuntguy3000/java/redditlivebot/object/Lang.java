@@ -1,5 +1,7 @@
 package me.stuntguy3000.java.redditlivebot.object;
 
+import java.util.List;
+
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.LogHandler;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
@@ -9,8 +11,6 @@ import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableMessage;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 import pro.zackpollard.telegrambot.api.user.User;
-
-import java.util.List;
 
 // @author Luke Anderson | stuntguy3000
 public class Lang {
@@ -31,6 +31,7 @@ public class Lang {
     public static final String LIVE_THREAD_STOP = Emoji.REPLAY.getText() + " *RedditLive has stopped tracking this live feed due to inactivity*";
     public static final String LIVE_THREAD_UPDATE = Emoji.PERSON_SPEAKING.getText() + " `%s` *New update by %s*\n\n%s";
     public static final String COMMAND_ADMIN_UNFOLLOW = Emoji.GREEN_BOX_TICK.getText() + " *Unfollowed the current live thread.*";
+    public static final String LIVE_THREAD_UPDATE_HTML = Emoji.PERSON_SPEAKING.getText() + " <code>%s</code> <b>New update by %s</b>\n\n%s";
 
     private static SendableMessage build(String message, Object... format) {
         SendableTextMessage.SendableTextMessageBuilder sendableTextMessageBuilder = SendableTextMessage.builder();
@@ -90,6 +91,22 @@ public class Lang {
             sbStr.append(prefix).append(aArr.get(i));
         }
         return sbStr.toString();
+    }
+
+    public static void sendHtml(Chat chat, String message, String... format) {
+        Object[] newFormatters = new String[format.length - 1];
+
+        for (int i = 0; i < format.length; i++) {
+            newFormatters[i] = format[i].replace("_", "").replace("*", "").replace("/", "").replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
+        }
+
+        message = String.format(message, newFormatters);
+
+        SendableTextMessage.SendableTextMessageBuilder sendableTextMessageBuilder = SendableTextMessage.builder();
+        sendableTextMessageBuilder.message(message);
+        sendableTextMessageBuilder.parseMode(ParseMode.HTML);
+
+        TelegramHook.getBot().sendMessage(chat, sendableTextMessageBuilder.build());
     }
 }
     

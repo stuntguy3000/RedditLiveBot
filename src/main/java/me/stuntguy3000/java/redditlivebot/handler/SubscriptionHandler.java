@@ -1,11 +1,11 @@
 package me.stuntguy3000.java.redditlivebot.handler;
 
+import java.util.ArrayList;
+
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.chat.Chat;
-
-import java.util.ArrayList;
 
 // @author Luke Anderson | stuntguy3000
 public class SubscriptionHandler {
@@ -40,6 +40,19 @@ public class SubscriptionHandler {
             if (chat != null) {
                 Lang.send(chat,
                         Lang.LIVE_THREAD_UPDATE, threadID, author, body);
+            } else {
+                unsubscribeChat(chatID);
+            }
+        }
+    }
+
+    public void broadcastHtml(String threadID, String author, String body) {
+        for (String chatID : getSubscriptions()) {
+            Chat chat = TelegramBot.getChat(chatID);
+
+            if (chat != null) {
+                Lang.sendHtml(chat,
+                        Lang.LIVE_THREAD_UPDATE_HTML, threadID, author, body);
             } else {
                 unsubscribeChat(chatID);
             }

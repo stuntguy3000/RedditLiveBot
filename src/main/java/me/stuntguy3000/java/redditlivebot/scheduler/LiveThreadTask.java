@@ -42,19 +42,23 @@ public class LiveThreadTask extends TimerTask {
             lastPost = data.getCreated_utc();
             alreadyPosted.add(data.getId());
 
-            String author = data.getAuthor().replace("*", "*\\**")
-                    .replace("_", "_\\__")
-                    .replace("`", "`\\``");
+            String author = data.getAuthor();
+            String body = data.getBody();
 
-            String body = data.getBody().replace("*", "*\\**")
-                    .replace("_", "_\\__")
-                    .replace("`", "`\\``");
+            if (author.contains("/") || author.contains("_") || author.contains("*")
+                    || body.contains("/") || body.contains("_") || body.contains("*")) {
+                Lang.sendHtml(TelegramHook.getRedditLiveChat(),
+                        Lang.LIVE_THREAD_UPDATE_HTML, getThreadID(), author, body);
 
-            Lang.send(TelegramHook.getRedditLiveChat(),
-                    Lang.LIVE_THREAD_UPDATE, getThreadID(), author, body);
+                RedditLiveBot.getInstance().getSubscriptionHandler().broadcastHtml(
+                        getThreadID(), author, body);
+            } else {
+                Lang.send(TelegramHook.getRedditLiveChat(),
+                        Lang.LIVE_THREAD_UPDATE, getThreadID(), author, body);
 
-            RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
-                    getThreadID(), author, body);
+                RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
+                        getThreadID(), author, body);
+            }
         }
     }
 
