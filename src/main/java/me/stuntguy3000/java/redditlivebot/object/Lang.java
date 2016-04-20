@@ -96,7 +96,7 @@ public class Lang {
     public static void sendHtml(Chat chat, String message, String... format) {
         Object[] newFormatters = new Object[format.length - 1];
 
-        for (int i = 0; i < format.length - 1; i++) {
+        for (int i = 0; i < format.length; i++) {
             newFormatters[i] = format[i].replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
         }
 
