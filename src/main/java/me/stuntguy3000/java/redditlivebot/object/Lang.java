@@ -1,6 +1,5 @@
 package me.stuntguy3000.java.redditlivebot.object;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
@@ -94,14 +93,12 @@ public class Lang {
         return sbStr.toString();
     }
 
-    public static void sendHtml(Chat chat, String message, String... format) {
-        List<String> newFormat = new ArrayList<>();
+    public static void sendHtml(Chat chat, String message, Object... format) {
+        Object[] newFormat = new Object[format.length];
 
-        for (String aFormat : format) {
-            newFormat.add(aFormat.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"));
+        for (int i = 0; i < 3; i++) {
+            newFormat[i] = format[i].toString().replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
         }
-
-        sendDebug("MSG: %s FORMAT: %s", message, newFormat);
 
         message = String.format(message, newFormat);
 
