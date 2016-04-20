@@ -101,7 +101,7 @@ public class LiveThreadTask extends TimerTask {
                 }
             }
         } catch (Exception e) {
-            Lang.sendDebug("Exception Caught: " + e.getMessage());
+            Lang.sendDebug("Exception Caught: %s", e.getMessage());
             e.printStackTrace();
         }
     }
