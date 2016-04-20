@@ -34,7 +34,7 @@ public class LiveThreadTask extends TimerTask {
         this.plugin = RedditLiveBot.getInstance();
         this.threadID = threadID;
 
-        new Timer().schedule(this, 0, 2 * 1000);
+        new Timer().schedule(this, 0, 3 * 1000);
     }
 
     private void postUpdate(LiveThreadChildrenData data) {
