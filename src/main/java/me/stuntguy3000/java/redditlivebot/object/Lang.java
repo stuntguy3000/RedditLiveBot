@@ -95,11 +95,13 @@ public class Lang {
     }
 
     public static void sendHtml(Chat chat, String message, String... format) {
-        List<Object> newFormat = new ArrayList<>();
+        List<String> newFormat = new ArrayList<>();
 
         for (String aFormat : format) {
             newFormat.add(aFormat.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"));
         }
+
+        sendDebug("MSG: %s FORMAT: %s", message, newFormat);
 
         message = String.format(message, newFormat);
 
