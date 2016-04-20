@@ -51,7 +51,7 @@ public class LiveThreadTask extends TimerTask {
                     .replace("`", "`\\``");
 
             Lang.send(TelegramHook.getRedditLiveChat(),
-                    Lang.LIVE_THREAD_UPDATE, getThreadID(), data, author, body);
+                    Lang.LIVE_THREAD_UPDATE, getThreadID(), author, body);
 
             RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
                     getThreadID(), author, body);
