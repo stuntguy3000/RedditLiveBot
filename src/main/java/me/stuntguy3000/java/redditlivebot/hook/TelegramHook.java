@@ -3,6 +3,7 @@ package me.stuntguy3000.java.redditlivebot.hook;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -102,7 +103,7 @@ public class TelegramHook implements Listener {
                                     InputTextMessageContent.builder().messageText("*No last post available.*").parseMode(ParseMode.MARKDOWN).build()
                             ).build();
                 } else {
-                    long delay = System.currentTimeMillis() - lastPost.getCreated_utc();
+                    long delay = new Date().getTime() - lastPost.getCreated_utc();
                     String title = "Latest update - Posted " + String.format("%d min, %d sec ago",
                             TimeUnit.MILLISECONDS.toMinutes(delay),
                             TimeUnit.MILLISECONDS.toSeconds(delay) -

@@ -97,7 +97,7 @@ public class RedditLiveBot {
         if (getRedditHandler().getCurrentLiveThread() != null) {
             configHandler.getBotSettings().setLastPost(getRedditHandler().getCurrentLiveThread().getLastPost());
             configHandler.getBotSettings().setCurrentLiveFeed(getRedditHandler().getCurrentLiveThread().getThreadID());
-            Lang.sendDebug("Live current thread " + configHandler.getBotSettings().getCurrentLiveFeed());
+            Lang.sendDebug("Live current thread - Feed ID: " + configHandler.getBotSettings().getCurrentLiveFeed());
         } else {
             Lang.sendDebug("No current thread");
             configHandler.getBotSettings().setLastPost(-1);

@@ -17,9 +17,9 @@ public class VersionCommand extends Command {
     public void processCommand(CommandMessageReceivedEvent event) {
         Chat chat = event.getChat();
 
-        Lang.send(chat, Emoji.GHOST.getText() + " *RedditLiveBot by* @stuntguy3000\n" +
+        Lang.send(chat, Emoji.JOKER_CARD.getText() + " *RedditLiveBot by* @stuntguy3000\n" +
                 "*Current build:* " + RedditLiveBot.BUILD + "\n\n" +
-                "Source [Available on GitHub](https://github.com/stuntguy3000/telegames)\n" +
-                "Created using @zackpollard's [JavaTelegramBotAPI](https://github.com/zackpollard/JavaTelegramBot-API)");
+                "Source [Available on GitHub](https://github.com/stuntguy3000/redditlive)\n" +
+                "Created using @zackpollard's [Java Telegram API](https://github.com/zackpollard/JavaTelegramBot-API)");
     }
 }
