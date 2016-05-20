@@ -81,7 +81,9 @@ public class TelegramHook implements Listener {
             }
 
             // Handle posting of last threads
+            Lang.sendDebug("Live thread == null %s", RedditLiveBot.getInstance().getRedditHandler().getCurrentLiveThread());
             if (RedditLiveBot.getInstance().getRedditHandler().getCurrentLiveThread() == null) {
+                Lang.sendDebug("No live thread");
                 // Nothing to post
                 latestUpdate = InlineQueryResultArticle.builder()
                         .title("Latest update")
