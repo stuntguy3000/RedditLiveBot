@@ -110,11 +110,11 @@ public class TelegramHook implements Listener {
                     calendar.set(Calendar.HOUR_OF_DAY, currentTime.get(Calendar.HOUR_OF_DAY));
 
                     Lang.sendDebug(calendar.getTimeInMillis() + " ;;; " + lastPost.getCreated_utc());
-                    long delay = (calendar.getTimeInMillis()) - lastPost.getCreated_utc();
+                    long delay = (calendar.getTimeInMillis() / 1000) - lastPost.getCreated_utc();
                     String title = "Latest update - Posted " + String.format("%d min, %d sec ago",
-                            TimeUnit.MILLISECONDS.toMinutes(delay),
-                            TimeUnit.MILLISECONDS.toSeconds(delay) -
-                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(delay)));
+                            TimeUnit.SECONDS.toMinutes(delay),
+                            TimeUnit.SECONDS.toSeconds(delay) -
+                                    TimeUnit.SECONDS.toSeconds(TimeUnit.SECONDS.toMinutes(delay)));
                     String body;
                     boolean useMarkdown = true;
 
