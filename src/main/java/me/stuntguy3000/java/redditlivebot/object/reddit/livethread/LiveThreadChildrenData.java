@@ -9,7 +9,7 @@ import lombok.Data;
 public class LiveThreadChildrenData {
     private String author;
     private String body;
-    private long created;
+    private long created_utc;
     private UUID id;
     private boolean stricken;
 }

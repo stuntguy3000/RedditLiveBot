@@ -81,9 +81,7 @@ public class TelegramHook implements Listener {
             }
 
             // Handle posting of last threads
-            Lang.sendDebug("Live thread == null %s", RedditLiveBot.getInstance().getRedditHandler().getCurrentLiveThread());
             if (RedditLiveBot.getInstance().getRedditHandler().getCurrentLiveThread() == null) {
-                Lang.sendDebug("No live thread");
                 // Nothing to post
                 latestUpdate = InlineQueryResultArticle.builder()
                         .title("Latest update")
@@ -102,7 +100,7 @@ public class TelegramHook implements Listener {
                                     InputTextMessageContent.builder().messageText("*No last post available.*").parseMode(ParseMode.MARKDOWN).build()
                             ).build();
                 } else {
-                    long delay = (System.currentTimeMillis() / 1000) - lastPost.getCreated();
+                    long delay = (System.currentTimeMillis() / 1000) - lastPost.getCreated_utc();
                     long minutes = TimeUnit.SECONDS.toMinutes(delay);
                     long seconds = TimeUnit.MINUTES.toSeconds(minutes) - delay;
 
