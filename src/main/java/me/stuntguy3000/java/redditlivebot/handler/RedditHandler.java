@@ -15,6 +15,7 @@ import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.RedditThread;
+import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadBroadcasterTask;
 import me.stuntguy3000.java.redditlivebot.scheduler.RedditScannerTask;
@@ -144,6 +145,26 @@ public class RedditHandler {
         redditScannerTask = new RedditScannerTask();
         RedditLiveBot.getInstance().getConfigHandler().setCurrentFeed(null);
         Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_STOP);
+    }
+
+    public void postUpdate(LiveThreadChildrenData data, String threadID) {
+        String author = data.getAuthor();
+        String body = data.getBody();
+
+        if (author.contains("/") || author.contains("_") || author.contains("*")
+                || body.contains("/") || body.contains("_") || body.contains("*")) {
+            Lang.sendHtml(TelegramHook.getRedditLiveChat(),
+                    Lang.LIVE_THREAD_UPDATE_HTML, threadID, author, body);
+
+            RedditLiveBot.getInstance().getSubscriptionHandler().broadcastHtml(
+                    threadID, author, body);
+        } else {
+            Lang.send(TelegramHook.getRedditLiveChat(),
+                    Lang.LIVE_THREAD_UPDATE, threadID, author, body);
+
+            RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
+                    threadID, author, body);
+        }
     }
 }
     

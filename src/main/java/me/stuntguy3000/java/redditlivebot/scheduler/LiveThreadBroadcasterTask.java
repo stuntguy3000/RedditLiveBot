@@ -12,7 +12,6 @@ import java.util.UUID;
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
-import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildren;
@@ -24,6 +23,8 @@ public class LiveThreadBroadcasterTask extends TimerTask {
     private RedditLiveBot plugin;
     @Getter
     private long lastPost = -1;
+    @Getter
+    private LiveThreadChildrenData lastActualPost = null;
     @Getter
     private List<UUID> alreadyPosted = new ArrayList<>();
     @Getter
@@ -40,25 +41,10 @@ public class LiveThreadBroadcasterTask extends TimerTask {
     private void postUpdate(LiveThreadChildrenData data) {
         if (data != null && !alreadyPosted.contains(data.getId())) {
             lastPost = data.getCreated_utc();
+            lastActualPost = data;
             alreadyPosted.add(data.getId());
 
-            String author = data.getAuthor();
-            String body = data.getBody();
-
-            if (author.contains("/") || author.contains("_") || author.contains("*")
-                    || body.contains("/") || body.contains("_") || body.contains("*")) {
-                Lang.sendHtml(TelegramHook.getRedditLiveChat(),
-                        Lang.LIVE_THREAD_UPDATE_HTML, getThreadID(), author, body);
-
-                RedditLiveBot.getInstance().getSubscriptionHandler().broadcastHtml(
-                        getThreadID(), author, body);
-            } else {
-                Lang.send(TelegramHook.getRedditLiveChat(),
-                        Lang.LIVE_THREAD_UPDATE, getThreadID(), author, body);
-
-                RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
-                        getThreadID(), author, body);
-            }
+            RedditLiveBot.getInstance().getRedditHandler().postUpdate(data, threadID);
         }
     }
 
