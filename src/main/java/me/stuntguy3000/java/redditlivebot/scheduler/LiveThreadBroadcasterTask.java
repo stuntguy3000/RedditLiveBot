@@ -81,11 +81,7 @@ public class LiveThreadBroadcasterTask extends TimerTask {
                         sortedData.put(data.getCreated_utc(), data);
                     }
 
-                    double actualLastPost = lastPost;
-
-                    for (LiveThreadChildrenData data : sortedData.values()) {
-                        postUpdate(data);
-                    }
+                    sortedData.values().forEach(this::postUpdate);
                 }
             }
         } catch (Exception e) {
