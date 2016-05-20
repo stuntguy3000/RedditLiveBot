@@ -38,14 +38,18 @@ public class AdminCommand extends Command {
             case 1: {
                 if (args[0].equalsIgnoreCase("follow")) {
                     Lang.send(event.getChat(), Lang.ERROR_NOT_ENOUGH_ARGUMENTS);
+                    return;
                 } else if (args[0].equalsIgnoreCase("unfollow")) {
                     RedditLiveBot.getInstance().getRedditHandler().stopLiveThread();
                     Lang.send(event.getChat(), Lang.COMMAND_ADMIN_UNFOLLOW);
+                    return;
                 } else if (args[0].equalsIgnoreCase("debug")) {
                     Lang.send(event.getChat(), Lang.COMMAND_ADMIN_DEBUG, RedditLiveBot.DEBUG);
+                    return;
                 } else if (args[0].equalsIgnoreCase("restart")) {
                     Lang.send(event.getChat(), Lang.GENERAL_RESTART, event.getMessage().getSender().getUsername());
                     RedditLiveBot.getInstance().shutdown();
+                    return;
                 } else if (args[0].equalsIgnoreCase("status")) {
                     RedditHandler redditHandler = RedditLiveBot.getInstance().getRedditHandler();
                     LiveThreadBroadcasterTask liveThreadBroadcasterTask = redditHandler.getCurrentLiveThread();
@@ -57,18 +61,21 @@ public class AdminCommand extends Command {
                             "\n*Last post: *" + (liveThreadBroadcasterTask == null ? "C >> " + RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getLastPost() : "I >> " + liveThreadBroadcasterTask.getLastPost());
 
                     Lang.send(event.getChat(), redditData);
+                    return;
                 } else if (args[0].equalsIgnoreCase("subscriptions")) {
                     ArrayList<String> subscriptions = RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions();
                     Lang.send(event.getChat(), Lang.COMMAND_ADMIN_SUBSCRIPTIONS,
                             subscriptions.size(),
                             Lang.stringJoin(subscriptions,
                                     "", ", "));
+                    return;
                 }
-                return;
+                break;
             }
             case 2: {
                 if (args[0].equalsIgnoreCase("follow")) {
                     Lang.send(event.getChat(), Lang.ERROR_NOT_ENOUGH_ARGUMENTS);
+                    return;
                 } else if (args[0].equalsIgnoreCase("debug")) {
                     boolean newDebug = Boolean.valueOf(args[1]);
 
@@ -77,8 +84,9 @@ public class AdminCommand extends Command {
 
                     Lang.send(event.getChat(), Lang.COMMAND_ADMIN_DEBUG_TOGGLE, newDebug);
                     Lang.sendAdmin(Lang.COMMAND_ADMIN_DEBUG_TOGGLE, RedditLiveBot.DEBUG);
+                    return;
                 }
-                return;
+                break;
             }
             default: {
                 if (args.length >= 3 && args[0].equalsIgnoreCase("follow")) {
