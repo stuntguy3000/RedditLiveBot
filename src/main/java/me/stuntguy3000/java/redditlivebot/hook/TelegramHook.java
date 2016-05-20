@@ -123,7 +123,7 @@ public class TelegramHook implements Listener {
             }
 
             event.getQuery().answer(TelegramHook.getBot(),
-                    subscriptionButton.results(latestUpdate).build());
+                    subscriptionButton.results(latestUpdate).cache_time(0).build());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
