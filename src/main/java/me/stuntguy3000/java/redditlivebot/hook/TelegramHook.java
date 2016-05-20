@@ -1,5 +1,7 @@
 package me.stuntguy3000.java.redditlivebot.hook;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,7 +12,9 @@ import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.command.Command;
 import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.chat.Chat;
+import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResultArticle;
 import pro.zackpollard.telegrambot.api.event.Listener;
+import pro.zackpollard.telegrambot.api.event.chat.inline.InlineQueryReceivedEvent;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
 // @author Luke Anderson | stuntguy3000
@@ -55,6 +59,21 @@ public class TelegramHook implements Listener {
         String command = event.getCommand();
 
         instance.getCommandHandler().executeCommand(command, event);
+    }
+
+    @Override
+    public void onInlineQueryReceived(InlineQueryReceivedEvent event) {
+        try {
+            InlineQueryResultArticle article = InlineQueryResultArticle.builder()
+                    .title("RedditLive Test")
+                    .description("Latest update: Paul says hello, WWIII ensues.").url(
+                            new URL("https://camo.githubusercontent.com/b13830f5a9baecd3d83ef5cae4d5107d25cdbfbe/68747470733a2f2f662e636c6f75642e6769746875622e636f6d2f6173736574732f3732313033382f313732383830352f35336532613364382d363262352d313165332d383964312d3934376632373062646430332e706e67")
+                    ).hideUrl(true).thumbHeight(512).thumbWidth(512).id("latestNews").build();
+
+            event.getQuery().answer(TelegramHook.getBot(), article);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 }
     
