@@ -20,7 +20,6 @@ public class VersionCommand extends Command {
         Lang.send(chat, Emoji.GHOST.getText() + " *RedditLiveBot by* @stuntguy3000\n" +
                 "*Current build:* " + RedditLiveBot.BUILD + "\n\n" +
                 "Source [Available on GitHub](https://github.com/stuntguy3000/telegames)\n" +
-                "Created using @zackpollard's [JavaTelegramBotAPI](https://github.com/zackpollard/JavaTelegramBot-API)\n\n" +
-                "*Stay up-to-date with new features!*\nJoin https://telegram.me/telegames");
+                "Created using @zackpollard's [JavaTelegramBotAPI](https://github.com/zackpollard/JavaTelegramBot-API)");
     }
 }
