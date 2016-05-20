@@ -109,7 +109,7 @@ public class TelegramHook implements Listener {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.HOUR_OF_DAY, currentTime.get(Calendar.HOUR_OF_DAY));
 
-                    long delay = calendar.getTimeInMillis() - lastPost.getCreated_utc();
+                    long delay = (calendar.getTimeInMillis() * 1000) - lastPost.getCreated_utc();
                     String title = "Latest update - Posted " + String.format("%d min, %d sec ago",
                             TimeUnit.MILLISECONDS.toMinutes(delay),
                             TimeUnit.MILLISECONDS.toSeconds(delay) -
