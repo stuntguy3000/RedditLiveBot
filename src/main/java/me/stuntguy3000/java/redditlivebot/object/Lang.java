@@ -5,7 +5,6 @@ import java.util.List;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.LogHandler;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
-import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableMessage;
@@ -20,10 +19,6 @@ public class Lang {
     public static final String COMMAND_ADMIN_DEBUG_TOGGLE = "*Debug mode has been changed to* `%s`*.*";
     public static final String COMMAND_ADMIN_STATUS = "*RedditLiveBot Status:*\n\n";
     public static final String COMMAND_ADMIN_SUBSCRIPTIONS = "*RedditLive Subscriptions (%s):* \n`%s`";
-    public static final String ERROR_CHAT_NOT_SUBSCRIBED = Emoji.RED_CROSS.getText() + " *This chat is not subscribed.*";
-    public static final String ERROR_CHAT_SUBSCRIBED = Emoji.RED_CROSS.getText() + " *This chat is already subscribed.*";
-    public static final String ERROR_NOT_ADMIN = Emoji.RED_CROSS.getText() + " *You are not a RedditLiveBot administrator!*";
-    public static final String ERROR_NOT_ENOUGH_ARGUMENTS = Emoji.RED_CROSS.getText() + " *Invalid command usage!*";
     public static final String GENERAL_BROADCAST = Emoji.PERSON_SPEAKING.getText() + "*Announcement by* @%s\n\n%s";
     public static final String GENERAL_RESTART = "*Manual Restart engaged by* `%s`*.*";
     public static final String LIVE_THREAD_START = Emoji.BLUE_RIGHT_ARROW.getText() + " *Following a new feed!*\n\n" +
@@ -32,6 +27,12 @@ public class Lang {
     public static final String LIVE_THREAD_UPDATE = Emoji.PERSON_SPEAKING.getText() + " `%s` *New update by %s*\n\n%s";
     public static final String COMMAND_ADMIN_UNFOLLOW = Emoji.GREEN_BOX_TICK.getText() + " *Unfollowed the current live thread.*";
     public static final String LIVE_THREAD_UPDATE_HTML = Emoji.PERSON_SPEAKING.getText() + " <code>%s</code> <b>New update by %s</b>\n\n%s";
+    private static final String MISC_ERROR_PREFIX = Emoji.RED_CROSS.getText() + " ";
+    public static final String ERROR_CHAT_NOT_SUBSCRIBED = Lang.MISC_ERROR_PREFIX + "*This chat is not subscribed.*";
+    public static final String ERROR_CHAT_SUBSCRIBED = Lang.MISC_ERROR_PREFIX + "*This chat is already subscribed.*";
+    public static final String ERROR_NOT_ADMIN = Lang.MISC_ERROR_PREFIX + "*You are not a RedditLiveBot administrator!*";
+    public static final String ERROR_NOT_ENOUGH_ARGUMENTS = Lang.MISC_ERROR_PREFIX + "*Invalid command usage!*";
+    public static final String ERROR_COMMAND_INVALID = Lang.MISC_ERROR_PREFIX + "*Invalid command or arguments.*";
 
     private static SendableMessage build(String message, Object... format) {
         SendableTextMessage.SendableTextMessageBuilder sendableTextMessageBuilder = SendableTextMessage.builder();
@@ -42,7 +43,7 @@ public class Lang {
     }
 
     public static void send(Long chatID, String message, Object... format) {
-        TelegramHook.getBot().sendMessage(TelegramBot.getChat(chatID), build(message, format));
+        TelegramHook.getBot().sendMessage(TelegramHook.getBot().getChat(chatID), build(message, format));
     }
 
     public static void send(Chat chat, String message, Object... format) {
@@ -68,7 +69,7 @@ public class Lang {
     }
 
     private static void sendRaw(long chatID, String message, Object... format) {
-        TelegramHook.getBot().sendMessage(TelegramBot.getChat(chatID), SendableTextMessage.builder().message(String.format(message, format)).build());
+        TelegramHook.getBot().sendMessage(TelegramHook.getBot().getChat(chatID), SendableTextMessage.builder().message(String.format(message, format)).build());
     }
 
     public static String stringJoin(String[] aArr, String prefix, String sSep) {

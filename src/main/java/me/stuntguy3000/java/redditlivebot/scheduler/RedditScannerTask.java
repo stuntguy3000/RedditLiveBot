@@ -1,5 +1,9 @@
 package me.stuntguy3000.java.redditlivebot.scheduler;
 
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
@@ -7,13 +11,9 @@ import me.stuntguy3000.java.redditlivebot.object.reddit.RedditThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildren;
 import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildrenData;
 
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
 // @author Luke Anderson | stuntguy3000
-public class NewLiveThreadsTask extends TimerTask {
-    public NewLiveThreadsTask() {
+public class RedditScannerTask extends TimerTask {
+    public RedditScannerTask() {
         new Timer().schedule(this, 0, 15 * 1000);
     }
 

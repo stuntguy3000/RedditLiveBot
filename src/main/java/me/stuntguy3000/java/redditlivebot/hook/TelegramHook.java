@@ -1,5 +1,8 @@
 package me.stuntguy3000.java.redditlivebot.hook;
 
+import java.util.Arrays;
+import java.util.List;
+
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.object.ClassGetter;
@@ -9,9 +12,6 @@ import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.event.Listener;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
-
-import java.util.Arrays;
-import java.util.List;
 
 // @author Luke Anderson | stuntguy3000
 public class TelegramHook implements Listener {
@@ -33,7 +33,7 @@ public class TelegramHook implements Listener {
 
         this.initializeCommands();
 
-        redditLiveChat = TelegramBot.getChat("@RedditLive");
+        redditLiveChat = TelegramHook.getBot().getChat("@RedditLive");
         //redditLiveChat = TelegramBot.getChat(-14978569);
     }
 

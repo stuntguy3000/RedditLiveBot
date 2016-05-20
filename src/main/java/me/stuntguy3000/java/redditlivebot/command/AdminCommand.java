@@ -1,17 +1,16 @@
 package me.stuntguy3000.java.redditlivebot.command;
 
+import java.util.ArrayList;
+
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.command.Command;
-import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadTask;
-import me.stuntguy3000.java.redditlivebot.scheduler.NewLiveThreadsTask;
-import pro.zackpollard.telegrambot.api.TelegramBot;
+import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadBroadcasterTask;
+import me.stuntguy3000.java.redditlivebot.scheduler.RedditScannerTask;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
-
-import java.util.ArrayList;
 
 // @author Luke Anderson | stuntguy3000
 public class AdminCommand extends Command {
@@ -49,13 +48,13 @@ public class AdminCommand extends Command {
                     RedditLiveBot.getInstance().shutdown();
                 } else if (args[0].equalsIgnoreCase("status")) {
                     RedditHandler redditHandler = RedditLiveBot.getInstance().getRedditHandler();
-                    LiveThreadTask liveThreadTask = redditHandler.getCurrentLiveThread();
-                    NewLiveThreadsTask newLiveThreadsTask = redditHandler.getNewLiveThreadsTask();
+                    LiveThreadBroadcasterTask liveThreadBroadcasterTask = redditHandler.getCurrentLiveThread();
+                    RedditScannerTask redditScannerTask = redditHandler.getRedditScannerTask();
 
                     String redditData = Lang.COMMAND_ADMIN_STATUS +
-                            "*Current Live Thread: *" + (liveThreadTask == null ? "None!" : "http://reddit.com/live/" + liveThreadTask.getThreadID()) +
-                            "\n*New Live Thread Scanner: *" + (newLiveThreadsTask == null ? "Not Scanning" : "Scanning") +
-                            "\n*Last post: *" + (liveThreadTask == null ? "C >> " + RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getLastPost() : "I >> " + liveThreadTask.getLastPost());
+                            "*Current Live Thread: *" + (liveThreadBroadcasterTask == null ? "None!" : "http://reddit.com/live/" + liveThreadBroadcasterTask.getThreadID()) +
+                            "\n*New Live Thread Scanner: *" + (redditScannerTask == null ? "Not Scanning" : "Scanning") +
+                            "\n*Last post: *" + (liveThreadBroadcasterTask == null ? "C >> " + RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getLastPost() : "I >> " + liveThreadBroadcasterTask.getLastPost());
 
                     Lang.send(event.getChat(), redditData);
                 } else if (args[0].equalsIgnoreCase("subscriptions")) {
@@ -84,25 +83,31 @@ public class AdminCommand extends Command {
             default: {
                 if (args.length >= 3 && args[0].equalsIgnoreCase("follow")) {
                     RedditLiveBot.getInstance().getRedditHandler().startLiveThread(args[1], args[2]);
-                } else if (args.length > 1 && args[0].equalsIgnoreCase("broadcast")) {
-                    StringBuilder broadcastMessage = new StringBuilder();
+                    return;
+                } else {
+                    if (args.length > 1 && args[0].equalsIgnoreCase("broadcast")) {
+                        StringBuilder broadcastMessage = new StringBuilder();
 
-                    for (int i = 1; i < args.length; i++) {
-                        broadcastMessage.append(args[i]).append(" ");
-                    }
+                        for (int i = 1; i < args.length; i++) {
+                            broadcastMessage.append(args[i]).append(" ");
+                        }
 
-                    for (String chatID : RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions()) {
-                        Chat chat = TelegramBot.getChat(chatID);
+                        for (String chatID : RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions()) {
+                            Chat chat = TelegramHook.getBot().getChat(chatID);
 
-                        Lang.send(chat, Lang.GENERAL_BROADCAST, event.getMessage().getSender().getUsername(),
+                            Lang.send(chat, Lang.GENERAL_BROADCAST, event.getMessage().getSender().getUsername(),
+                                    broadcastMessage.toString().replaceAll("~", "\n"));
+                        }
+
+                        Lang.send(TelegramHook.getRedditLiveChat(), Lang.GENERAL_BROADCAST, event.getMessage().getSender().getUsername(),
                                 broadcastMessage.toString().replaceAll("~", "\n"));
+                        return;
                     }
-
-                    Lang.send(TelegramHook.getRedditLiveChat(), Lang.GENERAL_BROADCAST, event.getMessage().getSender().getUsername(),
-                            broadcastMessage.toString().replaceAll("~", "\n"));
                 }
             }
         }
+
+        Lang.send(event.getChat(), Lang.ERROR_COMMAND_INVALID);
     }
 }
     

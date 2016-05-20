@@ -19,7 +19,7 @@ import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChi
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
 
 // @author Luke Anderson | stuntguy3000
-public class LiveThreadTask extends TimerTask {
+public class LiveThreadBroadcasterTask extends TimerTask {
     @Getter
     private RedditLiveBot plugin;
     @Getter
@@ -29,7 +29,7 @@ public class LiveThreadTask extends TimerTask {
     @Getter
     private String threadID;
 
-    public LiveThreadTask(String threadID, Long lastPost) {
+    public LiveThreadBroadcasterTask(String threadID, Long lastPost) {
         this.lastPost = lastPost;
         this.plugin = RedditLiveBot.getInstance();
         this.threadID = threadID;

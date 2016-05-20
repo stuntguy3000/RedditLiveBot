@@ -3,8 +3,8 @@ package me.stuntguy3000.java.redditlivebot.handler;
 import java.util.ArrayList;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
+import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
-import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 
 // @author Luke Anderson | stuntguy3000
@@ -35,7 +35,7 @@ public class SubscriptionHandler {
 
     public void broadcast(String threadID, String author, String body) {
         for (String chatID : getSubscriptions()) {
-            Chat chat = TelegramBot.getChat(chatID);
+            Chat chat = TelegramHook.getBot().getChat(chatID);
 
             if (chat != null) {
                 Lang.send(chat,
@@ -48,7 +48,7 @@ public class SubscriptionHandler {
 
     public void broadcastHtml(String threadID, String author, String body) {
         for (String chatID : getSubscriptions()) {
-            Chat chat = TelegramBot.getChat(chatID);
+            Chat chat = TelegramHook.getBot().getChat(chatID);
 
             if (chat != null) {
                 Lang.sendHtml(chat,

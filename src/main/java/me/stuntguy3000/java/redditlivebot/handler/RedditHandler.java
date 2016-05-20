@@ -1,6 +1,14 @@
 package me.stuntguy3000.java.redditlivebot.handler;
 
 import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import javax.xml.ws.http.HTTPException;
+
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
@@ -8,29 +16,23 @@ import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.RedditThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildrenData;
-import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadTask;
-import me.stuntguy3000.java.redditlivebot.scheduler.NewLiveThreadsTask;
-
-import javax.xml.ws.http.HTTPException;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadBroadcasterTask;
+import me.stuntguy3000.java.redditlivebot.scheduler.RedditScannerTask;
 
 // @author Luke Anderson | stuntguy3000
 public class RedditHandler {
     private static final String USER_AGENT = "me.stuntguy3000.java.redditlivebot:v" + RedditLiveBot.BUILD + " (by /u/stuntguy3000)";
     @Getter
-    private LiveThreadTask currentLiveThread;
+    private LiveThreadBroadcasterTask currentLiveThread;
     @Getter
-    private NewLiveThreadsTask newLiveThreadsTask;
+    private RedditScannerTask redditScannerTask;
 
     public RedditHandler() {
         String existingID = RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getCurrentLiveFeed();
 
         if (existingID == null) {
             Lang.sendDebug("No existing thread.");
-            newLiveThreadsTask = new NewLiveThreadsTask();
+            redditScannerTask = new RedditScannerTask();
         } else {
             Lang.sendDebug("Existing thread.");
             startLiveThread(existingID, null, RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getLastPost());
@@ -109,12 +111,12 @@ public class RedditHandler {
             currentLiveThread = null;
         }
 
-        if (newLiveThreadsTask != null) {
-            newLiveThreadsTask.cancel();
-            newLiveThreadsTask = null;
+        if (redditScannerTask != null) {
+            redditScannerTask.cancel();
+            redditScannerTask = null;
         }
 
-        currentLiveThread = new LiveThreadTask(id, lastPost);
+        currentLiveThread = new LiveThreadBroadcasterTask(id, lastPost);
 
         RedditLiveBot.getInstance().getConfigHandler().addFeed(id);
         RedditLiveBot.getInstance().getConfigHandler().setCurrentFeed(id);
@@ -131,13 +133,15 @@ public class RedditHandler {
     public void stopLiveThread() {
         if (currentLiveThread != null) {
             currentLiveThread.cancel();
+            currentLiveThread = null;
         }
 
-        if (newLiveThreadsTask != null) {
-            newLiveThreadsTask.cancel();
+        if (redditScannerTask != null) {
+            redditScannerTask.cancel();
+            redditScannerTask = null;
         }
 
-        newLiveThreadsTask = new NewLiveThreadsTask();
+        redditScannerTask = new RedditScannerTask();
         RedditLiveBot.getInstance().getConfigHandler().setCurrentFeed(null);
         Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_STOP);
     }
