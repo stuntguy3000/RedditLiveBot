@@ -40,7 +40,7 @@ public class LiveThreadBroadcasterTask extends TimerTask {
 
     private void postUpdate(LiveThreadChildrenData data) {
         if (data != null && !alreadyPosted.contains(data.getId())) {
-            lastPost = data.getCreated_utc();
+            lastPost = data.getCreated();
             lastActualPost = data;
             alreadyPosted.add(data.getId());
 
@@ -58,7 +58,7 @@ public class LiveThreadBroadcasterTask extends TimerTask {
             for (LiveThreadChildren liveThreadChild : liveThread.getData().getChildren()) {
                 LiveThreadChildrenData data = liveThreadChild.getData();
 
-                if (!alreadyPosted.contains(data.getId()) && data.getCreated_utc() > lastPost) {
+                if (!alreadyPosted.contains(data.getId()) && data.getCreated() > lastPost) {
                     updates.add(data);
                 }
             }
@@ -78,12 +78,12 @@ public class LiveThreadBroadcasterTask extends TimerTask {
                     TreeMap<Long, LiveThreadChildrenData> sortedData = new TreeMap<>();
 
                     for (LiveThreadChildrenData data : updates) {
-                        sortedData.put(data.getCreated_utc(), data);
+                        sortedData.put(data.getCreated(), data);
                     }
 
                     double actualLastPost = lastPost;
 
-                    sortedData.descendingMap().entrySet().stream().filter(data -> data.getValue().getCreated_utc() > actualLastPost).forEachOrdered(data -> {
+                    sortedData.descendingMap().entrySet().stream().filter(data -> data.getValue().getCreated() > actualLastPost).forEachOrdered(data -> {
                         postUpdate(data.getValue());
                     });
                 }

@@ -3,9 +3,7 @@ package me.stuntguy3000.java.redditlivebot.hook;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import lombok.Getter;
@@ -104,13 +102,7 @@ public class TelegramHook implements Listener {
                                     InputTextMessageContent.builder().messageText("*No last post available.*").parseMode(ParseMode.MARKDOWN).build()
                             ).build();
                 } else {
-                    Calendar currentTime = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                    currentTime.set(Calendar.ZONE_OFFSET, TimeZone.getTimeZone("UTC").getRawOffset());
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(Calendar.HOUR_OF_DAY, currentTime.get(Calendar.HOUR_OF_DAY));
-
-                    Lang.sendDebug(calendar.getTimeInMillis() + " ;;; " + lastPost.getCreated_utc());
-                    long delay = (calendar.getTimeInMillis() / 1000) - lastPost.getCreated_utc();
+                    long delay = System.currentTimeMillis() - lastPost.getCreated();
                     String title = "Latest update - Posted " + String.format("%d min, %d sec ago",
                             TimeUnit.SECONDS.toMinutes(delay),
                             TimeUnit.SECONDS.toSeconds(delay) -
