@@ -106,6 +106,8 @@ public class TelegramHook implements Listener {
                     long minutes = TimeUnit.MILLISECONDS.toMinutes(delay);
                     long seconds = TimeUnit.MINUTES.toSeconds(minutes) - TimeUnit.MILLISECONDS.toSeconds(delay);
 
+                    Lang.sendDebug(System.currentTimeMillis() + " : created: " + lastPost.getCreated());
+
                     String title = "Latest update - Posted " + String.format("%d min, %d sec ago", delay, 0);
                     String body;
                     boolean useMarkdown = true;
