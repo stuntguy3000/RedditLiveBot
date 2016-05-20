@@ -1,11 +1,11 @@
 package me.stuntguy3000.java.redditlivebot.command;
 
+import java.util.Map;
+
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.command.Command;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
-
-import java.util.Map;
 
 
 // @author Luke Anderson | stuntguy3000
@@ -16,6 +16,13 @@ public class HelpCommand extends Command {
 
     public void processCommand(CommandMessageReceivedEvent event) {
         StringBuilder commandHelp = new StringBuilder();
+
+        if (event.getArgs().length > 0) {
+            if (event.getArgs()[0].equalsIgnoreCase("subscribe")) {
+                new SubscribeCommand().processCommand(event);
+                return;
+            }
+        }
 
         commandHelp.append("*RedditLiveBot Command Help:*\n");
 

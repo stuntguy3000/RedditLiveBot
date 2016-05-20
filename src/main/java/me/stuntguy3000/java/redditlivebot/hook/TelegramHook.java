@@ -75,7 +75,7 @@ public class TelegramHook implements Listener {
             InlineQueryResultArticle latestUpdate;
             if (!RedditLiveBot.getInstance().getSubscriptionHandler().isSubscribed(
                     TelegramHook.getBot().getChat(event.getQuery().getSender().getId()))) {
-                subscriptionButton = InlineQueryResponse.builder().switch_pm_text("Click here to subscribe to @RedditLiveBot.").switch_pm_parameter("/subscribe");
+                subscriptionButton = InlineQueryResponse.builder().switch_pm_text("Click here to subscribe to @RedditLiveBot.").switch_pm_parameter("subscribe");
             } else {
                 subscriptionButton = InlineQueryResponse.builder().switch_pm_text("You are subscribed to @RedditLiveBot.");
             }
