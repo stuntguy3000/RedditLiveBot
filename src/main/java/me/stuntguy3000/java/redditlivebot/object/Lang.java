@@ -27,6 +27,8 @@ public class Lang {
     public static final String LIVE_THREAD_UPDATE = Emoji.PERSON_SPEAKING.getText() + " `%s` *New update by %s*\n\n%s";
     public static final String COMMAND_ADMIN_UNFOLLOW = Emoji.GREEN_BOX_TICK.getText() + " *Unfollowed the current live thread.*";
     public static final String LIVE_THREAD_UPDATE_HTML = Emoji.PERSON_SPEAKING.getText() + " <code>%s</code> <b>New update by %s</b>\n\n%s";
+    public static final String LIVE_THREAD_REPOST_UPDATE_HTML = Emoji.PERSON_SPEAKING.getText() + " <code>%s</code> <b>Last update by %s</b>\n\n%s";
+    public static final String LIVE_THREAD_REPOST_UPDATE = Emoji.PERSON_SPEAKING.getText() + " `%s` *Last update by %s*\n\n%s";
     private static final String MISC_ERROR_PREFIX = Emoji.RED_CROSS.getText() + " ";
     public static final String ERROR_CHAT_NOT_SUBSCRIBED = Lang.MISC_ERROR_PREFIX + "*This chat is not subscribed.*";
     public static final String ERROR_CHAT_SUBSCRIBED = Lang.MISC_ERROR_PREFIX + "*This chat is already subscribed.*";

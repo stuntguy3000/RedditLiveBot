@@ -3,8 +3,9 @@ package me.stuntguy3000.java.redditlivebot.hook;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import lombok.Getter;
@@ -103,7 +104,12 @@ public class TelegramHook implements Listener {
                                     InputTextMessageContent.builder().messageText("*No last post available.*").parseMode(ParseMode.MARKDOWN).build()
                             ).build();
                 } else {
-                    long delay = new Date().getTime() - lastPost.getCreated_utc();
+                    Calendar currentTime = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                    currentTime.set(Calendar.ZONE_OFFSET, TimeZone.getTimeZone("UTC").getRawOffset());
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.HOUR_OF_DAY, currentTime.get(Calendar.HOUR_OF_DAY));
+
+                    long delay = calendar.getTimeInMillis() - lastPost.getCreated_utc();
                     String title = "Latest update - Posted " + String.format("%d min, %d sec ago",
                             TimeUnit.MILLISECONDS.toMinutes(delay),
                             TimeUnit.MILLISECONDS.toSeconds(delay) -
@@ -117,10 +123,10 @@ public class TelegramHook implements Listener {
                         // HTML
                         useMarkdown = false;
                         body = String.format(
-                                Lang.LIVE_THREAD_UPDATE_HTML, liveThreadBroadcasterTask.getThreadID(), lastPost.getAuthor(), lastPost.getBody());
+                                Lang.LIVE_THREAD_REPOST_UPDATE_HTML, liveThreadBroadcasterTask.getThreadID(), lastPost.getAuthor(), lastPost.getBody());
                     } else {
                         body = String.format(
-                                Lang.LIVE_THREAD_UPDATE, liveThreadBroadcasterTask.getThreadID(), lastPost.getAuthor(), lastPost.getBody());
+                                Lang.LIVE_THREAD_REPOST_UPDATE, liveThreadBroadcasterTask.getThreadID(), lastPost.getAuthor(), lastPost.getBody());
                     }
 
                     latestUpdate = InlineQueryResultArticle.builder()
