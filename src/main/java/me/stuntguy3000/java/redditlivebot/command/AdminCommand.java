@@ -73,7 +73,7 @@ public class AdminCommand extends Command {
                         stringBuilder.append("\n");
                     }
 
-                    Lang.send(event.getChat(), Lang.COMMAND_ADMIN_SUBSCRIPTIONS, stringBuilder.toString());
+                    Lang.send(event.getChat(), Lang.COMMAND_ADMIN_SUBSCRIPTIONS, subscriptions.size(), stringBuilder.toString());
                     return;
                 }
                 break;
