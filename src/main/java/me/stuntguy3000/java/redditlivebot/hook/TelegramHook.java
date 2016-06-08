@@ -19,6 +19,7 @@ import pro.zackpollard.telegrambot.api.chat.inline.send.InlineQueryResponse;
 import pro.zackpollard.telegrambot.api.chat.inline.send.content.InputTextMessageContent;
 import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResultArticle;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
+import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 import pro.zackpollard.telegrambot.api.event.Listener;
 import pro.zackpollard.telegrambot.api.event.chat.inline.InlineQueryReceivedEvent;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
@@ -40,6 +41,10 @@ public class TelegramHook implements Listener {
         bot.getEventsManager().register(this);
 
         Lang.sendAdmin("Bot has connected, running build #%d", RedditLiveBot.BUILD);
+
+        for (long adminID : RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getTelegramAdmins()) {
+            getBot().getChat(adminID).sendMessage(SendableTextMessage.builder().message("*[ADMIN] ").parseMode(ParseMode.MARKDOWN).build());
+        }
 
         this.initializeCommands();
 

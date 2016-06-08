@@ -1,29 +1,19 @@
 package me.stuntguy3000.java.redditlivebot.object.config;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
+
 // @author Luke Anderson | stuntguy3000
+@Data
 public class BotSettings {
-    @Getter
     private Boolean autoUpdater;
-    @Getter
-    @Setter
     private long lastPost;
-    @Getter
-    @Setter
     private String currentLiveFeed;
-    @Getter
-    @Setter
     private Boolean debugMode;
-    @Getter
     private List<String> knownLiveFeeds;
-    @Getter
     private List<Long> telegramAdmins;
-    @Getter
     private String telegramKey;
 
     public BotSettings() {

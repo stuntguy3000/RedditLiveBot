@@ -7,6 +7,7 @@ import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.command.Command;
+import me.stuntguy3000.java.redditlivebot.object.config.Subscriber;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadBroadcasterTask;
 import me.stuntguy3000.java.redditlivebot.scheduler.RedditScannerTask;
 import pro.zackpollard.telegrambot.api.chat.Chat;
@@ -63,11 +64,16 @@ public class AdminCommand extends Command {
                     Lang.send(event.getChat(), redditData);
                     return;
                 } else if (args[0].equalsIgnoreCase("subscriptions")) {
-                    ArrayList<String> subscriptions = RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions();
-                    Lang.send(event.getChat(), Lang.COMMAND_ADMIN_SUBSCRIPTIONS,
-                            subscriptions.size(),
-                            Lang.stringJoin(subscriptions,
-                                    "", ", "));
+                    ArrayList<Subscriber> subscriptions = RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions();
+
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    for (Subscriber subscriber : subscriptions) {
+                        stringBuilder.append(subscriber.getUserID()).append("(").append(subscriber.getUsername()).append(")");
+                        stringBuilder.append("\n");
+                    }
+
+                    Lang.send(event.getChat(), Lang.COMMAND_ADMIN_SUBSCRIPTIONS, stringBuilder.toString());
                     return;
                 }
                 break;
@@ -100,8 +106,8 @@ public class AdminCommand extends Command {
                             broadcastMessage.append(args[i]).append(" ");
                         }
 
-                        for (String chatID : RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions()) {
-                            Chat chat = TelegramHook.getBot().getChat(chatID);
+                        for (Subscriber subscriber : RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions()) {
+                            Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());
 
                             Lang.send(chat, Lang.GENERAL_BROADCAST, event.getMessage().getSender().getUsername(),
                                     broadcastMessage.toString().replaceAll("~", "\n"));
