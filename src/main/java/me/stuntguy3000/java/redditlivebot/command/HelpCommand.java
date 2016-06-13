@@ -11,7 +11,7 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 // @author Luke Anderson | stuntguy3000
 public class HelpCommand extends Command {
     public HelpCommand() {
-        super(RedditLiveBot.instance, "View command help", false, "help", "start", "?");
+        super("View command help", false, "help", "start", "?");
     }
 
     public void processCommand(CommandMessageReceivedEvent event) {

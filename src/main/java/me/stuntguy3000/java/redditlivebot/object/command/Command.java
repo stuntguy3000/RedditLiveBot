@@ -13,17 +13,14 @@ public abstract class Command {
     @Getter
     private final String description;
     @Getter
-    private final RedditLiveBot instance;
-    @Getter
     private final String[] names;
 
-    public Command(RedditLiveBot instance, String description, boolean adminOnly, String... names) {
-        this.instance = instance;
+    public Command(String description, boolean adminOnly, String... names) {
         this.names = names;
         this.description = description;
         this.adminOnly = adminOnly;
 
-        instance.getCommandHandler().registerCommand(this);
+        RedditLiveBot.instance.getCommandHandler().registerCommand(this);
     }
 
 

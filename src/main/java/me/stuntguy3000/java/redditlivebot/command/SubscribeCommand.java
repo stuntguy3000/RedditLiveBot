@@ -11,7 +11,7 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 public class SubscribeCommand extends Command {
 
     public SubscribeCommand() {
-        super(RedditLiveBot.instance, "Subscribe to RedditLive updates.", false, "subscribe");
+        super("Subscribe to RedditLive updates.", false, "subscribe");
     }
 
     @Override

@@ -17,7 +17,7 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 public class AdminCommand extends Command {
 
     public AdminCommand() {
-        super(RedditLiveBot.instance, "Command used by RedditLiveBot administrators.", true, "admin");
+        super("Command used by RedditLiveBot administrators.", true, "admin");
     }
 
     @Override

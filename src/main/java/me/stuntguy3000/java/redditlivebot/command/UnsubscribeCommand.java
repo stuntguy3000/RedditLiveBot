@@ -11,7 +11,7 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 public class UnsubscribeCommand extends Command {
 
     public UnsubscribeCommand() {
-        super(RedditLiveBot.instance, "Subscribe to RedditLive updates.", false, "unsubscribe");
+        super("Subscribe to RedditLive updates.", false, "unsubscribe");
     }
 
     @Override

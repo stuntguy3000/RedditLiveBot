@@ -48,5 +48,7 @@ public class AdminControlHandler {
 
         TelegramHook.getBot().editMessageText(message, threadInformation,
                 ParseMode.MARKDOWN, true, InlineKeyboardMarkup.builder().addRow(buttons).build());
+
+        updateMessages.put(threadID, message);
     }
 }

@@ -87,6 +87,8 @@ public class RedditLiveBot {
         adminControlHandler = new AdminControlHandler();
         subscriptionHandler = new SubscriptionHandler();
         redditHandler = new RedditHandler();
+
+        TelegramHook.initializeCommands();
     }
 
     public void shutdown() {
