@@ -196,12 +196,12 @@ public class TelegramEventHandler implements Listener {
 
             event.getCallbackQuery().answer("", false);
             return;
-        } else if (ID.startsWith("f#")) {
+        } else if (ID.startsWith("f$")) {
             /**
              * Manually follow a feed
              */
-            String threadID = ID.split("#")[1];
-            String title = ID.split("#")[2];
+            String threadID = ID.split("$")[1];
+            String title = ID.split("$")[2];
             Message sentMessage = instance.getAdminControlHandler().getUpdateMessages().get(threadID);
 
             Lang.sendDebug(sentMessage.getChat().getId() + " | CHATNAME");
