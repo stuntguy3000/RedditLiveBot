@@ -37,7 +37,7 @@ public class AdminControlHandler {
 
         String threadInformation = "*Reddit Live Thread*\n\n" +
                 "*Thread ID:* " + threadID + "\n" +
-                "*Thread URL:* https://reddit.com/live/" + threadID + "\n\n\n" +
+                "*Thread URL:* https://reddit.com/live/" + threadID + "\n" +
                 "*Score:* " + redditThread.getScore() + "\n";
 
         List<InlineKeyboardButton> buttons = new ArrayList<>();
@@ -47,7 +47,7 @@ public class AdminControlHandler {
                 .text("Click here to follow").build());
 
         TelegramHook.getBot().editMessageText(message, threadInformation,
-                ParseMode.MARKDOWN, true, InlineKeyboardMarkup.builder().addRow(buttons).build());
+                ParseMode.MARKDOWN, false, InlineKeyboardMarkup.builder().addRow(buttons).build());
 
         updateMessages.put(threadID, message);
     }
