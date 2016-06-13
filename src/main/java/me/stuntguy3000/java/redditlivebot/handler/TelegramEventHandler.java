@@ -14,7 +14,9 @@ import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.inline.send.InlineQueryResponse;
 import pro.zackpollard.telegrambot.api.chat.inline.send.content.InputTextMessageContent;
 import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResultArticle;
+import pro.zackpollard.telegrambot.api.chat.message.Message;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
+import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 import pro.zackpollard.telegrambot.api.event.Listener;
 import pro.zackpollard.telegrambot.api.event.chat.CallbackQueryReceivedEvent;
 import pro.zackpollard.telegrambot.api.event.chat.inline.InlineQueryReceivedEvent;
@@ -26,18 +28,24 @@ import pro.zackpollard.telegrambot.api.event.chat.message.TextMessageReceivedEve
  */
 public class TelegramEventHandler implements Listener {
 
+    private RedditLiveBot instance;
+
+    public TelegramEventHandler() {
+        instance = RedditLiveBot.instance;
+    }
+
     @Override
     public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
         String command = event.getCommand();
 
         // Process the command
-        RedditLiveBot.instance.getCommandHandler().executeCommand(command, event);
+        instance.getCommandHandler().executeCommand(command, event);
     }
 
     @Override
     public void onTextMessageReceived(TextMessageReceivedEvent event) {
         String message = event.getContent().getContent();
-        AdminControlHandler adminControlHandler = RedditLiveBot.instance.getAdminControlHandler();
+        AdminControlHandler adminControlHandler = instance.getAdminControlHandler();
 
         if (event.getMessage().getRepliedTo() != null) {
             if (adminControlHandler.getReplyActions().containsKey(event.getMessage().getRepliedTo())) {
@@ -57,9 +65,9 @@ public class TelegramEventHandler implements Listener {
         String ID = event.getCallbackQuery().getData();
         long userID = event.getCallbackQuery().getFrom().getId();
 
-        RedditHandler redditHandler = RedditLiveBot.instance.getRedditHandler();
+        RedditHandler redditHandler = instance.getRedditHandler();
 
-        if (!RedditLiveBot.instance.getConfigHandler().getBotSettings().getTelegramAdmins().contains(userID)) {
+        if (!instance.getConfigHandler().getBotSettings().getTelegramAdmins().contains(userID)) {
             event.getCallbackQuery().answer("You are not authorized to do this.", true);
             return;
         }
@@ -80,9 +88,16 @@ public class TelegramEventHandler implements Listener {
             } else if (command.equals(AdminInlineCommandType.DISABLE_DEBUG.getText())) {
 
             } else if (command.equals(AdminInlineCommandType.BROADCAST.getText())) {
+                Message message = chat.sendMessage(
+                        SendableTextMessage.builder().message("" +
+                                "*Please reply to this message with the content you would like to Broadcast.*").parseMode(ParseMode.MARKDOWN).build()
+                );
 
+                instance.getAdminControlHandler().addReplyMessage(
+                        message, AdminInlineCommandType.BROADCAST
+                );
             } else if (command.equals(AdminInlineCommandType.RESTART.getText())) {
-                RedditLiveBot.instance.getAdminControlHandler().updateMessage(chat,
+                instance.getAdminControlHandler().updateMessage(chat,
                         null);
             } else {
                 event.getCallbackQuery().answer("Unknown action! Button ID: " + ID, true);
@@ -100,7 +115,7 @@ public class TelegramEventHandler implements Listener {
             // Handle subscription prompting
             InlineQueryResponse.InlineQueryResponseBuilder subscriptionButton;
             InlineQueryResultArticle latestUpdate;
-            if (!RedditLiveBot.instance.getSubscriptionHandler().isSubscribed(
+            if (!instance.getSubscriptionHandler().isSubscribed(
                     TelegramHook.getBot().getChat(event.getQuery().getSender().getId()))) {
                 subscriptionButton = InlineQueryResponse.builder().switch_pm_text("Click here to subscribe to @RedditLiveBot.").switch_pm_parameter("subscribe");
             } else {
@@ -108,7 +123,7 @@ public class TelegramEventHandler implements Listener {
             }
 
             // Handle posting of last threads
-            if (RedditLiveBot.instance.getRedditHandler().getCurrentLiveThread() == null) {
+            if (instance.getRedditHandler().getCurrentLiveThread() == null) {
                 // Nothing to post
                 latestUpdate = InlineQueryResultArticle.builder()
                         .title("Latest update")
