@@ -21,6 +21,7 @@ import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 import pro.zackpollard.telegrambot.api.event.Listener;
 import pro.zackpollard.telegrambot.api.event.chat.CallbackQueryReceivedEvent;
+import pro.zackpollard.telegrambot.api.event.chat.ParticipantJoinGroupChatEvent;
 import pro.zackpollard.telegrambot.api.event.chat.inline.InlineQueryReceivedEvent;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 import pro.zackpollard.telegrambot.api.event.chat.message.TextMessageReceivedEvent;
@@ -34,6 +35,17 @@ public class TelegramEventHandler implements Listener {
 
     public TelegramEventHandler() {
         instance = RedditLiveBot.instance;
+    }
+
+    @Override
+    public void onParticipantJoinGroupChat(ParticipantJoinGroupChatEvent event) {
+        if (event.getParticipant().getId() == TelegramHook.getBot().getBotID()) {
+            event.getChat().sendMessage(SendableTextMessage.builder()
+                    .message("*Hello!*\n\nThis is a quick message to let you know that @RedditLiveBot is set to monitor all chat messages. We *do not* store or log any user messages, as this feature is for admin controls only.\n\nIf you have any issues, feel free to contact @stuntguy3000 or view the source from /source.")
+                    .parseMode(ParseMode.MARKDOWN).disableWebPagePreview(true)
+                    .build()
+            );
+        }
     }
 
     @Override
