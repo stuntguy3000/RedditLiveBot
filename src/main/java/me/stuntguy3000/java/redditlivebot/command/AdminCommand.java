@@ -65,12 +65,18 @@ public class AdminCommand extends Command {
                 .build());
 
         // Build the final message
+        InlineKeyboardMarkup.InlineKeyboardMarkupBuilder markup = InlineKeyboardMarkup.builder();
+
+        for (InlineKeyboardButton keyboardButton : buttons) {
+            markup.addRow(keyboardButton);
+        }
+
         Message message = chat.sendMessage(
                 SendableTextMessage.builder()
                         .message(
                                 "*Welcome to the RedditLive Admin Control Panel*\n\n" +
                                         "To use the control panel, please click on one of the buttons below.\n\nCurrent Status: " + statusText)
-                        .replyMarkup(InlineKeyboardMarkup.builder().addRow(buttons).build())
+                        .replyMarkup(markup.build())
                         .parseMode(ParseMode.MARKDOWN).build());
 
 
