@@ -77,6 +77,7 @@ public class AdminCommand extends Command {
 
             if (rows.size() == 2) {
                 markup.addRow(rows);
+                rows.clear();
             }
         }
 
