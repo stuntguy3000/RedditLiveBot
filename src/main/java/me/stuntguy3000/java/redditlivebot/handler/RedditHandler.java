@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 
 import javax.xml.ws.http.HTTPException;
@@ -55,39 +56,37 @@ public class RedditHandler {
 
         URL urlObject = new URL(url);
 
-        HttpURLConnection htmlConnection = (HttpURLConnection) urlObject.openConnection();
-        htmlConnection.setRequestProperty("User-Agent", USER_AGENT);
-        htmlConnection.setUseCaches(false);
-        htmlConnection.setConnectTimeout(2000);
-        htmlConnection.setReadTimeout(2000);
-        htmlConnection.connect();
+        try {
+            HttpURLConnection htmlConnection = (HttpURLConnection) urlObject.openConnection();
+            htmlConnection.setRequestProperty("User-Agent", USER_AGENT);
+            htmlConnection.setUseCaches(false);
+            htmlConnection.setConnectTimeout(2000);
+            htmlConnection.setReadTimeout(2000);
+            htmlConnection.connect();
 
-        if (htmlConnection.getResponseCode() == 200) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(htmlConnection.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
+            if (htmlConnection.getResponseCode() == 200) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(htmlConnection.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                Gson gson = new Gson();
+                String threadPostingsJSON = response.toString();
+
+                return gson.fromJson(threadPostingsJSON, LiveThread.class);
+            } else {
+                throw new HTTPException(htmlConnection.getResponseCode());
             }
-            in.close();
-
-            Gson gson = new Gson();
-            String threadPostingsJSON = response.toString();
-
-            return gson.fromJson(threadPostingsJSON, LiveThread.class);
-        } else {
-            throw new HTTPException(htmlConnection.getResponseCode());
+        } catch (SocketTimeoutException ex) {
+            System.out.println("[ERROR] SocketTimeoutException");
+            return null;
         }
     }
 
-    /**
-     *
-     *
-     * @param id
-     * @return
-     * @throws Exception
-     */
     public static RedditThread getThread(String id) throws Exception {
         String url = "https://www.reddit.com/r/" + id + "/new.json?limit=1";
 
@@ -148,7 +147,7 @@ public class RedditHandler {
         startLiveThread(threadData.getMedia().getEvent_id(), threadData.getTitle(), -1);
     }
 
-    public void stopLiveThread() {
+    public void stopLiveThread(boolean silent) {
         if (currentLiveThread != null) {
             currentLiveThread.cancel();
             currentLiveThread = null;
@@ -161,7 +160,10 @@ public class RedditHandler {
 
         redditScannerTask = new RedditScannerTask();
         RedditLiveBot.instance.getConfigHandler().setCurrentFeed(null);
-        Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_STOP);
+
+        if (!silent) {
+            Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_STOP);
+        }
     }
 
     public void postUpdate(LiveThreadChildrenData data, String threadID) {

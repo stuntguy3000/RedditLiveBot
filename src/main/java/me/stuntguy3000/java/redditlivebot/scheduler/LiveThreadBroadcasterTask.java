@@ -53,35 +53,46 @@ public class LiveThreadBroadcasterTask extends TimerTask {
         try {
             LiveThread liveThread = RedditHandler.getLiveThread(threadID);
 
-            LinkedList<LiveThreadChildrenData> updates = new LinkedList<>();
+            if (liveThread != null) {
+                LinkedList<LiveThreadChildrenData> updates = new LinkedList<>();
 
-            for (LiveThreadChildren liveThreadChild : liveThread.getData().getChildren()) {
-                LiveThreadChildrenData data = liveThreadChild.getData();
+                for (LiveThreadChildren liveThreadChild : liveThread.getData().getChildren()) {
+                    LiveThreadChildrenData data = liveThreadChild.getData();
 
-                if (!alreadyPosted.contains(data.getId()) && data.getCreated_utc() > lastPost) {
-                    updates.add(data);
+                    if (!alreadyPosted.contains(data.getId()) && data.getCreated_utc() > lastPost) {
+                        updates.add(data);
+                    }
                 }
-            }
 
 
-            if (lastPost == -1) {
-                postUpdate(updates.get(0));
-            } else {
-                if (updates.isEmpty()) {
+                if (lastPost == -1) {
+                    LiveThreadChildrenData lastUpdate = updates.get(0);
+
                     long secs = (new Date().getTime()) / 1000;
 
                     // Older than 6 hours?
                     if ((secs - lastPost) > 21600) {
-                        plugin.getRedditHandler().stopLiveThread();
+                        plugin.getRedditHandler().stopLiveThread(false);
                     }
+
+                    postUpdate(lastUpdate);
                 } else {
-                    TreeMap<Long, LiveThreadChildrenData> sortedData = new TreeMap<>();
+                    if (updates.isEmpty()) {
+                        long secs = (new Date().getTime()) / 1000;
 
-                    for (LiveThreadChildrenData data : updates) {
-                        sortedData.put(data.getCreated_utc(), data);
+                        // Older than 6 hours?
+                        if ((secs - lastPost) > 21600) {
+                            plugin.getRedditHandler().stopLiveThread(false);
+                        }
+                    } else {
+                        TreeMap<Long, LiveThreadChildrenData> sortedData = new TreeMap<>();
+
+                        for (LiveThreadChildrenData data : updates) {
+                            sortedData.put(data.getCreated_utc(), data);
+                        }
+
+                        sortedData.values().forEach(this::postUpdate);
                     }
-
-                    sortedData.values().forEach(this::postUpdate);
                 }
             }
         } catch (Exception e) {

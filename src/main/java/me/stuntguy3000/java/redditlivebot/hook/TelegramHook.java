@@ -36,8 +36,8 @@ public class TelegramHook {
             getBot().getChat(adminID).sendMessage(SendableTextMessage.builder().message("*[ADMIN] ").parseMode(ParseMode.MARKDOWN).build());
         }
 
-        redditLiveChat = TelegramHook.getBot().getChat("@RedditLive");
-        //redditLiveChat = TelegramBot.getChat(-14978569);
+        //redditLiveChat = TelegramHook.getBot().getChat("@RedditLive");
+        redditLiveChat = TelegramHook.getBot().getChat(-115432737);
     }
 
     public static void initializeCommands() {
