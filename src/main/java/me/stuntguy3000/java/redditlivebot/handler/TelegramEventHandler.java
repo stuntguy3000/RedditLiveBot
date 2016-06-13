@@ -48,7 +48,9 @@ public class TelegramEventHandler implements Listener {
         AdminControlHandler adminControlHandler = instance.getAdminControlHandler();
 
         if (event.getMessage().getRepliedTo() != null) {
+            System.out.println("Replied");
             if (adminControlHandler.getReplyActions().containsKey(event.getMessage().getRepliedTo())) {
+                System.out.println("It exists!");
                 AdminInlineCommandType inlineCommandType = adminControlHandler.getReplyActions().get(event.getMessage().getRepliedTo());
 
                 switch (inlineCommandType) {
@@ -56,7 +58,11 @@ public class TelegramEventHandler implements Listener {
                         event.getChat().sendMessage("Broadcasting " + message);
                     }
                 }
+            } else {
+                System.out.println("what is this");
             }
+        } else {
+            System.out.println("idfk");
         }
     }
 
