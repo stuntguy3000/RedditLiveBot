@@ -34,7 +34,7 @@ public class TelegramEventHandler implements Listener {
     public void onCallbackQueryReceivedEvent(CallbackQueryReceivedEvent event) {
         String ID = event.getCallbackQuery().getData();
 
-        event.getCallbackQuery().answer("Lets do this", true);
+        RedditLiveBot.instance.getRedditHandler().startLiveThread(ID, ID);
     }
 
     @Override

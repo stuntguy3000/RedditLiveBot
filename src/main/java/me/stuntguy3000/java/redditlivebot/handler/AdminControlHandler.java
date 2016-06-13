@@ -9,6 +9,7 @@ import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildrenData;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.message.Message;
+import pro.zackpollard.telegrambot.api.chat.message.content.TextContent;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
 import pro.zackpollard.telegrambot.api.keyboards.InlineKeyboardButton;
 import pro.zackpollard.telegrambot.api.keyboards.InlineKeyboardMarkup;
@@ -45,6 +46,16 @@ public class AdminControlHandler {
         buttons.add(InlineKeyboardButton.builder()
                 .callbackData(threadID)
                 .text("Click here to follow").build());
+
+        if (message.getContent() != null) {
+            if (message.getContent() instanceof TextContent) {
+                TextContent textContent = (TextContent) message.getContent();
+
+                if (textContent.getContent().equals(threadInformation)) {
+                    return;
+                }
+            }
+        }
 
         TelegramHook.getBot().editMessageText(message, threadInformation,
                 ParseMode.MARKDOWN, false, InlineKeyboardMarkup.builder().addRow(buttons).build());
