@@ -107,13 +107,13 @@ public class TelegramEventHandler implements Listener {
 
         RedditHandler redditHandler = instance.getRedditHandler();
 
-        if (!instance.getConfigHandler().getBotSettings().getTelegramAdmins().contains(userID)) {
-            event.getCallbackQuery().answer("You are not authorized to do this.", true);
-            return;
-        }
-
         // Standard admin functionality with the prefix # representing a chat
         if (ID.contains("#")) {
+            if (!instance.getConfigHandler().getBotSettings().getTelegramAdmins().contains(userID)) {
+                event.getCallbackQuery().answer("You are not authorized to do this.", true);
+                return;
+            }
+
             String command = ID.split("#")[0];
             Chat chat = TelegramHook.getBot().getChat(ID.split("#")[1]);
 
@@ -207,6 +207,11 @@ public class TelegramEventHandler implements Listener {
             event.getCallbackQuery().answer("", false);
             return;
         } else if (ID.startsWith("f,")) {
+            if (!instance.getConfigHandler().getBotSettings().getTelegramAdmins().contains(userID)) {
+                event.getCallbackQuery().answer("You are not authorized to do this.", true);
+                return;
+            }
+
             /**
              * Manually follow a feed
              */
@@ -232,6 +237,12 @@ public class TelegramEventHandler implements Listener {
 
             event.getCallbackQuery().answer("", false);
             return;
+        } else if (ID.startsWith("usrSubscribe:")) {
+            String userToSubscribe = ID.split(":")[1];
+            Chat chat = TelegramHook.getBot().getChat(userToSubscribe);
+
+            RedditLiveBot.instance.getSubscriptionHandler().subscribeChat(chat);
+            event.getCallbackQuery().answer("", false);
         }
 
         event.getCallbackQuery().answer("Unknown action! Button ID: " + ID, true);
