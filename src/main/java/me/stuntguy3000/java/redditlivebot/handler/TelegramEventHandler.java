@@ -71,6 +71,9 @@ public class TelegramEventHandler implements Listener {
                         RedditLiveBot.instance.getRedditHandler().startLiveThread(id, title);
                         break;
                     }
+                    /**
+                     * Broadcast a message
+                     */
                     case BROADCAST: {
                         for (Subscriber subscriber : RedditLiveBot.instance.getSubscriptionHandler().getSubscriptions()) {
                             Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());
@@ -191,7 +194,7 @@ public class TelegramEventHandler implements Listener {
                 instance.getAdminControlHandler().updateMessage(chat, null);
             }
 
-            event.getCallbackQuery().answer("Command received.", false);
+            event.getCallbackQuery().answer("", false);
             return;
         }
 
