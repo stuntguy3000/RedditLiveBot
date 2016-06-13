@@ -36,13 +36,11 @@ public class TelegramHook {
             getBot().getChat(adminID).sendMessage(SendableTextMessage.builder().message("*[ADMIN] ").parseMode(ParseMode.MARKDOWN).build());
         }
 
-        this.initializeCommands();
-
         redditLiveChat = TelegramHook.getBot().getChat("@RedditLive");
         //redditLiveChat = TelegramBot.getChat(-14978569);
     }
 
-    private void initializeCommands() {
+    public static void initializeCommands() {
         List<Class<?>> allCommands = ClassGetter.getClassesForPackage("me.stuntguy3000.java.redditlivebot.command.");
         allCommands.stream().filter(Command.class::isAssignableFrom).forEach(clazz -> {
             try {

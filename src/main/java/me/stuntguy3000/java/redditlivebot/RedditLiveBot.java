@@ -72,7 +72,6 @@ public class RedditLiveBot {
         LogHandler.log(" RedditLive build " + BUILD + " by @stuntguy3000");
         LogHandler.log("======================================");
 
-
         connectTelegram();
 
         if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
