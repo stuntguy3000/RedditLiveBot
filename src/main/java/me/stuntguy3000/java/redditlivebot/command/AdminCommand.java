@@ -31,6 +31,7 @@ public class AdminCommand extends Command {
 
         String statusText = "Scanning new threads...";
 
+        // Current bot status
         if (redditHandler.getCurrentLiveThread() != null) {
             statusText = "Following live thread. ID: " + redditHandler.getCurrentLiveThread().getThreadID();
 
@@ -43,6 +44,27 @@ public class AdminCommand extends Command {
                     .build());
         }
 
+        // Subscription data
+        buttons.add(InlineKeyboardButton.builder()
+                .text("View Subscriptions").callbackData("adminCommand@showSubs#" + event.getChat().getId())
+                .build());
+
+        // Toggle Debug
+        buttons.add(InlineKeyboardButton.builder()
+                .text(RedditLiveBot.DEBUG ? "Disable Debug" : "Enable Debug").callbackData("adminCommand@toggleDebug#" + event.getChat().getId())
+                .build());
+
+        // Broadcast Message
+        buttons.add(InlineKeyboardButton.builder()
+                .text("Broadcast a message").callbackData("adminCommand@broadcast#" + event.getChat().getId())
+                .build());
+
+        // Restart bot
+        buttons.add(InlineKeyboardButton.builder()
+                .text("Restart the bot").callbackData("adminCommand@restart#" + event.getChat().getId())
+                .build());
+
+        // Build the final message
         Message message = chat.sendMessage(
                 SendableTextMessage.builder()
                         .message(
