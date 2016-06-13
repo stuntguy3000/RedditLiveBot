@@ -44,7 +44,7 @@ public class SubscriptionHandler {
     public void unsubscribeChat(Subscriber subscriberToRemove) {
         for (Subscriber subscriber : new ArrayList<>(getSubscriptions())) {
             if (subscriber.getUserID().equals(subscriberToRemove.getUserID())) {
-                unsubscribeChat(subscriber);
+                unsubscribeChat(subscriber.getUserID());
             }
         }
 
