@@ -32,7 +32,7 @@ public class LiveThreadBroadcasterTask extends TimerTask {
 
     public LiveThreadBroadcasterTask(String threadID, Long lastPost) {
         this.lastPost = lastPost;
-        this.plugin = RedditLiveBot.getInstance();
+        this.plugin = RedditLiveBot.instance;
         this.threadID = threadID;
 
         new Timer().schedule(this, 0, 3 * 1000);
@@ -44,7 +44,7 @@ public class LiveThreadBroadcasterTask extends TimerTask {
             lastActualPost = data;
             alreadyPosted.add(data.getId());
 
-            RedditLiveBot.getInstance().getRedditHandler().postUpdate(data, threadID);
+            RedditLiveBot.instance.getRedditHandler().postUpdate(data, threadID);
         }
     }
 

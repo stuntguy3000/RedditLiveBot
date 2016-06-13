@@ -17,7 +17,7 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 public class AdminCommand extends Command {
 
     public AdminCommand() {
-        super(RedditLiveBot.getInstance(), "Command used by RedditLiveBot administrators.", true, "admin");
+        super(RedditLiveBot.instance, "Command used by RedditLiveBot administrators.", true, "admin");
     }
 
     @Override
@@ -41,7 +41,7 @@ public class AdminCommand extends Command {
                     Lang.send(event.getChat(), Lang.ERROR_NOT_ENOUGH_ARGUMENTS);
                     return;
                 } else if (args[0].equalsIgnoreCase("unfollow")) {
-                    RedditLiveBot.getInstance().getRedditHandler().stopLiveThread();
+                    RedditLiveBot.instance.getRedditHandler().stopLiveThread();
                     Lang.send(event.getChat(), Lang.COMMAND_ADMIN_UNFOLLOW);
                     return;
                 } else if (args[0].equalsIgnoreCase("debug")) {
@@ -49,22 +49,22 @@ public class AdminCommand extends Command {
                     return;
                 } else if (args[0].equalsIgnoreCase("restart")) {
                     Lang.send(event.getChat(), Lang.GENERAL_RESTART, event.getMessage().getSender().getUsername());
-                    RedditLiveBot.getInstance().shutdown();
+                    RedditLiveBot.instance.shutdown();
                     return;
                 } else if (args[0].equalsIgnoreCase("status")) {
-                    RedditHandler redditHandler = RedditLiveBot.getInstance().getRedditHandler();
+                    RedditHandler redditHandler = RedditLiveBot.instance.getRedditHandler();
                     LiveThreadBroadcasterTask liveThreadBroadcasterTask = redditHandler.getCurrentLiveThread();
                     RedditScannerTask redditScannerTask = redditHandler.getRedditScannerTask();
 
                     String redditData = Lang.COMMAND_ADMIN_STATUS +
                             "*Current Live Thread: *" + (liveThreadBroadcasterTask == null ? "None!" : "http://reddit.com/live/" + liveThreadBroadcasterTask.getThreadID()) +
                             "\n*New Live Thread Scanner: *" + (redditScannerTask == null ? "Not Scanning" : "Scanning") +
-                            "\n*Last post: *" + (liveThreadBroadcasterTask == null ? "C >> " + RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getLastPost() : "I >> " + liveThreadBroadcasterTask.getLastPost());
+                            "\n*Last post: *" + (liveThreadBroadcasterTask == null ? "C >> " + RedditLiveBot.instance.getConfigHandler().getBotSettings().getLastPost() : "I >> " + liveThreadBroadcasterTask.getLastPost());
 
                     Lang.send(event.getChat(), redditData);
                     return;
                 } else if (args[0].equalsIgnoreCase("subscriptions")) {
-                    ArrayList<Subscriber> subscriptions = RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions();
+                    ArrayList<Subscriber> subscriptions = RedditLiveBot.instance.getSubscriptionHandler().getSubscriptions();
 
                     StringBuilder stringBuilder = new StringBuilder();
 
@@ -86,7 +86,7 @@ public class AdminCommand extends Command {
                     boolean newDebug = Boolean.valueOf(args[1]);
 
                     RedditLiveBot.DEBUG = newDebug;
-                    RedditLiveBot.getInstance().getConfigHandler().getBotSettings().setDebugMode(newDebug);
+                    RedditLiveBot.instance.getConfigHandler().getBotSettings().setDebugMode(newDebug);
 
                     Lang.send(event.getChat(), Lang.COMMAND_ADMIN_DEBUG_TOGGLE, newDebug);
                     Lang.sendAdmin(Lang.COMMAND_ADMIN_DEBUG_TOGGLE, RedditLiveBot.DEBUG);
@@ -96,7 +96,7 @@ public class AdminCommand extends Command {
             }
             default: {
                 if (args.length >= 3 && args[0].equalsIgnoreCase("follow")) {
-                    RedditLiveBot.getInstance().getRedditHandler().startLiveThread(args[1], args[2]);
+                    RedditLiveBot.instance.getRedditHandler().startLiveThread(args[1], args[2]);
                     return;
                 } else {
                     if (args.length > 1 && args[0].equalsIgnoreCase("broadcast")) {
@@ -106,7 +106,7 @@ public class AdminCommand extends Command {
                             broadcastMessage.append(args[i]).append(" ");
                         }
 
-                        for (Subscriber subscriber : RedditLiveBot.getInstance().getSubscriptionHandler().getSubscriptions()) {
+                        for (Subscriber subscriber : RedditLiveBot.instance.getSubscriptionHandler().getSubscriptions()) {
                             Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());
 
                             Lang.send(chat, Lang.GENERAL_BROADCAST, event.getMessage().getSender().getUsername(),

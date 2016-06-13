@@ -11,12 +11,12 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 public class UnsubscribeCommand extends Command {
 
     public UnsubscribeCommand() {
-        super(RedditLiveBot.getInstance(), "Subscribe to RedditLive updates.", false, "unsubscribe");
+        super(RedditLiveBot.instance, "Subscribe to RedditLive updates.", false, "unsubscribe");
     }
 
     @Override
     public void processCommand(CommandMessageReceivedEvent event) {
-        SubscriptionHandler subscriptionHandler = RedditLiveBot.getInstance().getSubscriptionHandler();
+        SubscriptionHandler subscriptionHandler = RedditLiveBot.instance.getSubscriptionHandler();
 
         Chat chat = event.getMessage().getChat();
 

@@ -3,13 +3,15 @@ package me.stuntguy3000.java.redditlivebot.handler;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
-import me.stuntguy3000.java.redditlivebot.object.Lang;
+
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
+import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
+import me.stuntguy3000.java.redditlivebot.object.Lang;
 
 /**
  * Created by bo0tzz
@@ -58,7 +60,7 @@ public class UpdateHandler implements Runnable {
                     return;
                 }
 
-                RedditLiveBot.getInstance().shutdown();
+                RedditLiveBot.instance.shutdown();
             }
             try {
                 Thread.sleep(2000L);

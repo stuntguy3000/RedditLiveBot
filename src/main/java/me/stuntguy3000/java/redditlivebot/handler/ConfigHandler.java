@@ -2,12 +2,18 @@ package me.stuntguy3000.java.redditlivebot.handler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.config.BotSettings;
 import me.stuntguy3000.java.redditlivebot.object.config.Subscriptions;
-
-import java.io.*;
 
 // @author Luke Anderson | stuntguy3000
 public class ConfigHandler {
@@ -61,6 +67,7 @@ public class ConfigHandler {
 
     public void saveConfig() {
         saveConfig("config.json");
+        saveConfig("subscriptions.json");
     }
 
     private void saveConfig(String fileName) {

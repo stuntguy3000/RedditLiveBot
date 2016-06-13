@@ -6,7 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import lombok.Getter;
+import lombok.Data;
+import me.stuntguy3000.java.redditlivebot.handler.AdminControlHandler;
 import me.stuntguy3000.java.redditlivebot.handler.CommandHandler;
 import me.stuntguy3000.java.redditlivebot.handler.ConfigHandler;
 import me.stuntguy3000.java.redditlivebot.handler.LogHandler;
@@ -17,22 +18,17 @@ import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 
 // @author Luke Anderson | stuntguy3000
+@Data
 public class RedditLiveBot {
     public static int BUILD = 0;
     public static boolean DEBUG = false;
-    @Getter
     public static RedditLiveBot instance;
-    @Getter
     private static TelegramHook telegramHook;
-    @Getter
     private CommandHandler commandHandler;
-    @Getter
     private ConfigHandler configHandler;
-    @Getter
     private RedditHandler redditHandler;
-    @Getter
+    private AdminControlHandler adminControlHandler;
     private SubscriptionHandler subscriptionHandler;
-    @Getter
     private Thread updaterThread;
 
     public static void main(String[] args) {
@@ -76,7 +72,6 @@ public class RedditLiveBot {
         LogHandler.log(" RedditLive build " + BUILD + " by @stuntguy3000");
         LogHandler.log("======================================");
 
-        commandHandler = new CommandHandler();
 
         connectTelegram();
 
@@ -89,6 +84,8 @@ public class RedditLiveBot {
             LogHandler.log("** Auto Updater is set to false **");
         }
 
+        commandHandler = new CommandHandler();
+        adminControlHandler = new AdminControlHandler();
         subscriptionHandler = new SubscriptionHandler();
         redditHandler = new RedditHandler();
     }

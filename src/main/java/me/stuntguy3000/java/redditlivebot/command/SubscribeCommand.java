@@ -11,12 +11,12 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 public class SubscribeCommand extends Command {
 
     public SubscribeCommand() {
-        super(RedditLiveBot.getInstance(), "Subscribe to RedditLive updates.", false, "subscribe");
+        super(RedditLiveBot.instance, "Subscribe to RedditLive updates.", false, "subscribe");
     }
 
     @Override
     public void processCommand(CommandMessageReceivedEvent event) {
-        SubscriptionHandler subscriptionHandler = RedditLiveBot.getInstance().getSubscriptionHandler();
+        SubscriptionHandler subscriptionHandler = RedditLiveBot.instance.getSubscriptionHandler();
 
         Chat chat = event.getMessage().getChat();
 

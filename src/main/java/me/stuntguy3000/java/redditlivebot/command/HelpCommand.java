@@ -11,7 +11,7 @@ import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceived
 // @author Luke Anderson | stuntguy3000
 public class HelpCommand extends Command {
     public HelpCommand() {
-        super(RedditLiveBot.getInstance(), "View command help", false, "help", "start", "?");
+        super(RedditLiveBot.instance, "View command help", false, "help", "start", "?");
     }
 
     public void processCommand(CommandMessageReceivedEvent event) {
@@ -26,7 +26,7 @@ public class HelpCommand extends Command {
 
         commandHelp.append("*RedditLiveBot Command Help:*\n");
 
-        for (Map.Entry<String[], Command> command : RedditLiveBot.getInstance().getCommandHandler().getCommands().entrySet()) {
+        for (Map.Entry<String[], Command> command : RedditLiveBot.instance.getCommandHandler().getCommands().entrySet()) {
             commandHelp.append(String.format("%s:  _%s_\n", Lang.stringJoin(command.getKey(), "/", ", "), command.getValue().getDescription()));
         }
 

@@ -32,14 +32,16 @@ public class RedditScannerTask extends TimerTask {
                         long secs = (new Date().getTime()) / 1000;
                         String threadID = threadData.getMedia().getEvent_id();
 
+                        RedditLiveBot.instance.getAdminControlHandler().threadUpdate(threadData, threadID);
+
                         // Score more than 5, up to 3 hours old.
-                        if (threadData.getScore() >= 5 &&
+                        /*if (threadData.getScore() >= 5 &&
                                 (secs - threadData.getCreated_utc() < 10800) &&
-                                !RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getKnownLiveFeeds().contains(threadID.toLowerCase())) {
+                                !RedditLiveBot.instance.getConfigHandler().getBotSettings().getKnownLiveFeeds().contains(threadID.toLowerCase())) {
                             Lang.sendDebug("Following thread %s.", threadID);
-                            RedditLiveBot.getInstance().getRedditHandler().startLiveThread(threadData);
+                            RedditLiveBot.instance.getRedditHandler().startLiveThread(threadData);
                             return;
-                        }
+                        }*/
                     }
                 }
             }

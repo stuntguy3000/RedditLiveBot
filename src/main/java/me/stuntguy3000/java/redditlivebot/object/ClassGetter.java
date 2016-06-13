@@ -1,7 +1,5 @@
 package me.stuntguy3000.java.redditlivebot.object;
 
-import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
-
 import java.io.IOException;
 import java.net.URL;
 import java.security.CodeSource;
@@ -9,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 
 /**
  * User: Austin Date: 4/22/13 Time: 11:47 PM (c) lazertester
@@ -23,7 +23,7 @@ public class ClassGetter {
         // String relPath = pkgname.replace('.', '/');
 
         // Get a File object for the package
-        CodeSource src = RedditLiveBot.getInstance().getClass().getProtectionDomain().getCodeSource();
+        CodeSource src = RedditLiveBot.instance.getClass().getProtectionDomain().getCodeSource();
         if (src != null) {
             URL resource = src.getLocation();
             resource.getPath();

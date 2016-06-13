@@ -28,20 +28,30 @@ public class RedditHandler {
     @Getter
     private RedditScannerTask redditScannerTask;
 
+    /**
+     * Constructs a new RedditHandler
+     */
     public RedditHandler() {
-        String existingID = RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getCurrentLiveFeed();
+        String existingID = RedditLiveBot.instance.getConfigHandler().getBotSettings().getCurrentLiveFeed();
 
         if (existingID == null) {
             Lang.sendDebug("No existing thread.");
             redditScannerTask = new RedditScannerTask();
         } else {
             Lang.sendDebug("Existing thread.");
-            startLiveThread(existingID, null, RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getLastPost());
+            startLiveThread(existingID, null, RedditLiveBot.instance.getConfigHandler().getBotSettings().getLastPost());
         }
     }
 
+    /**
+     * Get a LiveThread object from a reddit live ID
+     *
+     * @param id String the Reddit Live thread ID
+     *
+     * @return LiveThread the live thread instance.
+     */
     public static LiveThread getLiveThread(String id) throws Exception {
-        String url = "https://www.reddit.com/live/" + id + ".json?limit=5";
+        String url = "https://www.reddit.com/live/" + id + ".json?limit=10";
 
         URL urlObject = new URL(url);
 
@@ -71,6 +81,13 @@ public class RedditHandler {
         }
     }
 
+    /**
+     *
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
     public static RedditThread getThread(String id) throws Exception {
         String url = "https://www.reddit.com/r/" + id + "/new.json?limit=1";
 
@@ -119,8 +136,8 @@ public class RedditHandler {
 
         currentLiveThread = new LiveThreadBroadcasterTask(id, lastPost);
 
-        RedditLiveBot.getInstance().getConfigHandler().addFeed(id);
-        RedditLiveBot.getInstance().getConfigHandler().setCurrentFeed(id);
+        RedditLiveBot.instance.getConfigHandler().addFeed(id);
+        RedditLiveBot.instance.getConfigHandler().setCurrentFeed(id);
 
         if (title != null) {
             Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_START, title, id);
@@ -143,7 +160,7 @@ public class RedditHandler {
         }
 
         redditScannerTask = new RedditScannerTask();
-        RedditLiveBot.getInstance().getConfigHandler().setCurrentFeed(null);
+        RedditLiveBot.instance.getConfigHandler().setCurrentFeed(null);
         Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_STOP);
     }
 
@@ -156,13 +173,13 @@ public class RedditHandler {
             Lang.sendHtml(TelegramHook.getRedditLiveChat(),
                     Lang.LIVE_THREAD_UPDATE_HTML, threadID, author, body);
 
-            RedditLiveBot.getInstance().getSubscriptionHandler().broadcastHtml(
+            RedditLiveBot.instance.getSubscriptionHandler().broadcastHtml(
                     threadID, author, body);
         } else {
             Lang.send(TelegramHook.getRedditLiveChat(),
                     Lang.LIVE_THREAD_UPDATE, threadID, author, body);
 
-            RedditLiveBot.getInstance().getSubscriptionHandler().broadcast(
+            RedditLiveBot.instance.getSubscriptionHandler().broadcast(
                     threadID, author, body);
         }
     }

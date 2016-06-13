@@ -57,7 +57,7 @@ public class Lang {
     }
 
     public static void sendAdmin(String message, Object... format) {
-        for (long adminID : RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getTelegramAdmins()) {
+        for (long adminID : RedditLiveBot.instance.getConfigHandler().getBotSettings().getTelegramAdmins()) {
             send(adminID, "*[ADMIN]* " + message, format);
         }
 

@@ -7,13 +7,14 @@ import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.config.Subscriber;
 import pro.zackpollard.telegrambot.api.chat.Chat;
+import pro.zackpollard.telegrambot.api.user.User;
 
 // @author Luke Anderson | stuntguy3000
 public class SubscriptionHandler {
     private RedditLiveBot plugin;
 
     public SubscriptionHandler() {
-        this.plugin = RedditLiveBot.getInstance();
+        this.plugin = RedditLiveBot.instance;
     }
 
     public ArrayList<Subscriber> getSubscriptions() {
@@ -32,6 +33,11 @@ public class SubscriptionHandler {
 
     public void subscribeChat(Chat chat) {
         plugin.getConfigHandler().getSubscriptions().getSubscriptions().add(new Subscriber(chat.getId(), chat.getName()));
+        plugin.getConfigHandler().saveSubscriptions();
+    }
+
+    public void subscribeChat(User user) {
+        plugin.getConfigHandler().getSubscriptions().getSubscriptions().add(new Subscriber(String.valueOf(user.getId()), user.getUsername()));
         plugin.getConfigHandler().saveSubscriptions();
     }
 

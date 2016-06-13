@@ -1,11 +1,11 @@
 package me.stuntguy3000.java.redditlivebot.object.command;
 
+import java.util.Arrays;
+
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
-
-import java.util.Arrays;
 
 public abstract class Command {
     @Getter
@@ -33,7 +33,7 @@ public abstract class Command {
 
     public void preProcessCommand(CommandMessageReceivedEvent event) {
         if (adminOnly) {
-            if (!RedditLiveBot.getInstance().getConfigHandler().getBotSettings().getTelegramAdmins().contains(event.getMessage().getSender().getId())) {
+            if (!RedditLiveBot.instance.getConfigHandler().getBotSettings().getTelegramAdmins().contains(event.getMessage().getSender().getId())) {
                 Lang.send(event.getChat(), Lang.ERROR_NOT_ADMIN);
                 return;
             }
