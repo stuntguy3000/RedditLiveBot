@@ -71,7 +71,7 @@ public class LiveThreadBroadcasterTask extends TimerTask {
                     long secs = (new Date().getTime()) / 1000;
 
                     // Older than 6 hours?
-                    if ((secs - lastPost) > 21600) {
+                    if ((secs - lastUpdate.getCreated_utc()) > 21600) {
                         plugin.getRedditHandler().stopLiveThread(false);
                     }
 
