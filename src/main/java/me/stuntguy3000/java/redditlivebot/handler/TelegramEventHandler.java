@@ -196,6 +196,30 @@ public class TelegramEventHandler implements Listener {
 
             event.getCallbackQuery().answer("", false);
             return;
+        } else if (ID.startsWith("f#")) {
+            /**
+             * Manually follow a feed
+             */
+            String threadID = ID.split("#")[1];
+            String title = ID.split("#")[2];
+            Message sentMessage = instance.getAdminControlHandler().getUpdateMessages().get(threadID);
+
+            redditHandler.startLiveThread(threadID, title);
+
+            String threadInformation = "*Reddit Live Thread*\n\n" +
+                    "*Thread ID:* " + threadID + "\n" +
+                    "*Thread URL:* https://reddit.com/live/" + threadID + "\n" +
+                    "*Thread Title:* " + title + "\n\n" +
+                    "*Now following this live feed.*";
+
+            TelegramHook.getBot().editMessageText(
+                    sentMessage,
+                    threadInformation,
+                    ParseMode.MARKDOWN, true, null
+            );
+
+            event.getCallbackQuery().answer("", false);
+            return;
         }
 
         event.getCallbackQuery().answer("Unknown action! Button ID: " + ID, true);
