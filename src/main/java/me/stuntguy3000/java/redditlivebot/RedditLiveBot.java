@@ -10,6 +10,7 @@ import lombok.Data;
 import me.stuntguy3000.java.redditlivebot.handler.AdminControlHandler;
 import me.stuntguy3000.java.redditlivebot.handler.CommandHandler;
 import me.stuntguy3000.java.redditlivebot.handler.ConfigHandler;
+import me.stuntguy3000.java.redditlivebot.handler.InlineKeyboardHandler;
 import me.stuntguy3000.java.redditlivebot.handler.LogHandler;
 import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
 import me.stuntguy3000.java.redditlivebot.handler.SubscriptionHandler;
@@ -29,6 +30,7 @@ public class RedditLiveBot {
     private RedditHandler redditHandler;
     private AdminControlHandler adminControlHandler;
     private SubscriptionHandler subscriptionHandler;
+    private InlineKeyboardHandler inlineKeyboardHandler;
     private Thread updaterThread;
 
     public static void main(String[] args) {
@@ -87,6 +89,7 @@ public class RedditLiveBot {
         adminControlHandler = new AdminControlHandler();
         subscriptionHandler = new SubscriptionHandler();
         redditHandler = new RedditHandler();
+        inlineKeyboardHandler = new InlineKeyboardHandler();
 
         TelegramHook.initializeCommands();
     }

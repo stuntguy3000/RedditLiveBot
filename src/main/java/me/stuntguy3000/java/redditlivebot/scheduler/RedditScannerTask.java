@@ -7,7 +7,9 @@ import java.util.TimerTask;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
+import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
 import me.stuntguy3000.java.redditlivebot.object.reddit.RedditThread;
+import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildren;
 import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildrenData;
 
@@ -32,16 +34,15 @@ public class RedditScannerTask extends TimerTask {
                         long secs = (new Date().getTime()) / 1000;
                         String threadID = threadData.getMedia().getEvent_id();
 
-                        RedditLiveBot.instance.getAdminControlHandler().threadUpdate(threadData, threadID);
+                        LiveThread liveThreadData = RedditHandler.getLiveThread(threadID);
+                        if (liveThreadData != null) {
+                            LiveThreadChildrenData lastPost = liveThreadData.getData().getChildren().get(0).getData();
 
-                        // Score more than 5, up to 3 hours old.
-                        /*if (threadData.getScore() >= 5 &&
-                                (secs - threadData.getCreated_utc() < 10800) &&
-                                !RedditLiveBot.instance.getConfigHandler().getBotSettings().getKnownLiveFeeds().contains(threadID.toLowerCase())) {
-                            Lang.sendDebug("Following thread %s.", threadID);
-                            RedditLiveBot.instance.getRedditHandler().startLiveThread(threadData);
-                            return;
-                        }*/
+                            // Less than 1 hour old
+                            if ((secs - lastPost.getCreated_utc()) < 3600) {
+                                RedditLiveBot.instance.getAdminControlHandler().threadUpdate(threadData, threadID);
+                            }
+                        }
                     }
                 }
             }

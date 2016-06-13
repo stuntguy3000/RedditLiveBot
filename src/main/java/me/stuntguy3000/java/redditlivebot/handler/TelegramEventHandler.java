@@ -27,14 +27,33 @@ public class TelegramEventHandler implements Listener {
     public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
         String command = event.getCommand();
 
+        // Process the command
         RedditLiveBot.instance.getCommandHandler().executeCommand(command, event);
     }
 
     @Override
     public void onCallbackQueryReceivedEvent(CallbackQueryReceivedEvent event) {
         String ID = event.getCallbackQuery().getData();
+        RedditHandler redditHandler = RedditLiveBot.instance.getRedditHandler();
 
-        RedditLiveBot.instance.getRedditHandler().startLiveThread(ID, ID);
+        long userID = event.getCallbackQuery().getFrom().getId();
+        if (!RedditLiveBot.instance.getConfigHandler().getBotSettings().getTelegramAdmins().contains(userID)) {
+            event.getCallbackQuery().answer("You are not authorized to do this.", true);
+            return;
+        }
+
+        if (ID.startsWith("adminStartFeed@")) {
+            String feedID = ID.replace("adminStartFeed@", "");
+            if (redditHandler.getCurrentLiveThread() == null) {
+                event.getCallbackQuery().answer("Staring live thread.", false);
+            } else {
+                redditHandler.startLiveThread(feedID, feedID);
+                event.getCallbackQuery().answer("Unable to start live thread, one is already running!", true);
+            }
+            return;
+        }
+
+        event.getCallbackQuery().answer("Unknown action! Button ID: " + ID, true);
     }
 
     @Override
