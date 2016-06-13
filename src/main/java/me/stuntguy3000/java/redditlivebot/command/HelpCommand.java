@@ -35,7 +35,7 @@ public class HelpCommand extends Command {
                 "*Command help:*\n" +
                 "/subscribe - Subscribe to updates from @RedditLive\n" +
                 "/unsubscribe - Unsubscribe to updates from @RedditLive\n" +
-                "/vrsion - Show bot version information, and provide a link to the source code.");
+                "/version - Show bot version information, and provide a link to the source code.");
 
         List<InlineKeyboardButton> buttons = new ArrayList<>();
 
