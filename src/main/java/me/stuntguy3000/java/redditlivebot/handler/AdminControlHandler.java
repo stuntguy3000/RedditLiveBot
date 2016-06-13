@@ -50,7 +50,7 @@ public class AdminControlHandler {
         List<InlineKeyboardButton> buttons = new ArrayList<>();
 
         buttons.add(InlineKeyboardButton.builder()
-                .callbackData("f$" + threadID + "$" + redditThread.getTitle())
+                .callbackData("f," + threadID + "," + redditThread.getTitle())
                 .text("Click here to follow").build());
 
         if (lastMessage != null && lastMessage.equals(threadInformation)) {
