@@ -242,7 +242,7 @@ public class TelegramEventHandler implements Listener {
             Chat chat = TelegramHook.getBot().getChat(userToSubscribe);
 
             RedditLiveBot.instance.getSubscriptionHandler().subscribeChat(chat);
-            event.getCallbackQuery().answer("", false);
+            event.getCallbackQuery().answer("You have subscribed to @RedditLiveBot", false);
         }
 
         event.getCallbackQuery().answer("Unknown action! Button ID: " + ID, true);
