@@ -27,7 +27,7 @@ public class AdminControlHandler {
     private Chat adminChat;
     private HashMap<String, Message> updateMessages = new HashMap<>();
     private HashMap<String, String> lastMessages = new HashMap<>();
-    private HashMap<Message, AdminInlineCommandType> replyActions = new HashMap<>();
+    private HashMap<Long, AdminInlineCommandType> replyActions = new HashMap<>();
 
     public AdminControlHandler() {
         adminChat = TelegramHook.getBot().getChat(-115432737);
@@ -75,7 +75,7 @@ public class AdminControlHandler {
     }
 
     public void addReplyMessage(Message message, AdminInlineCommandType type) {
-        replyActions.put(message, type);
+        replyActions.put(message.getMessageId(), type);
     }
 
     public InlineKeyboardMarkup getMarkup(Chat chat) {

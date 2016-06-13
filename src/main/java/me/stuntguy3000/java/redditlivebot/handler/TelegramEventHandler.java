@@ -51,9 +51,9 @@ public class TelegramEventHandler implements Listener {
 
         if (event.getMessage().getRepliedTo() != null) {
             System.out.println("Replied");
-            if (adminControlHandler.getReplyActions().containsKey(event.getMessage().getRepliedTo())) {
+            if (adminControlHandler.getReplyActions().containsKey(event.getMessage().getRepliedTo().getMessageId())) {
                 System.out.println("It exists!");
-                AdminInlineCommandType inlineCommandType = adminControlHandler.getReplyActions().get(event.getMessage().getRepliedTo());
+                AdminInlineCommandType inlineCommandType = adminControlHandler.getReplyActions().remove(event.getMessage().getRepliedTo().getMessageId());
 
                 switch (inlineCommandType) {
                     case BROADCAST: {
