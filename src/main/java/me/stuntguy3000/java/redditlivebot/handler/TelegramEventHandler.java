@@ -6,9 +6,11 @@ import java.util.concurrent.TimeUnit;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
+import me.stuntguy3000.java.redditlivebot.object.AdminInlineCommandType;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadBroadcasterTask;
+import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.inline.send.InlineQueryResponse;
 import pro.zackpollard.telegrambot.api.chat.inline.send.content.InputTextMessageContent;
 import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResultArticle;
@@ -17,6 +19,7 @@ import pro.zackpollard.telegrambot.api.event.Listener;
 import pro.zackpollard.telegrambot.api.event.chat.CallbackQueryReceivedEvent;
 import pro.zackpollard.telegrambot.api.event.chat.inline.InlineQueryReceivedEvent;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
+import pro.zackpollard.telegrambot.api.event.chat.message.TextMessageReceivedEvent;
 
 /**
  * @author stuntguy3000
@@ -32,24 +35,59 @@ public class TelegramEventHandler implements Listener {
     }
 
     @Override
+    public void onTextMessageReceived(TextMessageReceivedEvent event) {
+        String message = event.getContent().getContent();
+        AdminControlHandler adminControlHandler = RedditLiveBot.instance.getAdminControlHandler();
+
+        if (event.getMessage().getRepliedTo() != null) {
+            if (adminControlHandler.getReplyActions().containsKey(event.getMessage().getRepliedTo())) {
+                AdminInlineCommandType inlineCommandType = adminControlHandler.getReplyActions().get(event.getMessage().getRepliedTo());
+
+                switch (inlineCommandType) {
+                    case BROADCAST: {
+                        event.getChat().sendMessage("Broadcasting " + message);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public void onCallbackQueryReceivedEvent(CallbackQueryReceivedEvent event) {
         String ID = event.getCallbackQuery().getData();
+        long userID = event.getCallbackQuery().getFrom().getId();
+
         RedditHandler redditHandler = RedditLiveBot.instance.getRedditHandler();
 
-        long userID = event.getCallbackQuery().getFrom().getId();
         if (!RedditLiveBot.instance.getConfigHandler().getBotSettings().getTelegramAdmins().contains(userID)) {
             event.getCallbackQuery().answer("You are not authorized to do this.", true);
             return;
         }
 
-        if (ID.startsWith("adminStartFeed@")) {
-            String feedID = ID.replace("adminStartFeed@", "");
-            if (redditHandler.getCurrentLiveThread() == null) {
-                event.getCallbackQuery().answer("Staring live thread.", false);
+        // Standard admin functionality with the prefix # representing a chat
+        if (ID.contains("#")) {
+            String command = ID.split("#")[0];
+            Chat chat = TelegramHook.getBot().getChat(ID.split("#")[1]);
+
+            if (command.equals(AdminInlineCommandType.START_FOLLOW.getText())) {
+
+            } else if (command.equals(AdminInlineCommandType.STOP_FOLLOW.getText())) {
+
+            } else if (command.equals(AdminInlineCommandType.SHOW_SUBS.getText())) {
+
+            } else if (command.equals(AdminInlineCommandType.ENABLE_DEBUG.getText())) {
+
+            } else if (command.equals(AdminInlineCommandType.DISABLE_DEBUG.getText())) {
+
+            } else if (command.equals(AdminInlineCommandType.BROADCAST.getText())) {
+
+            } else if (command.equals(AdminInlineCommandType.RESTART.getText())) {
+                RedditLiveBot.instance.getAdminControlHandler().updateMessage(chat,
+                        null);
             } else {
-                redditHandler.startLiveThread(feedID, feedID);
-                event.getCallbackQuery().answer("Unable to start live thread, one is already running!", true);
+                event.getCallbackQuery().answer("Unknown action! Button ID: " + ID, true);
             }
+
             return;
         }
 
