@@ -51,7 +51,11 @@ public class AdminCommand extends Command {
 
         // Toggle Debug
         buttons.add(InlineKeyboardButton.builder()
-                .text(RedditLiveBot.DEBUG ? "Disable Debug" : "Enable Debug").callbackData("adminCommand@toggleDebug#" + event.getChat().getId())
+                .text("Enable Debug").callbackData("adminCommand@enableDebug#" + event.getChat().getId())
+                .build());
+
+        buttons.add(InlineKeyboardButton.builder()
+                .text("Disable Debug").callbackData("adminCommand@disableDebug#" + event.getChat().getId())
                 .build());
 
         // Broadcast Message
@@ -67,8 +71,13 @@ public class AdminCommand extends Command {
         // Build the final message
         InlineKeyboardMarkup.InlineKeyboardMarkupBuilder markup = InlineKeyboardMarkup.builder();
 
+        List<InlineKeyboardButton> rows = new ArrayList<>();
         for (InlineKeyboardButton keyboardButton : buttons) {
-            markup.addRow(keyboardButton);
+            rows.add(keyboardButton);
+
+            if (rows.size() == 2) {
+                markup.addRow(rows);
+            }
         }
 
         Message message = chat.sendMessage(
