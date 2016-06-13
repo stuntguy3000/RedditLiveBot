@@ -2,12 +2,14 @@ package me.stuntguy3000.java.redditlivebot.handler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.AdminInlineCommandType;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
+import me.stuntguy3000.java.redditlivebot.object.config.Subscriber;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadBroadcasterTask;
 import pro.zackpollard.telegrambot.api.chat.Chat;
@@ -50,21 +52,35 @@ public class TelegramEventHandler implements Listener {
         AdminControlHandler adminControlHandler = instance.getAdminControlHandler();
 
         if (event.getMessage().getRepliedTo() != null) {
-            System.out.println("Replied");
             if (adminControlHandler.getReplyActions().containsKey(event.getMessage().getRepliedTo().getMessageId())) {
-                System.out.println("It exists!");
                 AdminInlineCommandType inlineCommandType = adminControlHandler.getReplyActions().remove(event.getMessage().getRepliedTo().getMessageId());
 
                 switch (inlineCommandType) {
+                    case START_FOLLOW: {
+                        String id = message;
+                        String title = null;
+                        if (message.contains(" ")) {
+                            id = message.split(" ")[0];
+                        } else {
+                            title = message.split(" ", 2)[1];
+                        }
+
+                        RedditLiveBot.instance.getRedditHandler().startLiveThread(id, title);
+                        break;
+                    }
                     case BROADCAST: {
-                        event.getChat().sendMessage("Broadcasting " + message);
+                        for (Subscriber subscriber : RedditLiveBot.instance.getSubscriptionHandler().getSubscriptions()) {
+                            Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());
+
+                            Lang.send(chat, Lang.GENERAL_BROADCAST, event.getMessage().getSender().getUsername(),
+                                    message.replaceAll("~", "\n"));
+                        }
+
+                        Lang.send(TelegramHook.getRedditLiveChat(), Lang.GENERAL_BROADCAST, event.getMessage().getSender().getUsername(),
+                                message.replaceAll("~", "\n"));
                     }
                 }
-            } else {
-                System.out.println("what is this");
             }
-        } else {
-            System.out.println("idfk");
         }
     }
 
@@ -86,30 +102,93 @@ public class TelegramEventHandler implements Listener {
             Chat chat = TelegramHook.getBot().getChat(ID.split("#")[1]);
 
             if (command.equals(AdminInlineCommandType.START_FOLLOW.getText())) {
-
-            } else if (command.equals(AdminInlineCommandType.STOP_FOLLOW.getText())) {
-
-            } else if (command.equals(AdminInlineCommandType.SHOW_SUBS.getText())) {
-
-            } else if (command.equals(AdminInlineCommandType.ENABLE_DEBUG.getText())) {
-
-            } else if (command.equals(AdminInlineCommandType.DISABLE_DEBUG.getText())) {
-
-            } else if (command.equals(AdminInlineCommandType.BROADCAST.getText())) {
+                /**
+                 * Start following a live feed
+                 */
                 Message message = chat.sendMessage(
-                        SendableTextMessage.builder().message("" +
-                                "*Please reply to this message with the content you would like to Broadcast.*").parseMode(ParseMode.MARKDOWN).build()
+                        SendableTextMessage.builder().message(
+                                "*Please reply to this message with the live feed you would like to follow.*\n\n" +
+                                        "Syntax: `<ID> [title]`"
+                        ).parseMode(ParseMode.MARKDOWN).build()
+                );
+
+                instance.getAdminControlHandler().addReplyMessage(
+                        message, AdminInlineCommandType.START_FOLLOW
+                );
+            } else if (command.equals(AdminInlineCommandType.STOP_FOLLOW.getText())) {
+                /**
+                 * Stop following
+                 */
+                redditHandler.stopLiveThread(true);
+
+                chat.sendMessage(
+                        SendableTextMessage.builder().message(
+                                "*Silently stopped following any current live threads.*"
+                        ).parseMode(ParseMode.MARKDOWN).build()
+                );
+            } else if (command.equals(AdminInlineCommandType.SHOW_SUBS.getText())) {
+                /**
+                 * Show all subscribers
+                 */
+                ArrayList<Subscriber> subscriptions = RedditLiveBot.instance.getSubscriptionHandler().getSubscriptions();
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (Subscriber subscriber : subscriptions) {
+                    stringBuilder.append(subscriber.getUserID()).append("(").append(subscriber.getUsername()).append(")");
+                    stringBuilder.append("\n");
+                }
+
+                chat.sendMessage(
+                        SendableTextMessage.builder().message(
+                                stringBuilder.toString()
+                        ).parseMode(ParseMode.MARKDOWN).build()
+                );
+            } else if (command.equals(AdminInlineCommandType.ENABLE_DEBUG.getText())) {
+                /**
+                 * Enable debug mode
+                 */
+                RedditLiveBot.DEBUG = true;
+                RedditLiveBot.instance.getConfigHandler().saveConfig();
+
+                chat.sendMessage(
+                        SendableTextMessage.builder().message(
+                                "*Enabled debug mode.*"
+                        ).parseMode(ParseMode.MARKDOWN).build()
+                );
+            } else if (command.equals(AdminInlineCommandType.DISABLE_DEBUG.getText())) {
+                /**
+                 * Disable debug mode
+                 */
+                RedditLiveBot.DEBUG = false;
+                RedditLiveBot.instance.getConfigHandler().saveConfig();
+
+                chat.sendMessage(
+                        SendableTextMessage.builder().message(
+                                "*Disabled debug mode.*"
+                        ).parseMode(ParseMode.MARKDOWN).build()
+                );
+            } else if (command.equals(AdminInlineCommandType.BROADCAST.getText())) {
+                /**
+                 * Broadcast a message to all subscribers and the channel
+                 */
+                Message message = chat.sendMessage(
+                        SendableTextMessage.builder().message(
+                                "*Please reply to this message with the content you would like to Broadcast.*"
+                        ).parseMode(ParseMode.MARKDOWN).build()
                 );
 
                 instance.getAdminControlHandler().addReplyMessage(
                         message, AdminInlineCommandType.BROADCAST
                 );
             } else if (command.equals(AdminInlineCommandType.RESTART.getText())) {
-                instance.getAdminControlHandler().updateMessage(chat,
-                        null);
-            } else {
-                event.getCallbackQuery().answer("Unknown action! Button ID: " + ID, true);
+                /**
+                 * Restart the bot
+                 */
+                instance.getAdminControlHandler().updateMessage(chat, null);
             }
+
+            event.getCallbackQuery().answer(null, false);
 
             return;
         }
@@ -117,6 +196,7 @@ public class TelegramEventHandler implements Listener {
         event.getCallbackQuery().answer("Unknown action! Button ID: " + ID, true);
     }
 
+    // TODO: Cleanup, modulate where possible
     @Override
     public void onInlineQueryReceived(InlineQueryReceivedEvent event) {
         try {

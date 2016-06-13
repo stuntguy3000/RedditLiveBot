@@ -138,9 +138,8 @@ public class RedditHandler {
         RedditLiveBot.instance.getConfigHandler().addFeed(id);
         RedditLiveBot.instance.getConfigHandler().setCurrentFeed(id);
 
-        if (title != null) {
-            Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_START, title, id);
-        }
+        Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_START,
+                (title == null ? "Unknown Title" : title), id);
     }
 
     public void startLiveThread(RedditThreadChildrenData threadData) {
