@@ -56,6 +56,9 @@ public class TelegramEventHandler implements Listener {
                 AdminInlineCommandType inlineCommandType = adminControlHandler.getReplyActions().remove(event.getMessage().getRepliedTo().getMessageId());
 
                 switch (inlineCommandType) {
+                    /**
+                     * Start following a feed
+                     */
                     case START_FOLLOW: {
                         String id = message;
                         String title = null;
@@ -101,7 +104,7 @@ public class TelegramEventHandler implements Listener {
             String command = ID.split("#")[0];
             Chat chat = TelegramHook.getBot().getChat(ID.split("#")[1]);
 
-            if (command.equals(AdminInlineCommandType.START_FOLLOW.getText())) {
+            if (command.equals(AdminInlineCommandType.START_FOLLOW.getCommandID())) {
                 /**
                  * Start following a live feed
                  */
@@ -115,7 +118,7 @@ public class TelegramEventHandler implements Listener {
                 instance.getAdminControlHandler().addReplyMessage(
                         message, AdminInlineCommandType.START_FOLLOW
                 );
-            } else if (command.equals(AdminInlineCommandType.STOP_FOLLOW.getText())) {
+            } else if (command.equals(AdminInlineCommandType.STOP_FOLLOW.getCommandID())) {
                 /**
                  * Stop following
                  */
@@ -126,7 +129,7 @@ public class TelegramEventHandler implements Listener {
                                 "*Silently stopped following any current live threads.*"
                         ).parseMode(ParseMode.MARKDOWN).build()
                 );
-            } else if (command.equals(AdminInlineCommandType.SHOW_SUBS.getText())) {
+            } else if (command.equals(AdminInlineCommandType.SHOW_SUBS.getCommandID())) {
                 /**
                  * Show all subscribers
                  */
@@ -144,7 +147,7 @@ public class TelegramEventHandler implements Listener {
                                 stringBuilder.toString()
                         ).parseMode(ParseMode.MARKDOWN).build()
                 );
-            } else if (command.equals(AdminInlineCommandType.ENABLE_DEBUG.getText())) {
+            } else if (command.equals(AdminInlineCommandType.ENABLE_DEBUG.getCommandID())) {
                 /**
                  * Enable debug mode
                  */
@@ -156,7 +159,7 @@ public class TelegramEventHandler implements Listener {
                                 "*Enabled debug mode.*"
                         ).parseMode(ParseMode.MARKDOWN).build()
                 );
-            } else if (command.equals(AdminInlineCommandType.DISABLE_DEBUG.getText())) {
+            } else if (command.equals(AdminInlineCommandType.DISABLE_DEBUG.getCommandID())) {
                 /**
                  * Disable debug mode
                  */
@@ -168,7 +171,7 @@ public class TelegramEventHandler implements Listener {
                                 "*Disabled debug mode.*"
                         ).parseMode(ParseMode.MARKDOWN).build()
                 );
-            } else if (command.equals(AdminInlineCommandType.BROADCAST.getText())) {
+            } else if (command.equals(AdminInlineCommandType.BROADCAST.getCommandID())) {
                 /**
                  * Broadcast a message to all subscribers and the channel
                  */
@@ -181,15 +184,14 @@ public class TelegramEventHandler implements Listener {
                 instance.getAdminControlHandler().addReplyMessage(
                         message, AdminInlineCommandType.BROADCAST
                 );
-            } else if (command.equals(AdminInlineCommandType.RESTART.getText())) {
+            } else if (command.equals(AdminInlineCommandType.RESTART.getCommandID())) {
                 /**
                  * Restart the bot
                  */
                 instance.getAdminControlHandler().updateMessage(chat, null);
             }
 
-            event.getCallbackQuery().answer(null, false);
-
+            event.getCallbackQuery().answer("Command received.", false);
             return;
         }
 

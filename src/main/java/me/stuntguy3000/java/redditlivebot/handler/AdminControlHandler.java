@@ -86,42 +86,42 @@ public class AdminControlHandler {
         if (redditHandler.getCurrentLiveThread() != null) {
             buttons.add(InlineKeyboardButton.builder()
                     .text("Unfollow current thread").callbackData(
-                            AdminInlineCommandType.STOP_FOLLOW.getText() + "#" + chat.getId())
+                            AdminInlineCommandType.STOP_FOLLOW.getCommandID() + "#" + chat.getId())
                     .build());
         } else {
             buttons.add(InlineKeyboardButton.builder()
                     .text("Follow a thread").callbackData(
-                            AdminInlineCommandType.START_FOLLOW.getText() + "#" + chat.getId())
+                            AdminInlineCommandType.START_FOLLOW.getCommandID() + "#" + chat.getId())
                     .build());
         }
 
         // Subscription data
         buttons.add(InlineKeyboardButton.builder()
                 .text("View Subscriptions").callbackData(
-                        AdminInlineCommandType.SHOW_SUBS.getText() + "#" + chat.getId())
+                        AdminInlineCommandType.SHOW_SUBS.getCommandID() + "#" + chat.getId())
                 .build());
 
         // Toggle Debug
         buttons.add(InlineKeyboardButton.builder()
                 .text("Enable Debug").callbackData(
-                        AdminInlineCommandType.ENABLE_DEBUG.getText() + "#" + chat.getId())
+                        AdminInlineCommandType.ENABLE_DEBUG.getCommandID() + "#" + chat.getId())
                 .build());
 
         buttons.add(InlineKeyboardButton.builder()
                 .text("Disable Debug").callbackData(
-                        AdminInlineCommandType.DISABLE_DEBUG.getText() + "#" + chat.getId())
+                        AdminInlineCommandType.DISABLE_DEBUG.getCommandID() + "#" + chat.getId())
                 .build());
 
         // Broadcast Message
         buttons.add(InlineKeyboardButton.builder()
                 .text("Broadcast a message").callbackData(
-                        AdminInlineCommandType.BROADCAST.getText() + "#" + chat.getId())
+                        AdminInlineCommandType.BROADCAST.getCommandID() + "#" + chat.getId())
                 .build());
 
         // Restart bot
         buttons.add(InlineKeyboardButton.builder()
                 .text("Restart the bot").callbackData(
-                        AdminInlineCommandType.RESTART.getText() + "#" + chat.getId())
+                        AdminInlineCommandType.RESTART.getCommandID() + "#" + chat.getId())
                 .build());
 
         // Build the final message

@@ -15,9 +15,9 @@ public enum AdminInlineCommandType {
     RESTART("restart");
 
     @Getter
-    String text;
+    String commandID;
 
-    AdminInlineCommandType(String text) {
-        this.text = text;
+    AdminInlineCommandType(String commandID) {
+        this.commandID = commandID;
     }
 }

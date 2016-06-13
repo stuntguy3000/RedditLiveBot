@@ -11,7 +11,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import lombok.Getter;
-import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.config.BotSettings;
 import me.stuntguy3000.java.redditlivebot.object.config.Subscriptions;
 
@@ -78,7 +77,6 @@ public class ConfigHandler {
 
         switch (fileName.split(".json")[0].toLowerCase()) {
             case "config": {
-                Lang.sendDebug("SAVING CONFIG : " + botSettings.getCurrentLiveFeed());
                 json = gson.toJson(botSettings);
                 break;
             }

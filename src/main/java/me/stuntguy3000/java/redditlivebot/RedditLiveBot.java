@@ -104,7 +104,6 @@ public class RedditLiveBot {
             configHandler.getBotSettings().setLastPost(-1);
         }
 
-        configHandler.saveSubscriptions();
         configHandler.saveConfig();
 
         System.exit(0);
