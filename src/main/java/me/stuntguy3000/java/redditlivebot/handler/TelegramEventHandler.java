@@ -40,8 +40,6 @@ public class TelegramEventHandler implements Listener {
     public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
         String command = event.getCommand();
 
-        System.out.println("Command");
-
         // Process the command
         instance.getCommandHandler().executeCommand(command, event);
     }
