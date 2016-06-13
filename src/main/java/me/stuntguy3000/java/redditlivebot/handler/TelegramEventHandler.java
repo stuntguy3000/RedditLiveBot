@@ -204,6 +204,8 @@ public class TelegramEventHandler implements Listener {
             String title = ID.split("#")[2];
             Message sentMessage = instance.getAdminControlHandler().getUpdateMessages().get(threadID);
 
+            Lang.sendDebug(sentMessage.getChat().getId() + " | CHATNAME");
+
             redditHandler.startLiveThread(threadID, title);
 
             String threadInformation = "*Reddit Live Thread*\n\n" +
