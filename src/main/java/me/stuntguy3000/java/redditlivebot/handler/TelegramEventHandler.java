@@ -2,7 +2,6 @@ package me.stuntguy3000.java.redditlivebot.handler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
@@ -34,8 +33,6 @@ public class TelegramEventHandler implements Listener {
     @Override
     public void onCallbackQueryReceivedEvent(CallbackQueryReceivedEvent event) {
         String ID = event.getCallbackQuery().getData();
-        String action;
-        UUID uuid;
 
         event.getCallbackQuery().answer("Lets do this", true);
     }
