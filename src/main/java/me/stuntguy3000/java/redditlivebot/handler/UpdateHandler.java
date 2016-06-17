@@ -45,7 +45,7 @@ public class UpdateHandler implements Runnable {
                 }
             } catch (UnirestException e) {
                 //e.printStackTrace();
-                return;
+                break;
             }
 
             if (newBuild > currentBuild) {
@@ -57,7 +57,7 @@ public class UpdateHandler implements Runnable {
                 } catch (IOException e) {
                     Lang.sendAdmin("[UPDATER] Updater failed!");
                     e.printStackTrace();
-                    return;
+                    break;
                 }
 
                 RedditLiveBot.instance.shutdown();
