@@ -1,20 +1,14 @@
 package me.stuntguy3000.java.redditlivebot;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import lombok.Data;
 import me.stuntguy3000.java.redditlivebot.handler.AdminControlHandler;
 import me.stuntguy3000.java.redditlivebot.handler.CommandHandler;
 import me.stuntguy3000.java.redditlivebot.handler.ConfigHandler;
 import me.stuntguy3000.java.redditlivebot.handler.InlineKeyboardHandler;
+import me.stuntguy3000.java.redditlivebot.handler.JenkinsUpdateHandler;
 import me.stuntguy3000.java.redditlivebot.handler.LogHandler;
 import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
 import me.stuntguy3000.java.redditlivebot.handler.SubscriptionHandler;
-import me.stuntguy3000.java.redditlivebot.handler.UpdateHandler;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 
@@ -31,7 +25,7 @@ public class RedditLiveBot {
     private AdminControlHandler adminControlHandler;
     private SubscriptionHandler subscriptionHandler;
     private InlineKeyboardHandler inlineKeyboardHandler;
-    private Thread updaterThread;
+    private JenkinsUpdateHandler jenkinsUpdateHandler;
 
     public static void main(String[] args) {
         new RedditLiveBot().main();
@@ -39,8 +33,6 @@ public class RedditLiveBot {
 
     private void connectTelegram() {
         LogHandler.log("Connecting to Telegram...");
-        DEBUG = getConfigHandler().getBotSettings().getDebugMode();
-        LogHandler.log("Debug Mode is set to " + DEBUG);
         telegramHook = new TelegramHook(configHandler.getBotSettings().getTelegramKey(), this);
     }
 
@@ -48,42 +40,25 @@ public class RedditLiveBot {
         instance = this;
         configHandler = new ConfigHandler();
 
-        /**
-         * Initialize Build Number
-         */
-        File build = new File("build");
-
-        if (!build.exists()) {
-            try {
-                build.createNewFile();
-                PrintWriter writer = new PrintWriter(build, "UTF-8");
-                writer.print(0);
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            BUILD = Integer.parseInt(FileUtils.readFileToString(build));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        LogHandler.log("======================================");
-        LogHandler.log(" RedditLive build " + BUILD + " by @stuntguy3000");
-        LogHandler.log("======================================");
-
-        connectTelegram();
+        DEBUG = getConfigHandler().getBotSettings().getDebugMode();
+        LogHandler.log("Debug Mode is set to " + DEBUG);
 
         if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
-            LogHandler.log("Starting auto updater...");
-            Thread updater = new Thread(new UpdateHandler("RedditLiveBot", "RedditLiveBot"));
-            updater.start();
-            updaterThread = updater;
+            jenkinsUpdateHandler = new JenkinsUpdateHandler(
+                    "RedditLiveBot", "http://ci.zackpollard.pro/job/",
+                    "RedditLiveBot.jar", 200
+            );
+
+            try {
+                jenkinsUpdateHandler.startUpdater();
+            } catch (JenkinsUpdateHandler.JenkinsUpdateException e) {
+                e.printStackTrace();
+            }
         } else {
             LogHandler.log("** Auto Updater is set to false **");
         }
+
+        connectTelegram();
 
         commandHandler = new CommandHandler();
         adminControlHandler = new AdminControlHandler();

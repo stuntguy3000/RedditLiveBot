@@ -5,6 +5,7 @@ import java.util.List;
 
 import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
+import me.stuntguy3000.java.redditlivebot.handler.JenkinsUpdateHandler;
 import me.stuntguy3000.java.redditlivebot.handler.TelegramEventHandler;
 import me.stuntguy3000.java.redditlivebot.object.ClassGetter;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
@@ -28,7 +29,24 @@ public class TelegramHook {
         bot.startUpdates(false);
         bot.getEventsManager().register(new TelegramEventHandler());
 
-        Lang.sendAdmin("Bot has connected, running build #%d", RedditLiveBot.BUILD);
+        JenkinsUpdateHandler.UpdateInformation updateInformation = instance.getJenkinsUpdateHandler().getLastUpdate();
+
+        if (updateInformation == null || updateInformation.getGitCommitAuthors() == null || updateInformation.getGitCommitAuthors().isEmpty()) {
+            Lang.sendAdmin("*RedditLiveBot has connected.\n\n No build information available...*");
+        } else {
+            Lang.sendAdmin("*RedditLiveBot has connected (Build %d).*\n\n" +
+                            "*Last commit information:*\n" +
+                            "*Description:* %s\n" +
+                            "*Author:* %s\n" +
+                            "*Commit ID:* %s\n",
+                    updateInformation.getBuildNumber(),
+                    updateInformation.getGitCommitMessages().get(0),
+                    updateInformation.getGitCommitAuthors().get(0),
+                    "[" + updateInformation.getGitCommitIds().get(0) + "]" +
+                            "(https://github.com/stuntguy3000/RedditLive/commit/"
+                            + updateInformation.getGitCommitIds().get(0) + ")");
+        }
+
         redditLiveChat = TelegramHook.getBot().getChat("@RedditLive");
     }
 
