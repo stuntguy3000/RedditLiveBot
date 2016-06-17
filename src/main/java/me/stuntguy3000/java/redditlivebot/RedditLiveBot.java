@@ -15,7 +15,6 @@ import me.stuntguy3000.java.redditlivebot.object.Lang;
 // @author Luke Anderson | stuntguy3000
 @Data
 public class RedditLiveBot {
-    public static int BUILD = 0;
     public static boolean DEBUG = false;
     public static RedditLiveBot instance;
     private static TelegramHook telegramHook;
