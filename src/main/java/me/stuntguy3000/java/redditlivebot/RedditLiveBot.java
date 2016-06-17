@@ -43,6 +43,7 @@ public class RedditLiveBot {
         LogHandler.log("Debug Mode is set to " + DEBUG);
 
         if (this.getConfigHandler().getBotSettings().getAutoUpdater()) {
+            LogHandler.log("Starting auto updater...");
             jenkinsUpdateHandler = new JenkinsUpdateHandler(
                     "RedditLiveBot", "http://ci.zackpollard.pro/job/",
                     "RedditLiveBot.jar", 200
