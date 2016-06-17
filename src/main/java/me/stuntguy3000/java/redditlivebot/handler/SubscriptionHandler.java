@@ -7,6 +7,7 @@ import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.config.Subscriber;
 import pro.zackpollard.telegrambot.api.chat.Chat;
+import pro.zackpollard.telegrambot.api.user.User;
 
 // @author Luke Anderson | stuntguy3000
 public class SubscriptionHandler {
@@ -21,13 +22,7 @@ public class SubscriptionHandler {
     }
 
     public boolean isSubscribed(Chat chat) {
-        for (Subscriber subscriber : getSubscriptions()) {
-            if (subscriber.getUserID().equals(chat.getId())) {
-                return true;
-            }
-        }
-
-        return false;
+        return isSubscribed(chat.getId());
     }
 
     public void subscribeChat(Chat chat) {
@@ -35,6 +30,23 @@ public class SubscriptionHandler {
             plugin.getConfigHandler().getSubscriptions().getSubscriptions().add(new Subscriber(chat.getId(), chat.getName()));
             plugin.getConfigHandler().saveSubscriptions();
         }
+    }
+
+    public void subscribeUser(User user) {
+        if (!isSubscribed(String.valueOf(user.getId()))) {
+            plugin.getConfigHandler().getSubscriptions().getSubscriptions().add(new Subscriber(String.valueOf(user.getId()), user.getUsername()));
+            plugin.getConfigHandler().saveSubscriptions();
+        }
+    }
+
+    private boolean isSubscribed(String id) {
+        for (Subscriber subscriber : getSubscriptions()) {
+            if (subscriber.getUserID().equals(id)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void unsubscribeChat(Subscriber subscriberToRemove) {

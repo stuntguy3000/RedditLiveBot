@@ -23,8 +23,13 @@ public class SubscribeCommand extends Command {
         if (subscriptionHandler.isSubscribed(chat)) {
             Lang.send(chat, Lang.ERROR_CHAT_SUBSCRIBED);
         } else {
+            if (chat.getId().equals(String.valueOf(event.getMessage().getSender().getId()))) {
+                subscriptionHandler.subscribeUser(event.getMessage().getSender());
+            } else {
+                subscriptionHandler.subscribeChat(chat);
+            }
+
             Lang.send(chat, Lang.CHAT_SUBSCRIBED);
-            subscriptionHandler.subscribeChat(chat);
         }
     }
 }
