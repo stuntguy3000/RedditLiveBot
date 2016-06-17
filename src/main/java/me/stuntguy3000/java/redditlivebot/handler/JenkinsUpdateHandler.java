@@ -115,7 +115,7 @@ public class JenkinsUpdateHandler {
         }
 
         updateThread = new JenkinsUpdateThread(this);
-        timer.schedule(updateThread, delay);
+        timer.schedule(updateThread, delay, delay);
     }
 
     /**
