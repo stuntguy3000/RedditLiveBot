@@ -23,7 +23,7 @@ import me.stuntguy3000.java.redditlivebot.scheduler.RedditScannerTask;
 
 // @author Luke Anderson | stuntguy3000
 public class RedditHandler {
-    private static final String USER_AGENT = "me.stuntguy3000.java.redditlivebot:v" + RedditLiveBot.BUILD + " (by /u/stuntguy3000)";
+    private static final String USER_AGENT = "me.stuntguy3000.java.redditlivebot (by /u/stuntguy3000)";
     @Getter
     private LiveThreadBroadcasterTask currentLiveThread;
     @Getter
