@@ -25,6 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import me.stuntguy3000.java.redditlivebot.object.Lang;
 
 /**
  * Handles the automatic updating of jar files from a Jenkins CI instance
@@ -125,7 +126,7 @@ public class JenkinsUpdateHandler {
      *
      * @return UpdateInformation the information for this build
      */
-    UpdateInformation getUpdateInformation(int build) throws JenkinsUpdateException {
+    private UpdateInformation getUpdateInformation(int build) throws JenkinsUpdateException {
         try {
             String url = getUrl("/" + build + "/api/json?tree=changeSet[items[id,msg,author[id]]]");
             HttpResponse<String> unirestRequest = Unirest.get(url).asString();
@@ -173,7 +174,7 @@ public class JenkinsUpdateHandler {
      *
      * @param updateInformation UpdateInformation the information to save
      */
-    void saveNewUpdateInformation(UpdateInformation updateInformation) throws JenkinsUpdateException {
+    private void saveNewUpdateInformation(UpdateInformation updateInformation) throws JenkinsUpdateException {
         try {
             if (!updateInformationFile.exists()) {
                 if (!updateInformationFile.createNewFile()) {
@@ -246,12 +247,12 @@ public class JenkinsUpdateHandler {
         @Override
         public void run() {
             try {
+                int newJenkinsBuildNumber = 0;
                 if (updateHandler.getLastUpdate() != null) {
                     /**
                      * Check the latest build on Jenkins against the known last build
                      */
                     HttpResponse<String> unirestRequest;
-                    int newJenkinsBuildNumber;
 
                     try {
                         unirestRequest = Unirest.get(updateHandler.getUrl("/lastSuccessfulBuild/buildNumber")).asString();
@@ -264,15 +265,18 @@ public class JenkinsUpdateHandler {
                     } else {
                         throw new JenkinsUpdateException("Jenkins returned a status code of " + unirestRequest.getStatus());
                     }
-
-                    /**
-                     * Validation check
-                     */
-                    if (newJenkinsBuildNumber > updateHandler.getLastUpdate().getBuildNumber()) {
-                        downloadUpdate(newJenkinsBuildNumber);
-                        System.exit(0);
-                    }
                 }
+
+                Lang.sendDebug("newJenkinsBuildNumber: %d", newJenkinsBuildNumber);
+
+                /**
+                 * Validation check
+                 */
+                if (newJenkinsBuildNumber > updateHandler.getLastUpdate().getBuildNumber()) {
+                    downloadUpdate(newJenkinsBuildNumber);
+                    System.exit(0);
+                }
+
             } catch (JenkinsUpdateException ex) {
                 System.err.println("JenkinsUpdateException has occurred.");
 
