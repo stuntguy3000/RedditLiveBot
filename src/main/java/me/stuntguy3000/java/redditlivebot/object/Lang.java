@@ -58,7 +58,7 @@ public class Lang {
 
     public static void sendAdmin(String message, Object... format) {
         send(Long.valueOf(-115432737), "*[ADMIN]* " + message, format);
-        LogHandler.log("[ADMIN] " + message.replace("`[DEBUG]`", "[DEBUG]"), format);
+        LogHandler.log("[ADMIN] " + message.replace("`[DEBUG]`", "[DEBUG]").replace("*", "").replace("_", ""), format);
     }
 
     public static void sendDebug(String message, Object... format) {
