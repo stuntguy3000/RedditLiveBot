@@ -11,8 +11,6 @@ import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.command.Command;
 import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.chat.Chat;
-import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
-import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 
 // @author Luke Anderson | stuntguy3000
 public class TelegramHook {
@@ -31,13 +29,7 @@ public class TelegramHook {
         bot.getEventsManager().register(new TelegramEventHandler());
 
         Lang.sendAdmin("Bot has connected, running build #%d", RedditLiveBot.BUILD);
-
-        for (long adminID : RedditLiveBot.instance.getConfigHandler().getBotSettings().getTelegramAdmins()) {
-            getBot().getChat(adminID).sendMessage(SendableTextMessage.builder().message("*[ADMIN] ").parseMode(ParseMode.MARKDOWN).build());
-        }
-
         redditLiveChat = TelegramHook.getBot().getChat("@RedditLive");
-        //redditLiveChat = TelegramHook.getBot().getChat(-115432737);
     }
 
     public static void initializeCommands() {
