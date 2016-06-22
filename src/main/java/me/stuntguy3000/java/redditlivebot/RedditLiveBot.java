@@ -46,7 +46,7 @@ public class RedditLiveBot {
             LogHandler.log("Starting auto updater...");
             jenkinsUpdateHandler = new JenkinsUpdateHandler(
                     "RedditLiveBot", "http://ci.zackpollard.pro/job/",
-                    "RedditLiveBot.jar", 200
+                    "RedditLiveBot.jar", 60000
             );
 
             try {
