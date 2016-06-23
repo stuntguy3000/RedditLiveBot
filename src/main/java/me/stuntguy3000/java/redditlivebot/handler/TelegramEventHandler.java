@@ -201,8 +201,11 @@ public class TelegramEventHandler implements Listener {
                 /**
                  * Restart the bot
                  */
-                instance.getAdminControlHandler().updateMessage(chat,
-                        SendableTextMessage.builder().message("Restarting...").build());
+                chat.sendMessage(
+                        SendableTextMessage.builder().message(
+                                "*Restarting...*"
+                        ).parseMode(ParseMode.MARKDOWN).build()
+                );
 
                 instance.shutdown();
             }
