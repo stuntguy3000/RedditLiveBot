@@ -19,7 +19,7 @@ public class Lang {
     public static final String COMMAND_ADMIN_DEBUG_TOGGLE = "*Debug mode has been changed to* `%s`*.*";
     public static final String COMMAND_ADMIN_STATUS = "*RedditLiveBot Status:*\n\n";
     public static final String COMMAND_ADMIN_SUBSCRIPTIONS = "*RedditLive Subscriptions (%s):* \n`%s`";
-    public static final String GENERAL_BROADCAST = Emoji.PERSON_SPEAKING.getText() + "*Announcement by* @%s\n\n%s";
+    public static final String GENERAL_BROADCAST = Emoji.PERSON_SPEAKING.getText() + "*Announcement by* %s\n\n%s";
     public static final String GENERAL_RESTART = "*Manual Restart engaged by* `%s`*.*";
     public static final String LIVE_THREAD_START = Emoji.BLUE_RIGHT_ARROW.getText() + " *Following a new feed!*\n\n" +
             "_Name: _ %s\n_URL: _ https://reddit.com/live/%s";
