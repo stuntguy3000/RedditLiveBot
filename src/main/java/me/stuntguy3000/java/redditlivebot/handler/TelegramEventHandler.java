@@ -158,7 +158,7 @@ public class TelegramEventHandler implements Listener {
                 chat.sendMessage(
                         SendableTextMessage.builder().message(
                                 stringBuilder.toString()
-                        ).parseMode(ParseMode.MARKDOWN).build()
+                        ).build()
                 );
             } else if (command.equals(AdminInlineCommandType.ENABLE_DEBUG.getCommandID())) {
                 /**
