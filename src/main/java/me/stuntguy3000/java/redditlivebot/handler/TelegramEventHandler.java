@@ -206,11 +206,13 @@ public class TelegramEventHandler implements Listener {
 
             event.getCallbackQuery().answer("", false);
             return;
-        } else if (ID.startsWith("f,")) {
+        } else if (ID.startsWith("f,") || ID.startsWith("fS,")) {
             if (!instance.getConfigHandler().getBotSettings().getTelegramAdmins().contains(userID)) {
                 event.getCallbackQuery().answer("You are not authorized to do this.", true);
                 return;
             }
+
+            boolean silent = ID.startsWith("fS,");
 
             /**
              * Manually follow a feed

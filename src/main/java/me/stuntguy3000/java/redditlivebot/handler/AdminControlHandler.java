@@ -51,7 +51,11 @@ public class AdminControlHandler {
 
         buttons.add(InlineKeyboardButton.builder()
                 .callbackData("f," + threadID + "," + redditThread.getTitle())
-                .text("Click here to follow").build());
+                .text("Follow").build());
+
+        buttons.add(InlineKeyboardButton.builder()
+                .callbackData("fS," + threadID + "," + redditThread.getTitle())
+                .text("Follow SILENTLY").build());
 
         if (lastMessage != null && lastMessage.equals(threadInformation)) {
             return;

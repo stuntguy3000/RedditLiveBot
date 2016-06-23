@@ -96,7 +96,7 @@ public class AdminOldCommand extends Command {
             }
             default: {
                 if (args.length >= 3 && args[0].equalsIgnoreCase("follow")) {
-                    RedditLiveBot.instance.getRedditHandler().startLiveThread(args[1], args[2]);
+                    RedditLiveBot.instance.getRedditHandler().startLiveThread(args[1], args[2], false);
                     return;
                 } else {
                     if (args.length > 1 && args[0].equalsIgnoreCase("broadcast")) {

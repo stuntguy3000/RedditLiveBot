@@ -25,6 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 
 /**
@@ -274,7 +275,7 @@ public class JenkinsUpdateHandler {
                  */
                 if (newJenkinsBuildNumber > updateHandler.getLastUpdate().getBuildNumber()) {
                     downloadUpdate(newJenkinsBuildNumber);
-                    System.exit(0);
+                    RedditLiveBot.instance.shutdown();
                 }
 
             } catch (JenkinsUpdateException ex) {
