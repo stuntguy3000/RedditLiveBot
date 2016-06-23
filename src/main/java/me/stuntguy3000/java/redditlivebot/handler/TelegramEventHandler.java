@@ -78,7 +78,7 @@ public class TelegramEventHandler implements Listener {
                             title = message.split(" ", 2)[1];
                         }
 
-                        RedditLiveBot.instance.getRedditHandler().startLiveThread(id, title);
+                        RedditLiveBot.instance.getRedditHandler().startLiveThread(id, title, false);
                         break;
                     }
                     /**
@@ -223,7 +223,7 @@ public class TelegramEventHandler implements Listener {
 
             Lang.sendDebug(sentMessage.getChat().getId() + " | CHATNAME");
 
-            redditHandler.startLiveThread(threadID, title);
+            redditHandler.startLiveThread(threadID, title, silent);
 
             String threadInformation = "*Reddit Live Thread*\n\n" +
                     "*Thread ID:* " + threadID + "\n" +
