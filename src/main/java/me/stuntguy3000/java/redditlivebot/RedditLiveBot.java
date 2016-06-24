@@ -1,9 +1,5 @@
 package me.stuntguy3000.java.redditlivebot;
 
-import com.mashape.unirest.http.Unirest;
-
-import org.apache.http.impl.nio.client.HttpAsyncClients;
-
 import lombok.Data;
 import me.stuntguy3000.java.redditlivebot.handler.AdminControlHandler;
 import me.stuntguy3000.java.redditlivebot.handler.CommandHandler;
@@ -44,8 +40,6 @@ public class RedditLiveBot {
     private void main() {
         instance = this;
         configHandler = new ConfigHandler();
-        
-        Unirest.setAsyncHttpClient(HttpAsyncClients.createDefault());
 
         DEBUG = getConfigHandler().getBotSettings().getDebugMode();
         LogHandler.log("Debug Mode is set to " + DEBUG);
