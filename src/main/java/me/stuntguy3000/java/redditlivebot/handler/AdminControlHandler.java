@@ -100,8 +100,9 @@ public class AdminControlHandler {
         }
 
         // Subscription data
+        int count = RedditLiveBot.instance.getSubscriptionHandler().getSubscriptions().size();
         buttons.add(InlineKeyboardButton.builder()
-                .text("View Subscriptions").callbackData(
+                .text("View Subscriptions (" + count + ")").callbackData(
                         AdminInlineCommandType.SHOW_SUBS.getCommandID() + "#" + chat.getId())
                 .build());
 
