@@ -149,7 +149,7 @@ public class TelegramEventHandler implements Listener {
                 List<String> subList = new ArrayList<>();
 
                 for (Subscriber subscriber : subscriptions) {
-                    subList.add(subscriber.getUserID() + " (" + subscriber.getUsername() + ")");
+                    subList.add(subscriber.getUserID() + " - " + subscriber.getUsername());
                 }
 
                 PaginatedMessage paginatedMessage =
