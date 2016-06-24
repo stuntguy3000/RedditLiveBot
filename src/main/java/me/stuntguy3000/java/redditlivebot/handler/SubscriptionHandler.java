@@ -62,11 +62,13 @@ public class SubscriptionHandler {
     }
 
     public void forwardMessage(Message message) {
+        ThreadExecutionHandler threadExecutionHandler = RedditLiveBot.instance.getThreadExecutionHandler();
+
         long loopStart = System.currentTimeMillis();
         for (Subscriber subscriber : getSubscriptions()) {
             long start = System.currentTimeMillis();
 
-            new SendMessageTask(message, subscriber.getUserID()).run();
+            threadExecutionHandler.queue(new SendMessageTask(message, subscriber.getUserID()));
 
             long diff = System.currentTimeMillis() - start;
             System.out.println(diff);
