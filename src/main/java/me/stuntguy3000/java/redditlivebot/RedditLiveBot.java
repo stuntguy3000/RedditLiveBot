@@ -67,6 +67,7 @@ public class RedditLiveBot {
         subscriptionHandler = new SubscriptionHandler();
         redditHandler = new RedditHandler();
         inlineKeyboardHandler = new InlineKeyboardHandler();
+        paginationHandler = new PaginationHandler();
 
         TelegramHook.initializeCommands();
     }
