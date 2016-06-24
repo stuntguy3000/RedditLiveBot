@@ -64,19 +64,9 @@ public class SubscriptionHandler {
     public void forwardMessage(Message message) {
         ThreadExecutionHandler threadExecutionHandler = RedditLiveBot.instance.getThreadExecutionHandler();
 
-        long loopStart = System.currentTimeMillis();
         for (Subscriber subscriber : getSubscriptions()) {
-            long start = System.currentTimeMillis();
-
             threadExecutionHandler.queue(new SendMessageTask(message, subscriber.getUserID()));
-
-            long diff = System.currentTimeMillis() - start;
-            System.out.println(diff);
         }
-
-        //getSubscriptions().stream().parallel().forEach((s) -> message.forwardMessage(TelegramHook.getBot().getChat(s.getUserID())));
-
-        System.out.println("loopEnd: " + (System.currentTimeMillis() - loopStart));
     }
 
     @Deprecated
