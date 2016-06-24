@@ -20,6 +20,7 @@ import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChi
 import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadBroadcasterTask;
 import me.stuntguy3000.java.redditlivebot.scheduler.RedditScannerTask;
+import pro.zackpollard.telegrambot.api.chat.message.Message;
 
 // @author Luke Anderson | stuntguy3000
 public class RedditHandler {
@@ -171,20 +172,17 @@ public class RedditHandler {
         String author = data.getAuthor();
         String body = data.getBody();
 
+        Message message;
         if (author.contains("/") || author.contains("_") || author.contains("*")
                 || body.contains("/") || body.contains("_") || body.contains("*")) {
-            Lang.sendHtml(TelegramHook.getRedditLiveChat(),
+            message = Lang.sendHtml(TelegramHook.getRedditLiveChat(),
                     Lang.LIVE_THREAD_UPDATE_HTML, threadID, author, body);
-
-            RedditLiveBot.instance.getSubscriptionHandler().broadcastHtml(
-                    threadID, author, body);
         } else {
-            Lang.send(TelegramHook.getRedditLiveChat(),
+            message = Lang.send(TelegramHook.getRedditLiveChat(),
                     Lang.LIVE_THREAD_UPDATE, threadID, author, body);
 
-            RedditLiveBot.instance.getSubscriptionHandler().broadcast(
-                    threadID, author, body);
         }
+        RedditLiveBot.instance.getSubscriptionHandler().forwardMessage(message);
     }
 }
     

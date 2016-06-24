@@ -7,6 +7,7 @@ import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.config.Subscriber;
 import pro.zackpollard.telegrambot.api.chat.Chat;
+import pro.zackpollard.telegrambot.api.chat.message.Message;
 import pro.zackpollard.telegrambot.api.user.User;
 
 // @author Luke Anderson | stuntguy3000
@@ -59,6 +60,14 @@ public class SubscriptionHandler {
         plugin.getConfigHandler().saveSubscriptions();
     }
 
+    public void forwardMessage(Message message) {
+        for (Subscriber subscriber : new ArrayList<>(getSubscriptions())) {
+            Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());
+            message.forwardMessage(chat);
+        }
+    }
+
+    @Deprecated
     public void broadcast(String threadID, String author, String body) {
         for (Subscriber subscriber : new ArrayList<>(getSubscriptions())) {
             Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());
@@ -72,6 +81,7 @@ public class SubscriptionHandler {
         }
     }
 
+    @Deprecated
     public void broadcastHtml(String threadID, String author, String body) {
         for (Subscriber subscriber : new ArrayList<>(getSubscriptions())) {
             Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());

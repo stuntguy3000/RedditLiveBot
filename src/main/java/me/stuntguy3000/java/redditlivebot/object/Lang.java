@@ -6,6 +6,7 @@ import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.LogHandler;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import pro.zackpollard.telegrambot.api.chat.Chat;
+import pro.zackpollard.telegrambot.api.chat.message.Message;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableMessage;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
@@ -48,8 +49,8 @@ public class Lang {
         TelegramHook.getBot().sendMessage(TelegramHook.getBot().getChat(chatID), build(message, format));
     }
 
-    public static void send(Chat chat, String message, Object... format) {
-        TelegramHook.getBot().sendMessage(chat, build(message, format));
+    public static Message send(Chat chat, String message, Object... format) {
+        return TelegramHook.getBot().sendMessage(chat, build(message, format));
     }
 
     public static void send(User user, String message, Object... format) {
@@ -93,7 +94,7 @@ public class Lang {
         return sbStr.toString();
     }
 
-    public static void sendHtml(Chat chat, String message, Object... format) {
+    public static Message sendHtml(Chat chat, String message, Object... format) {
         Object[] newFormat = new Object[format.length];
 
         for (int i = 0; i < 3; i++) {
@@ -106,7 +107,7 @@ public class Lang {
         sendableTextMessageBuilder.message(message);
         sendableTextMessageBuilder.parseMode(ParseMode.HTML);
 
-        TelegramHook.getBot().sendMessage(chat, sendableTextMessageBuilder.build());
+        return TelegramHook.getBot().sendMessage(chat, sendableTextMessageBuilder.build());
     }
 }
     

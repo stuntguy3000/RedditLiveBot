@@ -7,6 +7,7 @@ import me.stuntguy3000.java.redditlivebot.handler.ConfigHandler;
 import me.stuntguy3000.java.redditlivebot.handler.InlineKeyboardHandler;
 import me.stuntguy3000.java.redditlivebot.handler.JenkinsUpdateHandler;
 import me.stuntguy3000.java.redditlivebot.handler.LogHandler;
+import me.stuntguy3000.java.redditlivebot.handler.PaginationHandler;
 import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
 import me.stuntguy3000.java.redditlivebot.handler.SubscriptionHandler;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
@@ -25,6 +26,7 @@ public class RedditLiveBot {
     private SubscriptionHandler subscriptionHandler;
     private InlineKeyboardHandler inlineKeyboardHandler;
     private JenkinsUpdateHandler jenkinsUpdateHandler;
+    private PaginationHandler paginationHandler;
 
     public static void main(String[] args) {
         new RedditLiveBot().main();

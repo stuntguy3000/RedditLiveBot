@@ -3,6 +3,8 @@ package me.stuntguy3000.java.redditlivebot.handler;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
@@ -10,6 +12,7 @@ import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.AdminInlineCommandType;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.config.Subscriber;
+import me.stuntguy3000.java.redditlivebot.object.pagination.PaginatedMessage;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadBroadcasterTask;
 import pro.zackpollard.telegrambot.api.chat.Chat;
@@ -85,15 +88,10 @@ public class TelegramEventHandler implements Listener {
                      * Broadcast a message
                      */
                     case BROADCAST: {
-                        for (Subscriber subscriber : RedditLiveBot.instance.getSubscriptionHandler().getSubscriptions()) {
-                            Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());
-
-                            Lang.send(chat, Lang.GENERAL_BROADCAST, event.getMessage().getSender().getUsername(),
-                                    message.replaceAll("~", "\n"));
-                        }
-
-                        Lang.send(TelegramHook.getRedditLiveChat(), Lang.GENERAL_BROADCAST, event.getMessage().getSender().getUsername(),
+                        Message broadcastMessage = Lang.send(TelegramHook.getRedditLiveChat(), Lang.GENERAL_BROADCAST, event.getMessage().getSender().getUsername(),
                                 message.replaceAll("~", "\n"));
+
+                        RedditLiveBot.instance.getSubscriptionHandler().forwardMessage(broadcastMessage);
                     }
                 }
             }
@@ -148,18 +146,23 @@ public class TelegramEventHandler implements Listener {
                  */
                 ArrayList<Subscriber> subscriptions = RedditLiveBot.instance.getSubscriptionHandler().getSubscriptions();
 
-                StringBuilder stringBuilder = new StringBuilder();
+                List<String> subList = new ArrayList<>();
 
                 for (Subscriber subscriber : subscriptions) {
-                    stringBuilder.append(subscriber.getUserID()).append("(").append(subscriber.getUsername()).append(")");
-                    stringBuilder.append("\n");
+                    subList.add(subscriber.getUserID() + " (" + subscriber.getUsername() + ")");
                 }
 
-                chat.sendMessage(
-                        SendableTextMessage.builder().message(
-                                stringBuilder.toString()
-                        ).build()
-                );
+                PaginatedMessage paginatedMessage =
+                        RedditLiveBot.instance.getPaginationHandler()
+                                .createPaginatedMessage(subList, 30);
+
+                paginatedMessage.setMessage(chat.sendMessage(
+                        SendableTextMessage.builder()
+                                .message(paginatedMessage.getPaginatedList().getCurrentPageContent())
+                                .replyMarkup(paginatedMessage.getButtons())
+                                .parseMode(ParseMode.MARKDOWN)
+                                .disableWebPagePreview(true)
+                                .build()));
             } else if (command.equals(AdminInlineCommandType.ENABLE_DEBUG.getCommandID())) {
                 /**
                  * Enable debug mode
@@ -213,6 +216,9 @@ public class TelegramEventHandler implements Listener {
             event.getCallbackQuery().answer("", false);
             return;
         } else if (ID.startsWith("f,") || ID.startsWith("fS,")) {
+            /**
+             * Feed Following
+             */
             if (!instance.getConfigHandler().getBotSettings().getTelegramAdmins().contains(userID)) {
                 event.getCallbackQuery().answer("You are not authorized to do this.", true);
                 return;
@@ -246,11 +252,56 @@ public class TelegramEventHandler implements Listener {
             event.getCallbackQuery().answer("", false);
             return;
         } else if (ID.startsWith("usrSubscribe:")) {
+            /**
+             * User Subscriptions
+             */
             String userToSubscribe = ID.split(":")[1];
             Chat chat = TelegramHook.getBot().getChat(userToSubscribe);
 
             RedditLiveBot.instance.getSubscriptionHandler().subscribeChat(chat);
             event.getCallbackQuery().answer("You have subscribed to @RedditLiveBot", false);
+        } else {
+            /**
+             * Pagination via UUID
+             */
+            String action;
+            UUID uuid;
+
+            try {
+                uuid = UUID.fromString(ID.split("\\|")[0]);
+                action = ID.split("\\|")[1];
+
+                PaginatedMessage paginatedMessage = RedditLiveBot.instance.getPaginationHandler().getMessage(uuid);
+
+                if (paginatedMessage != null) {
+                    String content;
+                    switch (action) {
+                        case "next": {
+                            content = paginatedMessage.getPaginatedList().switchToNextPage();
+                            break;
+                        }
+                        case "prev": {
+                            content = paginatedMessage.getPaginatedList().switchToPreviousPage();
+                            break;
+                        }
+                        case "ignore": {
+                            event.getCallbackQuery().answer("Use Next or Previous to navigate.", true);
+                            return;
+                        }
+                        default: {
+                            event.getCallbackQuery().answer("Unable to continue! Contact @stuntguy3000", true);
+                            return;
+                        }
+                    }
+
+                    TelegramHook.getBot().editMessageText(
+                            paginatedMessage.getMessage(), content, ParseMode.MARKDOWN, false, paginatedMessage.getButtons()
+                    );
+                    return;
+                }
+            } catch (Exception ignore) {
+
+            }
         }
 
         event.getCallbackQuery().answer("Unknown action! Button ID: " + ID, true);
