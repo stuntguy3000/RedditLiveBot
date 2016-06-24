@@ -61,10 +61,15 @@ public class SubscriptionHandler {
     }
 
     public void forwardMessage(Message message) {
-        for (Subscriber subscriber : new ArrayList<>(getSubscriptions())) {
+        long loopStart = System.currentTimeMillis();
+        for (Subscriber subscriber : getSubscriptions()) {
+            long start = System.currentTimeMillis();
             Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());
             message.forwardMessage(chat);
+            long diff = System.currentTimeMillis() - start;
+            System.out.println(diff);
         }
+        System.out.println("loopEnd: " + (System.currentTimeMillis() - loopStart));
     }
 
     @Deprecated
