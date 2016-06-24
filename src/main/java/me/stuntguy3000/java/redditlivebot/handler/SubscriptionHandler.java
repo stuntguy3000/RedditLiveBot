@@ -6,6 +6,7 @@ import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.config.Subscriber;
+import me.stuntguy3000.java.redditlivebot.scheduler.SendMessageTask;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.message.Message;
 import pro.zackpollard.telegrambot.api.user.User;
@@ -62,16 +63,16 @@ public class SubscriptionHandler {
 
     public void forwardMessage(Message message) {
         long loopStart = System.currentTimeMillis();
-        /*for (Subscriber subscriber : getSubscriptions()) {
+        for (Subscriber subscriber : getSubscriptions()) {
             long start = System.currentTimeMillis();
-            Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());
-            message.forwardMessage(chat);
+
+            new SendMessageTask(message, subscriber.getUserID()).run();
+
             long diff = System.currentTimeMillis() - start;
             System.out.println(diff);
-        }*/
+        }
 
-        getSubscriptions().stream().parallel().forEach((s) ->
-                message.forwardMessage(TelegramHook.getBot().getChat(s.getUserID())));
+        //getSubscriptions().stream().parallel().forEach((s) -> message.forwardMessage(TelegramHook.getBot().getChat(s.getUserID())));
 
         System.out.println("loopEnd: " + (System.currentTimeMillis() - loopStart));
     }
