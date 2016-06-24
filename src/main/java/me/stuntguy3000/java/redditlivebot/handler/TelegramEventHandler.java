@@ -160,7 +160,7 @@ public class TelegramEventHandler implements Listener {
                         SendableTextMessage.builder()
                                 .message(paginatedMessage.getPaginatedList().getCurrentPageContent())
                                 .replyMarkup(paginatedMessage.getButtons())
-                                .parseMode(ParseMode.MARKDOWN)
+                                .parseMode(ParseMode.NONE)
                                 .disableWebPagePreview(true)
                                 .build()));
             } else if (command.equals(AdminInlineCommandType.ENABLE_DEBUG.getCommandID())) {
