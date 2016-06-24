@@ -154,7 +154,7 @@ public class TelegramEventHandler implements Listener {
 
                 PaginatedMessage paginatedMessage =
                         RedditLiveBot.instance.getPaginationHandler()
-                                .createPaginatedMessage(subList, 30);
+                                .createPaginatedMessage(subList, 15);
 
                 paginatedMessage.setMessage(chat.sendMessage(
                         SendableTextMessage.builder()
@@ -295,7 +295,7 @@ public class TelegramEventHandler implements Listener {
                     }
 
                     TelegramHook.getBot().editMessageText(
-                            paginatedMessage.getMessage(), content, ParseMode.MARKDOWN, false, paginatedMessage.getButtons()
+                            paginatedMessage.getMessage(), content, ParseMode.NONE, false, paginatedMessage.getButtons()
                     );
                     return;
                 }
