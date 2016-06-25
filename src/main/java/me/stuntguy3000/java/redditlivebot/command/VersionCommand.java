@@ -31,13 +31,13 @@ public class VersionCommand extends Command {
                     updateInformation.getGitCommitMessages().get(0),
                     updateInformation.getGitCommitAuthors().get(0),
                     "[" + updateInformation.getGitCommitIds().get(0) + "]" +
-                            "(https://github.com/stuntguy3000/RedditLive/commit/"
+                            "(https://github.com/stuntguy3000/RedditLiveBot/commit/"
                             + updateInformation.getGitCommitIds().get(0) + ")");
         }
 
         Lang.send(chat, Emoji.JOKER_CARD.getText() + " *RedditLiveBot by* @stuntguy3000\n" +
                 buildInfo +
-                "\nSource [Available on GitHub](https://github.com/stuntguy3000/redditlive)\n" +
+                "\nSource [Available on GitHub](https://github.com/stuntguy3000/RedditLiveBot)\n" +
                 "Created using @zackpollard's [Java Telegram API](https://github.com/zackpollard/JavaTelegramBot-API)");
 
     }

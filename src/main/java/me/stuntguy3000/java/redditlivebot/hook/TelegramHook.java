@@ -43,7 +43,7 @@ public class TelegramHook {
                     updateInformation.getGitCommitMessages().get(0),
                     updateInformation.getGitCommitAuthors().get(0),
                     "[" + updateInformation.getGitCommitIds().get(0) + "]" +
-                            "(https://github.com/stuntguy3000/RedditLive/commit/"
+                            "(https://github.com/stuntguy3000/RedditLiveBot/commit/"
                             + updateInformation.getGitCommitIds().get(0) + ")");
         }
 
