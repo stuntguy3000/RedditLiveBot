@@ -33,9 +33,7 @@ public class AdminCommand extends Command {
                         .message(
                                 "*Welcome to the RedditLive Admin Control Panel*\n\n" +
                                         "To use the control panel, please click on one of the buttons below.\n\nCurrent Status: " + statusText)
-                        .replyMarkup(RedditLiveBot.instance.getAdminControlHandler().getMarkup(event.getChat()))
+                        .replyMarkup(RedditLiveBot.instance.getAdminControlHandler().getDashboardKeyboardMarkup(event.getChat()))
                         .parseMode(ParseMode.MARKDOWN).build());
-
-        RedditLiveBot.instance.getInlineKeyboardHandler().addMessage(message);
     }
 }

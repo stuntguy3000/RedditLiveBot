@@ -81,7 +81,7 @@ public class TelegramEventHandler implements Listener {
                             title = message.split(" ", 2)[1];
                         }
 
-                        RedditLiveBot.instance.getRedditHandler().startLiveThread(id, title, false);
+                        RedditLiveBot.instance.getRedditHandler().followLiveThread(id, title, false);
                         break;
                     }
                     /**
@@ -133,7 +133,7 @@ public class TelegramEventHandler implements Listener {
                 /**
                  * Stop following
                  */
-                redditHandler.stopLiveThread(true);
+                redditHandler.unfollowLiveThread(true);
 
                 chat.sendMessage(
                         SendableTextMessage.builder().message(
@@ -168,7 +168,7 @@ public class TelegramEventHandler implements Listener {
                  * Enable debug mode
                  */
                 RedditLiveBot.DEBUG = true;
-                RedditLiveBot.instance.getConfigHandler().saveConfig();
+                RedditLiveBot.instance.getConfigHandler().saveConfigs();
 
                 chat.sendMessage(
                         SendableTextMessage.builder().message(
@@ -180,7 +180,7 @@ public class TelegramEventHandler implements Listener {
                  * Disable debug mode
                  */
                 RedditLiveBot.DEBUG = false;
-                RedditLiveBot.instance.getConfigHandler().saveConfig();
+                RedditLiveBot.instance.getConfigHandler().saveConfigs();
 
                 chat.sendMessage(
                         SendableTextMessage.builder().message(
@@ -235,7 +235,7 @@ public class TelegramEventHandler implements Listener {
 
             Lang.sendDebug(sentMessage.getChat().getId() + " | CHATNAME");
 
-            redditHandler.startLiveThread(threadID, title, silent);
+            redditHandler.followLiveThread(threadID, title, silent);
 
             String threadInformation = "*Reddit Live Thread*\n\n" +
                     "*Thread ID:* " + threadID + "\n" +

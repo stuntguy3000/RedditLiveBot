@@ -8,11 +8,10 @@ import lombok.Data;
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.AdminInlineCommandType;
-import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildrenData;
+import me.stuntguy3000.java.redditlivebot.object.reddit.subreddit.SubredditChildrenData;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.message.Message;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
-import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 import pro.zackpollard.telegrambot.api.keyboards.InlineKeyboardButton;
 import pro.zackpollard.telegrambot.api.keyboards.InlineKeyboardMarkup;
 
@@ -33,7 +32,13 @@ public class AdminControlHandler {
         adminChat = TelegramHook.getBot().getChat(-115432737);
     }
 
-    public void threadUpdate(RedditThreadChildrenData redditThread, String threadID) {
+    /**
+     * Posts a new live thread to the admin chat
+     *
+     * @param redditThread SubredditChildrenData the data to be posted
+     * @param threadID     String the id of the thread
+     */
+    public void postNewLiveThread(SubredditChildrenData redditThread, String threadID) {
         Message message = updateMessages.get(threadID);
         String lastMessage = lastMessages.get(threadID);
 
@@ -51,11 +56,11 @@ public class AdminControlHandler {
 
         buttons.add(InlineKeyboardButton.builder()
                 .callbackData("f," + threadID + "," + redditThread.getTitle())
-                .text("Follow").build());
+                .text("Follow (Normal)").build());
 
         buttons.add(InlineKeyboardButton.builder()
                 .callbackData("fS," + threadID + "," + redditThread.getTitle())
-                .text("Follow SILENTLY").build());
+                .text("Follow (Silent)").build());
 
         if (lastMessage != null && lastMessage.equals(threadInformation)) {
             return;
@@ -68,21 +73,28 @@ public class AdminControlHandler {
         lastMessages.put(threadID, threadInformation);
     }
 
-    public void updateMessage(Chat chat, SendableTextMessage updateMessage) {
-        Message message = updateMessages.get(chat.getId());
-
-        TelegramHook.getBot().editMessageText(message,
-                updateMessage.getMessage(),
-                updateMessage.getParseMode(),
-                false, getMarkup(chat)
-        );
-    }
-
+    /**
+     * Adds a reply message to the actions map
+     * <p>A reply message is one where the user is prompted to provide context or information
+     * with one example being the broadcast command where the user specifies text to be broadcasted
+     * </p>
+     *
+     * @param message Message the original message
+     * @param type AdminInlineCommandType the type of command
+     */
     public void addReplyMessage(Message message, AdminInlineCommandType type) {
         replyActions.put(message.getMessageId(), type);
     }
 
-    public InlineKeyboardMarkup getMarkup(Chat chat) {
+    /**
+     * Generate the keyboard markup for a Chat
+     * <p>The admin dashboard is a simple GUI to control basic functions of the bot</p>
+     *
+     * @param chat Chat the chat where the message will be sent
+     *
+     * @return InlineKeyboardMarkup the generated markup
+     */
+    public InlineKeyboardMarkup getDashboardKeyboardMarkup(Chat chat) {
         RedditHandler redditHandler = RedditLiveBot.instance.getRedditHandler();
         List<InlineKeyboardButton> buttons = new ArrayList<>();
 

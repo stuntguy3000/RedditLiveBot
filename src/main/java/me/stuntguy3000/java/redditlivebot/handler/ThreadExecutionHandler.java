@@ -6,6 +6,9 @@ import java.util.concurrent.Executors;
 import lombok.Data;
 
 /**
+ * Handles the execution of multiple threads
+ * <p>Used for simultaneous message posting</p>
+ *
  * @author stuntguy3000
  */
 @Data

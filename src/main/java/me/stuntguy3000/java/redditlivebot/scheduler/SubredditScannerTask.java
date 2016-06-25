@@ -8,14 +8,14 @@ import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.RedditHandler;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
-import me.stuntguy3000.java.redditlivebot.object.reddit.RedditThread;
+import me.stuntguy3000.java.redditlivebot.object.reddit.Subreddit;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
-import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildren;
-import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildrenData;
+import me.stuntguy3000.java.redditlivebot.object.reddit.subreddit.SubredditChildren;
+import me.stuntguy3000.java.redditlivebot.object.reddit.subreddit.SubredditChildrenData;
 
 // @author Luke Anderson | stuntguy3000
-public class RedditScannerTask extends TimerTask {
-    public RedditScannerTask() {
+public class SubredditScannerTask extends TimerTask {
+    public SubredditScannerTask() {
         new Timer().schedule(this, 0, 15 * 1000);
     }
 
@@ -24,11 +24,11 @@ public class RedditScannerTask extends TimerTask {
         Lang.sendDebug("Checking for new live threads...");
 
         try {
-            RedditThread redditThread = RedditHandler.getThread("live");
+            Subreddit subreddit = RedditHandler.getSubreddit("live");
 
-            if (redditThread != null) {
-                for (RedditThreadChildren threadChild : redditThread.getData().getChildren()) {
-                    RedditThreadChildrenData threadData = threadChild.getData();
+            if (subreddit != null) {
+                for (SubredditChildren threadChild : subreddit.getData().getChildren()) {
+                    SubredditChildrenData threadData = threadChild.getData();
 
                     if (threadData != null && threadData.getMedia() != null) {
                         long secs = (new Date().getTime()) / 1000;
@@ -40,7 +40,7 @@ public class RedditScannerTask extends TimerTask {
 
                             // Less than 1 hour old
                             if ((secs - lastPost.getCreated_utc()) < 3600) {
-                                RedditLiveBot.instance.getAdminControlHandler().threadUpdate(threadData, threadID);
+                                RedditLiveBot.instance.getAdminControlHandler().postNewLiveThread(threadData, threadID);
                             }
                         }
                     }

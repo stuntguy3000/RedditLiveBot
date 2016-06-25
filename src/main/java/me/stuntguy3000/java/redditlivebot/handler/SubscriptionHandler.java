@@ -3,30 +3,52 @@ package me.stuntguy3000.java.redditlivebot.handler;
 import java.util.ArrayList;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
-import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
-import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.config.Subscriber;
-import me.stuntguy3000.java.redditlivebot.scheduler.SendMessageTask;
+import me.stuntguy3000.java.redditlivebot.scheduler.ForwardMessageTask;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.message.Message;
 import pro.zackpollard.telegrambot.api.user.User;
 
-// @author Luke Anderson | stuntguy3000
+/**
+ * Handles Subscriptions
+ *
+ * @author stunt3000
+ */
 public class SubscriptionHandler {
     private RedditLiveBot plugin;
 
+    /**
+     * Create a new SubscriptionHandler instance
+     */
     public SubscriptionHandler() {
         this.plugin = RedditLiveBot.instance;
     }
 
+    /**
+     * Returns a list of all Subscribers
+     *
+     * @return ArrayList of all subscribers
+     */
     public ArrayList<Subscriber> getSubscriptions() {
         return plugin.getConfigHandler().getSubscriptions().getSubscriptions();
     }
 
+    /**
+     * Returns if a Chat is subscribed
+     *
+     * @param chat Chat the specified chat
+     *
+     * @return true if chat is subscribed
+     */
     public boolean isSubscribed(Chat chat) {
         return isSubscribed(chat.getId());
     }
 
+    /**
+     * Subscribes a chat
+     *
+     * @param chat Chat the chat to be subscribed
+     */
     public void subscribeChat(Chat chat) {
         if (!isSubscribed(chat)) {
             plugin.getConfigHandler().getSubscriptions().getSubscriptions().add(new Subscriber(chat.getId(), chat.getName()));
@@ -34,6 +56,11 @@ public class SubscriptionHandler {
         }
     }
 
+    /**
+     * Subscribe a user
+     *
+     * @param user User the user to be subscribed
+     */
     public void subscribeUser(User user) {
         if (!isSubscribed(String.valueOf(user.getId()))) {
             plugin.getConfigHandler().getSubscriptions().getSubscriptions().add(new Subscriber(String.valueOf(user.getId()), user.getUsername()));
@@ -41,6 +68,12 @@ public class SubscriptionHandler {
         }
     }
 
+    /**
+     * Returns if a user ID is subscribed
+     *
+     * @param id String the ID to be checked
+     * @return true if id is subscribed
+     */
     private boolean isSubscribed(String id) {
         for (Subscriber subscriber : getSubscriptions()) {
             if (subscriber.getUserID().equals(id)) {
@@ -51,52 +84,25 @@ public class SubscriptionHandler {
         return false;
     }
 
-    public void unsubscribeChat(Subscriber subscriberToRemove) {
-        for (Subscriber subscriber : new ArrayList<>(getSubscriptions())) {
-            if (subscriber.getUserID().equals(subscriberToRemove.getUserID())) {
-                getSubscriptions().remove(subscriber);
-            }
-        }
-
-        plugin.getConfigHandler().saveSubscriptions();
-    }
-
+    /**
+     * Forward a Message to a subscriber
+     * <p>@RedditLiveBot must be in the chat</p>
+     *
+     * @param message Message the message to forward
+     */
     public void forwardMessage(Message message) {
         ThreadExecutionHandler threadExecutionHandler = RedditLiveBot.instance.getThreadExecutionHandler();
 
         for (Subscriber subscriber : getSubscriptions()) {
-            threadExecutionHandler.queue(new SendMessageTask(message, subscriber.getUserID()));
+            threadExecutionHandler.queue(new ForwardMessageTask(message, subscriber.getUserID()));
         }
     }
 
-    @Deprecated
-    public void broadcast(String threadID, String author, String body) {
-        for (Subscriber subscriber : new ArrayList<>(getSubscriptions())) {
-            Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());
-
-            if (chat != null) {
-                Lang.send(chat,
-                        Lang.LIVE_THREAD_UPDATE, threadID, author, body);
-            } else {
-                unsubscribeChat(subscriber);
-            }
-        }
-    }
-
-    @Deprecated
-    public void broadcastHtml(String threadID, String author, String body) {
-        for (Subscriber subscriber : new ArrayList<>(getSubscriptions())) {
-            Chat chat = TelegramHook.getBot().getChat(subscriber.getUserID());
-
-            if (chat != null) {
-                Lang.sendHtml(chat,
-                        Lang.LIVE_THREAD_UPDATE_HTML, threadID, author, body);
-            } else {
-                unsubscribeChat(subscriber);
-            }
-        }
-    }
-
+    /**
+     * Unsubscribe a chat ID
+     *
+     * @param id String the chat ID to unsubscribe
+     */
     public void unsubscribeChat(String id) {
         for (Subscriber subscriber : new ArrayList<>(getSubscriptions())) {
             if (subscriber.getUserID().equals(id)) {

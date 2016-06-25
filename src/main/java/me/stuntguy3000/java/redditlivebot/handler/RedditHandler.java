@@ -15,11 +15,10 @@ import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.reddit.LiveThread;
-import me.stuntguy3000.java.redditlivebot.object.reddit.RedditThread;
+import me.stuntguy3000.java.redditlivebot.object.reddit.Subreddit;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
-import me.stuntguy3000.java.redditlivebot.object.reddit.redditthread.RedditThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadBroadcasterTask;
-import me.stuntguy3000.java.redditlivebot.scheduler.RedditScannerTask;
+import me.stuntguy3000.java.redditlivebot.scheduler.SubredditScannerTask;
 import pro.zackpollard.telegrambot.api.chat.message.Message;
 
 // @author Luke Anderson | stuntguy3000
@@ -28,7 +27,7 @@ public class RedditHandler {
     @Getter
     private LiveThreadBroadcasterTask currentLiveThread;
     @Getter
-    private RedditScannerTask redditScannerTask;
+    private SubredditScannerTask subredditScanner;
 
     /**
      * Constructs a new RedditHandler
@@ -38,10 +37,10 @@ public class RedditHandler {
 
         if (existingID == null) {
             Lang.sendDebug("No existing thread.");
-            redditScannerTask = new RedditScannerTask();
+            subredditScanner = new SubredditScannerTask();
         } else {
             Lang.sendDebug("Existing thread.");
-            startLiveThread(existingID, null, RedditLiveBot.instance.getConfigHandler().getBotSettings().getLastPost(), true);
+            followLiveThread(existingID, null, RedditLiveBot.instance.getConfigHandler().getBotSettings().getLastPost(), true);
         }
     }
 
@@ -88,7 +87,14 @@ public class RedditHandler {
         }
     }
 
-    public static RedditThread getThread(String id) throws Exception {
+    /**
+     * Returns a Subreddit content based upon the ID
+     *
+     * @param id String the subreddit's name
+     *
+     * @return Subreddit the associated subreddit
+     */
+    public static Subreddit getSubreddit(String id) throws Exception {
         String url = "https://www.reddit.com/r/" + id + "/new.json?limit=1";
 
         URL urlObject = new URL(url);
@@ -113,30 +119,45 @@ public class RedditHandler {
             Gson gson = new Gson();
             String threadPostingsJSON = response.toString();
 
-            return gson.fromJson(threadPostingsJSON, RedditThread.class);
+            return gson.fromJson(threadPostingsJSON, Subreddit.class);
         } else {
             throw new HTTPException(htmlConnection.getResponseCode());
         }
     }
 
-    public void startLiveThread(String id, String title, boolean silent) {
-        startLiveThread(id, title, -1, silent);
+    /**
+     * Follow a live thread with no last post
+     *
+     * @param id String the live thread's ID
+     * @param title String the title of the live thread
+     * @param silent Boolean true to follow the live thread silently (suppress any announcement messages)
+     */
+    public void followLiveThread(String id, String title, boolean silent) {
+        followLiveThread(id, title, -1, silent);
     }
 
-    public void startLiveThread(String id, String title, long lastPost, boolean silent) {
+    /**
+     * Follow a live thread
+     *
+     * @param id String the live thread's ID
+     * @param title String the title of the live thread
+     * @param lastPost Long the Unix time of the last post
+     * @param silent Boolean true to follow the live thread silently (suppress any announcement messages)
+     */
+    public void followLiveThread(String id, String title, long lastPost, boolean silent) {
         if (currentLiveThread != null) {
             currentLiveThread.cancel();
             currentLiveThread = null;
         }
 
-        if (redditScannerTask != null) {
-            redditScannerTask.cancel();
-            redditScannerTask = null;
+        if (subredditScanner != null) {
+            subredditScanner.cancel();
+            subredditScanner = null;
         }
 
         currentLiveThread = new LiveThreadBroadcasterTask(id, lastPost);
 
-        RedditLiveBot.instance.getConfigHandler().addFeed(id);
+        RedditLiveBot.instance.getConfigHandler().addKnownFeed(id);
         RedditLiveBot.instance.getConfigHandler().setCurrentFeed(id);
 
         if (!silent) {
@@ -145,22 +166,23 @@ public class RedditHandler {
         }
     }
 
-    public void startLiveThread(RedditThreadChildrenData threadData) {
-        startLiveThread(threadData.getMedia().getEvent_id(), threadData.getTitle(), -1, false);
-    }
-
-    public void stopLiveThread(boolean silent) {
+    /**
+     * Stop following a live thread
+     *
+     * @param silent Boolean true to suppress any messages
+     */
+    public void unfollowLiveThread(boolean silent) {
         if (currentLiveThread != null) {
             currentLiveThread.cancel();
             currentLiveThread = null;
         }
 
-        if (redditScannerTask != null) {
-            redditScannerTask.cancel();
-            redditScannerTask = null;
+        if (subredditScanner != null) {
+            subredditScanner.cancel();
+            subredditScanner = null;
         }
 
-        redditScannerTask = new RedditScannerTask();
+        subredditScanner = new SubredditScannerTask();
         RedditLiveBot.instance.getConfigHandler().setCurrentFeed(null);
 
         if (!silent) {
@@ -168,7 +190,13 @@ public class RedditHandler {
         }
     }
 
-    public void postUpdate(LiveThreadChildrenData data, String threadID) {
+    /**
+     * Post an update from a Live thread
+     *
+     * @param data LiveThreadChildrenData the update information
+     * @param threadID String the live thread's ID
+     */
+    public void postLiveThreadUpdate(LiveThreadChildrenData data, String threadID) {
         String author = data.getAuthor();
         String body = data.getBody();
 
@@ -182,6 +210,7 @@ public class RedditHandler {
                     Lang.LIVE_THREAD_UPDATE, threadID, author, body);
 
         }
+
         RedditLiveBot.instance.getSubscriptionHandler().forwardMessage(message);
     }
 }

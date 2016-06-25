@@ -9,7 +9,7 @@ import pro.zackpollard.telegrambot.api.chat.message.Message;
  * @author stuntguy3000
  */
 @AllArgsConstructor
-public class SendMessageTask implements Runnable {
+public class ForwardMessageTask implements Runnable {
 
     private final Message message;
     private final String chatID;

@@ -22,6 +22,9 @@ public class ConfigHandler {
     @Getter
     private Subscriptions subscriptions = new Subscriptions();
 
+    /**
+     * Load configuration files and initiate config objects
+     */
     public ConfigHandler() {
         loadFile("config.json");
         loadFile("subscriptions.json");
@@ -31,13 +34,24 @@ public class ConfigHandler {
         }
     }
 
-    public void addFeed(String id) {
+    /**
+     * Adds a feed ID to the known feed list
+     *
+     * @param id String the feed ID to add
+     */
+    public void addKnownFeed(String id) {
         if (!botSettings.getKnownLiveFeeds().contains(id.toLowerCase())) {
             botSettings.getKnownLiveFeeds().add(id.toLowerCase());
             saveConfig("config.json");
         }
     }
 
+    /**
+     * Loads a file into its related config object
+     * <p>Filenames must be complete including file extension</p>
+     *
+     * @param fileName String the files name
+     */
     private void loadFile(String fileName) {
         Gson gson = new Gson();
         File configFile = new File(fileName);
@@ -64,11 +78,20 @@ public class ConfigHandler {
         }
     }
 
-    public void saveConfig() {
+    /**
+     * Save all configurations
+     */
+    public void saveConfigs() {
         saveConfig("config.json");
         saveConfig("subscriptions.json");
     }
 
+    /**
+     * Save a configuration
+     * <p>Filenames must be complete including file extension</p>
+     *
+     * @param fileName String
+     */
     private void saveConfig(String fileName) {
         File configFile = new File(fileName);
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
@@ -108,10 +131,18 @@ public class ConfigHandler {
         }
     }
 
+    /**
+     * Save the subscriptions configuration
+     */
     public void saveSubscriptions() {
         saveConfig("subscriptions.json");
     }
 
+    /**
+     * Set the current live feed
+     *
+     * @param id String the current live feed
+     */
     public void setCurrentFeed(String id) {
         getBotSettings().setCurrentLiveFeed(id);
     }

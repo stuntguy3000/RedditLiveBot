@@ -9,7 +9,7 @@ import me.stuntguy3000.java.redditlivebot.object.Lang;
 import me.stuntguy3000.java.redditlivebot.object.command.Command;
 import me.stuntguy3000.java.redditlivebot.object.config.Subscriber;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadBroadcasterTask;
-import me.stuntguy3000.java.redditlivebot.scheduler.RedditScannerTask;
+import me.stuntguy3000.java.redditlivebot.scheduler.SubredditScannerTask;
 import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
@@ -41,7 +41,7 @@ public class AdminOldCommand extends Command {
                     Lang.send(event.getChat(), Lang.ERROR_NOT_ENOUGH_ARGUMENTS);
                     return;
                 } else if (args[0].equalsIgnoreCase("unfollow")) {
-                    RedditLiveBot.instance.getRedditHandler().stopLiveThread(false);
+                    RedditLiveBot.instance.getRedditHandler().unfollowLiveThread(false);
                     Lang.send(event.getChat(), Lang.COMMAND_ADMIN_UNFOLLOW);
                     return;
                 } else if (args[0].equalsIgnoreCase("debug")) {
@@ -54,11 +54,11 @@ public class AdminOldCommand extends Command {
                 } else if (args[0].equalsIgnoreCase("status")) {
                     RedditHandler redditHandler = RedditLiveBot.instance.getRedditHandler();
                     LiveThreadBroadcasterTask liveThreadBroadcasterTask = redditHandler.getCurrentLiveThread();
-                    RedditScannerTask redditScannerTask = redditHandler.getRedditScannerTask();
+                    SubredditScannerTask subredditScannerTask = redditHandler.getSubredditScanner();
 
                     String redditData = Lang.COMMAND_ADMIN_STATUS +
                             "*Current Live Thread: *" + (liveThreadBroadcasterTask == null ? "None!" : "http://reddit.com/live/" + liveThreadBroadcasterTask.getThreadID()) +
-                            "\n*New Live Thread Scanner: *" + (redditScannerTask == null ? "Not Scanning" : "Scanning") +
+                            "\n*New Live Thread Scanner: *" + (subredditScannerTask == null ? "Not Scanning" : "Scanning") +
                             "\n*Last post: *" + (liveThreadBroadcasterTask == null ? "C >> " + RedditLiveBot.instance.getConfigHandler().getBotSettings().getLastPost() : "I >> " + liveThreadBroadcasterTask.getLastPost());
 
                     Lang.send(event.getChat(), redditData);
@@ -96,7 +96,7 @@ public class AdminOldCommand extends Command {
             }
             default: {
                 if (args.length >= 3 && args[0].equalsIgnoreCase("follow")) {
-                    RedditLiveBot.instance.getRedditHandler().startLiveThread(args[1], args[2], false);
+                    RedditLiveBot.instance.getRedditHandler().followLiveThread(args[1], args[2], false);
                     return;
                 } else {
                     if (args.length > 1 && args[0].equalsIgnoreCase("broadcast")) {

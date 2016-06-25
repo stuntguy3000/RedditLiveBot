@@ -7,16 +7,27 @@ import lombok.Getter;
 import me.stuntguy3000.java.redditlivebot.object.command.Command;
 import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 
+/**
+ * Handles the execution of Telegram commands
+ *
+ * @author stuntguy3000
+ */
 public class CommandHandler {
     @Getter
     public HashMap<String[], Command> commands = new HashMap<>();
 
-    public void executeCommand(String s, CommandMessageReceivedEvent event) {
+    /**
+     * Executes a command
+     *
+     * @param commandLabel String the command being sent
+     * @param event        CommandMessageReceivedEvent
+     */
+    public void executeCommand(String commandLabel, CommandMessageReceivedEvent event) {
         Command cmd = null;
 
         for (Map.Entry<String[], Command> command : commands.entrySet()) {
             for (String name : command.getKey()) {
-                if (s.equalsIgnoreCase(name)) {
+                if (commandLabel.equalsIgnoreCase(name)) {
                     cmd = command.getValue();
                 }
             }
@@ -27,15 +38,11 @@ public class CommandHandler {
         }
     }
 
-    public String getBotFatherString() {
-        StringBuilder sb = new StringBuilder();
-        for (Command cmd : commands.values()) {
-            sb.append(cmd.createBotFatherString()).append("\n");
-        }
-
-        return sb.toString();
-    }
-
+    /**
+     * Registers a new command
+     *
+     * @param cmd Command the command being registered
+     */
     public void registerCommand(Command cmd) {
         commands.put(cmd.getNames(), cmd);
     }

@@ -4,7 +4,6 @@ import lombok.Data;
 import me.stuntguy3000.java.redditlivebot.handler.AdminControlHandler;
 import me.stuntguy3000.java.redditlivebot.handler.CommandHandler;
 import me.stuntguy3000.java.redditlivebot.handler.ConfigHandler;
-import me.stuntguy3000.java.redditlivebot.handler.InlineKeyboardHandler;
 import me.stuntguy3000.java.redditlivebot.handler.JenkinsUpdateHandler;
 import me.stuntguy3000.java.redditlivebot.handler.LogHandler;
 import me.stuntguy3000.java.redditlivebot.handler.PaginationHandler;
@@ -25,7 +24,6 @@ public class RedditLiveBot {
     private RedditHandler redditHandler;
     private AdminControlHandler adminControlHandler;
     private SubscriptionHandler subscriptionHandler;
-    private InlineKeyboardHandler inlineKeyboardHandler;
     private JenkinsUpdateHandler jenkinsUpdateHandler;
     private PaginationHandler paginationHandler;
     private ThreadExecutionHandler threadExecutionHandler;
@@ -68,7 +66,6 @@ public class RedditLiveBot {
         adminControlHandler = new AdminControlHandler();
         subscriptionHandler = new SubscriptionHandler();
         redditHandler = new RedditHandler();
-        inlineKeyboardHandler = new InlineKeyboardHandler();
         paginationHandler = new PaginationHandler();
         threadExecutionHandler = new ThreadExecutionHandler();
 
@@ -85,7 +82,7 @@ public class RedditLiveBot {
             configHandler.getBotSettings().setLastPost(-1);
         }
 
-        configHandler.saveConfig();
+        configHandler.saveConfigs();
 
         System.exit(0);
     }
