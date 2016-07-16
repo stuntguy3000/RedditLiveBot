@@ -199,19 +199,8 @@ public class RedditHandler {
     public void postLiveThreadUpdate(LiveThreadChildrenData data, String threadID) {
         String author = data.getAuthor();
         String body = data.getBody();
-
-        Message message;
-        if (author.contains("/") || author.contains("_") || author.contains("*")
-                || body.contains("/") || body.contains("_") || body.contains("*")) {
-            message = Lang.sendHtml(TelegramHook.getRedditLiveChat(),
-                    Lang.LIVE_THREAD_UPDATE_HTML, threadID, author, body);
-        } else {
-            message = Lang.send(TelegramHook.getRedditLiveChat(),
-                    Lang.LIVE_THREAD_UPDATE, threadID, author, body);
-
-        }
-
-        RedditLiveBot.instance.getSubscriptionHandler().forwardMessage(message);
+        RedditLiveBot.instance.getSubscriptionHandler().forwardMessage(Lang.send(TelegramHook.getRedditLiveChat(),
+                Lang.LIVE_THREAD_UPDATE, threadID, author, body));
     }
 }
     

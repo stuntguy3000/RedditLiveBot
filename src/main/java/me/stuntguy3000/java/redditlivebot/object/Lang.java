@@ -1,6 +1,8 @@
 package me.stuntguy3000.java.redditlivebot.object;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import me.stuntguy3000.java.redditlivebot.RedditLiveBot;
 import me.stuntguy3000.java.redditlivebot.handler.LogHandler;
@@ -14,6 +16,8 @@ import pro.zackpollard.telegrambot.api.user.User;
 
 // @author Luke Anderson | stuntguy3000
 public class Lang {
+    public static final Pattern USERNAME_PATTERN = Pattern.compile("\\s/u/(\\S+)");
+    public static final Pattern SUBREDDIT_PATTERN = Pattern.compile("\\s/r/(\\S+)");
     public static final String CHAT_SUBSCRIBED = Emoji.GREEN_BOX_TICK.getText() + " *This chat has subscribed to RedditLiveBot's updates.*";
     public static final String CHAT_UNSUBSCRIBED = Emoji.GREEN_BOX_TICK.getText() + " *You have unsubscribed from updates.*";
     public static final String COMMAND_ADMIN_DEBUG = "*Debug is set to* `%s`*.*";
@@ -27,8 +31,6 @@ public class Lang {
     public static final String LIVE_THREAD_STOP = Emoji.REPLAY.getText() + " *RedditLive has stopped tracking this live feed due to inactivity*";
     public static final String LIVE_THREAD_UPDATE = Emoji.PERSON_SPEAKING.getText() + " `%s` *New update by %s*\n\n%s";
     public static final String COMMAND_ADMIN_UNFOLLOW = Emoji.GREEN_BOX_TICK.getText() + " *Unfollowed the current live thread.*";
-    public static final String LIVE_THREAD_UPDATE_HTML = Emoji.PERSON_SPEAKING.getText() + " <code>%s</code> <b>New update by %s</b>\n\n%s";
-    public static final String LIVE_THREAD_REPOST_UPDATE_HTML = Emoji.PERSON_SPEAKING.getText() + " <code>%s</code> <b>Last update by %s</b>\n\n%s";
     public static final String LIVE_THREAD_REPOST_UPDATE = Emoji.PERSON_SPEAKING.getText() + " `%s` *Last update by %s*\n\n%s";
     private static final String MISC_ERROR_PREFIX = Emoji.RED_CROSS.getText() + " ";
     public static final String ERROR_CHAT_NOT_SUBSCRIBED = Lang.MISC_ERROR_PREFIX + "*This chat is not subscribed.*";
@@ -39,10 +41,25 @@ public class Lang {
 
     private static SendableMessage build(String message, Object... format) {
         SendableTextMessage.SendableTextMessageBuilder sendableTextMessageBuilder = SendableTextMessage.builder();
-        sendableTextMessageBuilder.message(String.format(message, format));
+        String formatted = String.format(message, format);
+        formatted = rigerousReplace(USERNAME_PATTERN, formatted, "[/u/<r>](https://reddit.com/u/<r>)");
+        formatted = rigerousReplace(SUBREDDIT_PATTERN, formatted, "[/r/<r>](https://reddit.com/r/<r>)");
+
+        sendableTextMessageBuilder.message(formatted);
         sendableTextMessageBuilder.parseMode(ParseMode.MARKDOWN);
 
         return sendableTextMessageBuilder.build();
+    }
+
+    private static String rigerousReplace(Pattern pattern, String text, String replace) {
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            text = matcher.replaceFirst(" " + replace.replace("<r>", matcher.group(1)));
+            matcher = pattern.matcher(text);
+        }
+
+        return text;
     }
 
     public static void send(Long chatID, String message, Object... format) {
