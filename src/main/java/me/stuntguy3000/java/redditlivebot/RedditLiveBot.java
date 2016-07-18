@@ -19,13 +19,13 @@ public class RedditLiveBot {
     public static boolean DEBUG = false;
     public static RedditLiveBot instance;
     private static TelegramHook telegramHook;
+    private AdminControlHandler adminControlHandler;
     private CommandHandler commandHandler;
     private ConfigHandler configHandler;
-    private RedditHandler redditHandler;
-    private AdminControlHandler adminControlHandler;
-    private SubscriptionHandler subscriptionHandler;
     private JenkinsUpdateHandler jenkinsUpdateHandler;
     private PaginationHandler paginationHandler;
+    private RedditHandler redditHandler;
+    private SubscriptionHandler subscriptionHandler;
     private ThreadExecutionHandler threadExecutionHandler;
 
     public static void main(String[] args) {
@@ -48,7 +48,7 @@ public class RedditLiveBot {
             LogHandler.log("Starting auto updater...");
             jenkinsUpdateHandler = new JenkinsUpdateHandler(
                     "RedditLiveBot", "http://ci.zackpollard.pro/job/",
-                    "RedditLiveBot.jar", 60000
+                    "RedditLiveBot.jar", 10000
             );
 
             try {

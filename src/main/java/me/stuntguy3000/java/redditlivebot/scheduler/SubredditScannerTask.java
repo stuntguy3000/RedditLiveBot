@@ -47,7 +47,7 @@ public class SubredditScannerTask extends TimerTask {
                 }
             }
 
-            Lang.sendDebug("Nothing new!");
+            Lang.sendDebug("No new posted live threads.");
         } catch (Exception e) {
             Lang.sendDebug("Exception Caught: " + e.getMessage());
             e.printStackTrace();

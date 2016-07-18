@@ -24,9 +24,9 @@ import pro.zackpollard.telegrambot.api.keyboards.InlineKeyboardMarkup;
 public class AdminControlHandler {
 
     private Chat adminChat;
-    private HashMap<String, Message> updateMessages = new HashMap<>();
     private HashMap<String, String> lastMessages = new HashMap<>();
     private HashMap<Long, AdminInlineCommandType> replyActions = new HashMap<>();
+    private HashMap<String, Message> updateMessages = new HashMap<>();
 
     public AdminControlHandler() {
         adminChat = TelegramHook.getBot().getChat(-115432737);
@@ -41,10 +41,6 @@ public class AdminControlHandler {
     public void postNewLiveThread(SubredditChildrenData redditThread, String threadID) {
         Message message = updateMessages.get(threadID);
         String lastMessage = lastMessages.get(threadID);
-
-        if (message == null) {
-            message = adminChat.sendMessage("Loading...");
-        }
 
         String threadInformation = "*Reddit Live Thread*\n\n" +
                 "*Thread ID:* " + threadID + "\n" +
@@ -64,6 +60,10 @@ public class AdminControlHandler {
 
         if (lastMessage != null && lastMessage.equals(threadInformation)) {
             return;
+        }
+
+        if (message == null) {
+            message = adminChat.sendMessage("Loading new live thread...");
         }
 
         message = TelegramHook.getBot().editMessageText(message, threadInformation,
