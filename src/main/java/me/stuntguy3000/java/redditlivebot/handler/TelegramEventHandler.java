@@ -74,14 +74,8 @@ public class TelegramEventHandler implements Listener {
                      */
                     case START_FOLLOW: {
                         String id = message;
-                        String title = null;
-                        if (message.contains(" ")) {
-                            id = message.split(" ")[0];
-                        } else {
-                            title = message.split(" ", 2)[1];
-                        }
 
-                        RedditLiveBot.instance.getRedditHandler().followLiveThread(id, title, false);
+                        RedditLiveBot.instance.getRedditHandler().followLiveThread(id, false);
                         break;
                     }
                     /**
@@ -230,17 +224,15 @@ public class TelegramEventHandler implements Listener {
              * Manually follow a feed
              */
             String threadID = ID.split(",")[1];
-            String title = ID.split(",")[2];
             Message sentMessage = instance.getAdminControlHandler().getUpdateMessages().get(threadID);
 
             Lang.sendDebug(sentMessage.getChat().getId() + " | CHATNAME");
 
-            redditHandler.followLiveThread(threadID, title, silent);
+            redditHandler.followLiveThread(threadID, silent);
 
             String threadInformation = "*Reddit Live Thread*\n\n" +
                     "*Thread ID:* " + threadID + "\n" +
                     "*Thread URL:* https://reddit.com/live/" + threadID + "\n" +
-                    "*Thread Title:* " + title + "\n\n" +
                     "*Now following this live feed.*";
 
             TelegramHook.getBot().editMessageText(

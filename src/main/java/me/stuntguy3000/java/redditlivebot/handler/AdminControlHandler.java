@@ -51,11 +51,11 @@ public class AdminControlHandler {
         List<InlineKeyboardButton> buttons = new ArrayList<>();
 
         buttons.add(InlineKeyboardButton.builder()
-                .callbackData("f," + threadID + "," + redditThread.getTitle())
+                .callbackData("f," + threadID)
                 .text("Follow (Normal)").build());
 
         buttons.add(InlineKeyboardButton.builder()
-                .callbackData("fS," + threadID + "," + redditThread.getTitle())
+                .callbackData("fS," + threadID)
                 .text("Follow (Silent)").build());
 
         if (lastMessage != null && lastMessage.equals(threadInformation)) {

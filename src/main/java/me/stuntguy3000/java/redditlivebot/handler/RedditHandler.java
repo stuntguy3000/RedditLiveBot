@@ -40,7 +40,7 @@ public class RedditHandler {
             subredditScanner = new SubredditScannerTask();
         } else {
             Lang.sendDebug("Existing thread.");
-            followLiveThread(existingID, null, RedditLiveBot.instance.getConfigHandler().getBotSettings().getLastPost(), true);
+            followLiveThread(existingID, RedditLiveBot.instance.getConfigHandler().getBotSettings().getLastPost(), true);
         }
     }
 
@@ -132,8 +132,8 @@ public class RedditHandler {
      * @param title String the title of the live thread
      * @param silent Boolean true to follow the live thread silently (suppress any announcement messages)
      */
-    public void followLiveThread(String id, String title, boolean silent) {
-        followLiveThread(id, title, -1, silent);
+    public void followLiveThread(String id, boolean silent) {
+        followLiveThread(id, -1, silent);
     }
 
     /**
@@ -144,7 +144,7 @@ public class RedditHandler {
      * @param lastPost Long the Unix time of the last post
      * @param silent Boolean true to follow the live thread silently (suppress any announcement messages)
      */
-    public void followLiveThread(String id, String title, long lastPost, boolean silent) {
+    public void followLiveThread(String id, long lastPost, boolean silent) {
         if (currentLiveThread != null) {
             currentLiveThread.cancel();
             currentLiveThread = null;
@@ -161,8 +161,7 @@ public class RedditHandler {
         RedditLiveBot.instance.getConfigHandler().setCurrentFeed(id);
 
         if (!silent) {
-            Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_START,
-                    (title == null ? "Unknown Title" : title), id);
+            Lang.send(TelegramHook.getRedditLiveChat(), Lang.LIVE_THREAD_START, id);
         }
     }
 

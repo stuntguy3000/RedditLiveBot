@@ -27,7 +27,7 @@ public class Lang {
     public static final String GENERAL_BROADCAST = Emoji.PERSON_SPEAKING.getText() + "*Announcement by* %s\n\n%s";
     public static final String GENERAL_RESTART = "*Manual Restart engaged by* `%s`*.*";
     public static final String LIVE_THREAD_START = Emoji.BLUE_RIGHT_ARROW.getText() + " *Following a new feed!*\n\n" +
-            "_Name: _ %s\n_URL: _ https://reddit.com/live/%s";
+            "_URL: _ https://reddit.com/live/%s";
     public static final String LIVE_THREAD_STOP = Emoji.REPLAY.getText() + " *RedditLive has stopped tracking this live feed due to inactivity*";
     public static final String LIVE_THREAD_UPDATE = Emoji.PERSON_SPEAKING.getText() + " `%s` *New update by %s*\n\n%s";
     public static final String COMMAND_ADMIN_UNFOLLOW = Emoji.GREEN_BOX_TICK.getText() + " *Unfollowed the current live thread.*";
