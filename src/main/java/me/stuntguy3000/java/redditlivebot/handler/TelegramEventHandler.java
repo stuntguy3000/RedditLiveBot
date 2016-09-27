@@ -68,6 +68,11 @@ public class TelegramEventHandler implements Listener {
             if (adminControlHandler.getReplyActions().containsKey(event.getMessage().getRepliedTo().getMessageId())) {
                 AdminInlineCommandType inlineCommandType = adminControlHandler.getReplyActions().remove(event.getMessage().getRepliedTo().getMessageId());
 
+                if (instance.isAdmin(event.getMessage().getSender().getId())) {
+                    Lang.send(event.getChat(), Lang.ERROR_NOT_ADMIN);
+                    return;
+                }
+
                 switch (inlineCommandType) {
                     /**
                      * Start following a feed
