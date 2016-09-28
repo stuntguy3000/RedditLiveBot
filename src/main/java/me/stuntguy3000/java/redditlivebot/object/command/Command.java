@@ -30,7 +30,7 @@ public abstract class Command {
 
     public void preProcessCommand(CommandMessageReceivedEvent event) {
         if (adminOnly) {
-            if (!RedditLiveBot.instance.getConfigHandler().getBotSettings().getTelegramAdmins().contains(event.getMessage().getSender().getId())) {
+            if (!RedditLiveBot.instance.isAdmin(event.getMessage().getSender().getId())) {
                 Lang.send(event.getChat(), Lang.ERROR_NOT_ADMIN);
                 return;
             }

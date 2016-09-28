@@ -12,6 +12,7 @@ import me.stuntguy3000.java.redditlivebot.handler.SubscriptionHandler;
 import me.stuntguy3000.java.redditlivebot.handler.ThreadExecutionHandler;
 import me.stuntguy3000.java.redditlivebot.hook.TelegramHook;
 import me.stuntguy3000.java.redditlivebot.object.Lang;
+import pro.zackpollard.telegrambot.api.user.User;
 
 // @author Luke Anderson | stuntguy3000
 @Data
@@ -70,6 +71,15 @@ public class RedditLiveBot {
         threadExecutionHandler = new ThreadExecutionHandler();
 
         TelegramHook.initializeCommands();
+    }
+
+    /**
+     * Checks to see if a user is an administrator.
+     * @param user
+     * @return
+     */
+    public boolean isAdmin(long user) {
+        return getConfigHandler().getBotSettings().getTelegramAdmins().contains(user);
     }
 
     public void shutdown() {
