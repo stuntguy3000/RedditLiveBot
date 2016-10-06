@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class LiveThreadChildrenData {
     private String author;
-    private String body;
+    private String body_html;
     private long created_utc;
     private UUID id;
     private boolean stricken;

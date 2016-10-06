@@ -19,7 +19,6 @@ import me.stuntguy3000.java.redditlivebot.object.reddit.Subreddit;
 import me.stuntguy3000.java.redditlivebot.object.reddit.livethread.LiveThreadChildrenData;
 import me.stuntguy3000.java.redditlivebot.scheduler.LiveThreadBroadcasterTask;
 import me.stuntguy3000.java.redditlivebot.scheduler.SubredditScannerTask;
-import pro.zackpollard.telegrambot.api.chat.message.Message;
 
 // @author Luke Anderson | stuntguy3000
 public class RedditHandler {
@@ -197,7 +196,7 @@ public class RedditHandler {
      */
     public void postLiveThreadUpdate(LiveThreadChildrenData data, String threadID) {
         String author = data.getAuthor();
-        String body = data.getBody();
+        String body = data.getBody_html();
         RedditLiveBot.instance.getSubscriptionHandler().forwardMessage(Lang.send(TelegramHook.getRedditLiveChat(),
                 Lang.LIVE_THREAD_UPDATE, threadID, author, body));
     }
